@@ -505,7 +505,7 @@ transform:translateY(0px);
   place-items: center;
   background:
     linear-gradient(rgba(18, 63, 43, 0.2), rgba(18, 63, 43, 0.35)),
-    url("../images/hero-product.png") center / cover;
+    url("../images/hero-product.webp") center / cover;
   border-radius: var(--radius-large);
 }
 
@@ -1415,7 +1415,7 @@ transform:translateY(0px);
   background:
     radial-gradient(circle at 82% 24%, rgba(255,255,255,.92), transparent 25%),
     linear-gradient(90deg, rgba(49,25,10,.92) 0%, rgba(93,52,23,.80) 38%, rgba(244,214,164,.42) 67%, rgba(247,235,211,.90) 100%),
-    url('../images/hero-banner.jpg') center/cover no-repeat;
+    url('../images/hero-banner.webp') center/cover no-repeat;
   box-shadow: 0 24px 65px rgba(22, 60, 41, .15);
 }
 
@@ -1873,7 +1873,7 @@ transform:translateY(0px);
   background:
     linear-gradient(rgba(18,63,43,.22), rgba(18,63,43,.36)),
     linear-gradient(135deg, rgba(68,38,14,.3), rgba(244,228,193,.05)),
-    url('../images/hero-banner.jpg') center/cover;
+    url('../images/hero-banner.webp') center/cover;
 }
 .story-card { width: min(84%, 420px); }
 .story-card p { margin-top: 10px; font-size: 15px; color: #536157; }
@@ -2069,9 +2069,9 @@ transform:translateY(0px);
 .about-full-track { position:relative; min-height:590px; }
 .about-full-slide { position:absolute; inset:0; display:flex; align-items:center; padding:64px; opacity:0; pointer-events:none; transition:opacity .6s ease; background-size:cover; background-position:center; }
 .about-full-slide.active { opacity:1; pointer-events:auto; }
-.about-bg-story { background-image:linear-gradient(90deg,rgba(18,34,23,.82) 0%,rgba(18,34,23,.57) 48%,rgba(18,34,23,.12) 100%),url('../images/hero-banner.jpg'); }
-.about-bg-ingredients { background-image:linear-gradient(90deg,rgba(18,34,23,.84) 0%,rgba(18,34,23,.56) 48%,rgba(18,34,23,.14) 100%),url('../images/product-ingredients.png'); }
-.about-bg-promise { background-image:linear-gradient(90deg,rgba(18,34,23,.86) 0%,rgba(18,34,23,.58) 48%,rgba(18,34,23,.16) 100%),url('../images/product-benefits.png'); }
+.about-bg-story { background-image:linear-gradient(90deg,rgba(18,34,23,.82) 0%,rgba(18,34,23,.57) 48%,rgba(18,34,23,.12) 100%),url('../images/hero-banner.webp'); }
+.about-bg-ingredients { background-image:linear-gradient(90deg,rgba(18,34,23,.84) 0%,rgba(18,34,23,.56) 48%,rgba(18,34,23,.14) 100%),url('../images/product-ingredients.webp'); }
+.about-bg-promise { background-image:linear-gradient(90deg,rgba(18,34,23,.86) 0%,rgba(18,34,23,.58) 48%,rgba(18,34,23,.16) 100%),url('../images/product-benefits.webp'); }
 .about-full-overlay { max-width:680px; color:#fff; }
 .about-full-overlay h1,
 .about-full-overlay h2 { margin-top:18px; font-family:"Playfair Display",serif; color:#fff; font-size:clamp(52px,6vw,82px); line-height:1.02; letter-spacing:-2px; }
@@ -2138,7 +2138,7 @@ transform:translateY(0px);
   inset: 0;
   background:
     linear-gradient(90deg, rgba(7, 35, 24, .92) 0%, rgba(7, 35, 24, .75) 42%, rgba(7, 35, 24, .24) 100%),
-    url('../images/coming-soon-banner.png') center / cover no-repeat;
+    url('../images/coming-soon-banner.webp') center / cover no-repeat;
   z-index: 0;
 }
 .home-slide-coming > *:not(.home-coming-background) {

@@ -1,9 +1,9 @@
 (() => {
   const STORAGE_KEY = "deshigram_cart_v2";
   const catalog = {
-    "pack-1": { id: "pack-1", name: "Pack of 1", price: 179, mrp: 199, weight: "100g × 1", image: "images/pack-1.png" },
-    "pack-2": { id: "pack-2", name: "Pack of 2", price: 299, mrp: 379, weight: "100g × 2", image: "images/pack-2.png" },
-    "pack-3": { id: "pack-3", name: "Pack of 3", price: 399, mrp: 549, weight: "100g × 3", image: "images/pack-3.png" }
+    "pack-1": { id: "pack-1", name: "Pack of 1", price: 179, mrp: 199, weight: "100g × 1", image: "images/pack-1.webp" },
+    "pack-2": { id: "pack-2", name: "Pack of 2", price: 299, mrp: 379, weight: "100g × 2", image: "images/pack-2.webp" },
+    "pack-3": { id: "pack-3", name: "Pack of 3", price: 399, mrp: 549, weight: "100g × 3", image: "images/pack-3.webp" }
   };
 
   function getCart() {
