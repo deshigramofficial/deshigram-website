@@ -1,0 +1,132 @@
+const menuButton = document.getElementById("menuButton");
+const navigation = document.getElementById("navigation");
+const currentYear = document.getElementById("currentYear");
+
+if (menuButton && navigation) {
+  const navigationLinks = navigation.querySelectorAll("a");
+  menuButton.addEventListener("click", () => {
+    navigation.classList.toggle("is-open");
+    const isOpen = navigation.classList.contains("is-open");
+    menuButton.textContent = isOpen ? "✕" : "☰";
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  navigationLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      navigation.classList.remove("is-open");
+      menuButton.textContent = "☰";
+      menuButton.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+if (currentYear) currentYear.textContent = new Date().getFullYear();
+
+const revealElements = document.querySelectorAll(".reveal");
+if (revealElements.length) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealElements.forEach((element) => revealObserver.observe(element));
+}
+
+const siteSearch = document.getElementById("siteSearch");
+const searchToggle = document.getElementById("searchToggle");
+const productSearchInput = document.getElementById("productSearchInput");
+const searchResults = document.getElementById("searchResults");
+
+const searchableProducts = [
+  { name: "Dry Fruits Energy Powder", description: "100g nutrition pouch", href: "index.html#products" },
+  { name: "Pack of 1", description: "Launch offer ₹179", href: "index.html#products" },
+  { name: "Pack of 2", description: "Launch offer ₹299", href: "index.html#products" },
+  { name: "Pack of 3", description: "Launch offer ₹399", href: "index.html#products" }
+];
+
+function renderSearchResults(query = "") {
+  if (!searchResults) return;
+  const normalizedQuery = query.trim().toLowerCase();
+  const matches = normalizedQuery ? searchableProducts.filter((product) => `${product.name} ${product.description}`.toLowerCase().includes(normalizedQuery)) : searchableProducts;
+  searchResults.innerHTML = matches.length ? matches.map((product) => `<a class="search-result-item" href="${product.href}">${product.name}<small>${product.description}</small></a>`).join("") : '<p class="search-empty">No product found.</p>';
+}
+
+if (siteSearch && searchToggle && productSearchInput) {
+  searchToggle.addEventListener("click", () => {
+    const willOpen = !siteSearch.classList.contains("is-open");
+    siteSearch.classList.toggle("is-open", willOpen);
+    searchToggle.setAttribute("aria-expanded", String(willOpen));
+    if (willOpen) {
+      renderSearchResults(productSearchInput.value);
+      window.setTimeout(() => productSearchInput.focus(), 50);
+    }
+  });
+
+  productSearchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+
+  document.addEventListener("click", (event) => {
+    if (!siteSearch.contains(event.target)) {
+      siteSearch.classList.remove("is-open");
+      searchToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      siteSearch.classList.remove("is-open");
+      searchToggle.setAttribute("aria-expanded", "false");
+      searchToggle.focus();
+    }
+  });
+}
+
+function setupCarousel(rootSelector, options = {}) {
+  document.querySelectorAll(rootSelector).forEach((carousel) => {
+    const track = carousel.querySelector(options.trackSelector || '.pack-carousel-track, .about-banner-track');
+    if (!track) return;
+    const slides = Array.from(track.children);
+    const prev = carousel.querySelector(options.prevSelector || '.pack-carousel-arrow.prev');
+    const next = carousel.querySelector(options.nextSelector || '.pack-carousel-arrow.next');
+    const dots = Array.from(carousel.querySelectorAll(options.dotSelector || '.pack-carousel-dots button, .about-banner-dots button'));
+    let index = 0;
+    let intervalId = null;
+
+    const setActive = (newIndex) => {
+      index = (newIndex + slides.length) % slides.length;
+      if (carousel.matches('[data-home-carousel], [data-about-full-carousel]')) {
+        slides.forEach((slide, idx) => slide.classList.toggle('active', idx === index));
+      } else {
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === index));
+    };
+
+    const startAuto = () => {
+      if (!options.auto) return;
+      stopAuto();
+      intervalId = window.setInterval(() => setActive(index + 1), options.delay || 3200);
+    };
+
+    const stopAuto = () => {
+      if (intervalId) window.clearInterval(intervalId);
+    };
+
+    prev?.addEventListener('click', () => { setActive(index - 1); startAuto(); });
+    next?.addEventListener('click', () => { setActive(index + 1); startAuto(); });
+    dots.forEach((dot, idx) => dot.addEventListener('click', () => { setActive(idx); startAuto(); }));
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+    carousel.addEventListener('touchstart', stopAuto, { passive: true });
+    carousel.addEventListener('touchend', startAuto, { passive: true });
+
+    setActive(0);
+    startAuto();
+  });
+}
+
+setupCarousel('[data-pack-carousel]', { auto: false, trackSelector: '.pack-carousel-track', prevSelector: '.pack-carousel-arrow.prev', nextSelector: '.pack-carousel-arrow.next', dotSelector: '.pack-carousel-dots button' });
+setupCarousel('[data-home-carousel]', { auto: true, delay: 4200, trackSelector: '.home-banner-track', prevSelector: '.home-banner-arrow.prev', nextSelector: '.home-banner-arrow.next', dotSelector: '.home-banner-dots button' });
+setupCarousel('[data-about-full-carousel]', { auto: true, delay: 4200, trackSelector: '.about-full-track', prevSelector: '.about-full-arrow.prev', nextSelector: '.about-full-arrow.next', dotSelector: '.about-full-dots button' });
