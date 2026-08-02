@@ -45,38 +45,21 @@
         <label class="payment-method-card">
           <input type="radio" name="paymentMethod" value="upi">
           <span class="payment-method-icon">📱</span>
-          <span><strong>Online UPI Payment</strong><small>UPI app ya QR se payment karein</small></span>
+          <span><strong>Pay with UPI</strong><small>Click karte hi installed UPI app khulega</small></span>
         </label>
       </div>
     </section>
 
     <div class="upi-payment-box" id="upiPaymentBox" hidden>
       <div class="upi-heading">
-        <div><span class="upi-kicker">Online payment</span><h2>UPI payment option chunein</h2></div>
+        <div><span class="upi-kicker">UPI payment</span><h2>UPI app open ho raha hai</h2></div>
         <span class="upi-app-badge">Any UPI App</span>
       </div>
+      <p class="upi-note">PhonePe, Google Pay, Paytm ya kisi bhi installed UPI app me payment complete karein. Payment ke baad neeche UTR number bhar dein.</p>
+      <div class="upi-detail-row"><span>UPI ID</span><strong id="upiIdText">singh.abhinendra5@ybl</strong></div>
+    </div>
 
-      <div class="upi-choice-options">
-        <button type="button" class="upi-choice active" data-upi-choice="app">Pay with UPI App</button>
-        <button type="button" class="upi-choice" data-upi-choice="qr">Scan QR Code</button>
-      </div>
-
-      <div class="upi-panel" id="upiAppPanel">
-        <div class="upi-details">
-          <div class="upi-detail-row"><span>Receiver</span><strong>Mr Abhinendra Singh</strong></div>
-          <div class="upi-detail-row"><span>UPI ID</span><strong id="upiIdText">singh.abhinendra5@ybl</strong></div>
-          <button type="button" class="copy-upi-button" id="copyUpiButton">Copy UPI ID</button>
-          <a class="button button-secondary upi-app-button" id="openUpiAppButton" href="#">Open UPI App</a>
-          <p class="upi-note">Mobile par button dabane se installed UPI app khul sakti hai. Desktop par QR option use karein.</p>
-        </div>
-      </div>
-
-      <div class="upi-panel" id="upiQrPanel" hidden>
-        <div class="upi-qr-wrap"><img src="images/payment-qr-phonepe.jpeg" alt="PhonePe UPI QR code for payment"></div>
-        <p class="upi-note qr-note">QR scan karke payment karein. Payment ke baad UTR number enter karna zaroori hai.</p>
-      </div>
-
-      <label class="transaction-label">UPI transaction ID / UTR number
+    <label class="transaction-label">UPI transaction ID / UTR number
         <input type="text" name="transactionId" id="transactionId" minlength="6" placeholder="Example: 425612345678">
       </label>
     </div>
@@ -91,7 +74,7 @@
 </div></section>
 </main>
 
-<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh ki parampara har ghar tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="contact.html">Contact</a></div><p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div></footer>
+<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh ki parampara har ghar tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="contact.html">Contact</a></div><p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div><div class="legal-quick-link"><a href="policies.html">Privacy, Shipping, Refund & Terms</a></div></footer>
 <script src="js/products-data.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/checkout.js"></script>

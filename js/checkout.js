@@ -6,14 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.getElementById("checkoutStatus");
   const confirmButton = document.getElementById("confirmPaymentButton");
   const whatsappButton = document.getElementById("whatsappCheckoutButton");
-  const copyUpiButton = document.getElementById("copyUpiButton");
-  const openUpiAppButton = document.getElementById("openUpiAppButton");
   const upiPaymentBox = document.getElementById("upiPaymentBox");
   const transactionId = document.getElementById("transactionId");
+  const transactionLabel = transactionId?.closest("label");
   const checkoutNotice = document.getElementById("checkoutNotice");
-  const upiAppPanel = document.getElementById("upiAppPanel");
-  const upiQrPanel = document.getElementById("upiQrPanel");
-  const upiChoiceButtons = [...document.querySelectorAll("[data-upi-choice]")];
   const paymentRadios = [...document.querySelectorAll('input[name="paymentMethod"]')];
   const upiId = "singh.abhinendra5@ybl";
   const receiverName = "Mr Abhinendra Singh";
@@ -22,22 +18,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return form.querySelector('input[name="paymentMethod"]:checked')?.value || "cod";
   }
 
-  function updatePaymentUI() {
+  function upiLink() {
+    const total = cart.getSubtotal();
+    return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(receiverName)}&am=${total}&cu=INR&tn=${encodeURIComponent("DeshiGram order payment")}`;
+  }
+
+  function updatePaymentUI({ openApp = false } = {}) {
     const isUpi = selectedPaymentMethod() === "upi";
     upiPaymentBox.hidden = !isUpi;
+    if (transactionLabel) transactionLabel.hidden = !isUpi;
     transactionId.required = isUpi;
     confirmButton.textContent = isUpi ? "Confirm UPI Payment on WhatsApp" : "Confirm COD Order on WhatsApp";
     checkoutNotice.innerHTML = isUpi
-      ? "<strong>Online Payment:</strong> Payment ke baad UTR number enter karein. Shipping charge aur courier serviceability WhatsApp confirmation ke samay batayi jayegi."
+      ? "<strong>Online Payment:</strong> UPI app me payment complete karke UTR number enter karein. Shipping charge aur courier serviceability WhatsApp confirmation ke samay batayi jayegi."
       : "<strong>Cash on Delivery:</strong> Order WhatsApp par confirm hoga. Shipping charge aur courier serviceability confirmation ke samay batayi jayegi.";
     status.textContent = "";
-  }
 
-  function selectUpiChoice(choice) {
-    const showQr = choice === "qr";
-    upiQrPanel.hidden = !showQr;
-    upiAppPanel.hidden = showQr;
-    upiChoiceButtons.forEach(button => button.classList.toggle("active", button.dataset.upiChoice === choice));
+    if (isUpi && openApp && cart.getCart().length) {
+      window.location.href = upiLink();
+    }
   }
 
   function render() {
@@ -47,14 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmButton.disabled = true;
       whatsappButton.disabled = true;
       totalEl.textContent = "₹0";
-      openUpiAppButton.href = "#";
       return;
     }
 
     itemsEl.innerHTML = items.map(item => `<article class="checkout-item"><img src="${item.image}" alt="${item.name}"><div><h3>${item.name}</h3><p>${item.weight} × ${item.quantity}</p></div><strong>₹${item.price * item.quantity}</strong></article>`).join("");
-    const total = cart.getSubtotal();
-    totalEl.textContent = `₹${total}`;
-    openUpiAppButton.href = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(receiverName)}&am=${total}&cu=INR&tn=${encodeURIComponent("DeshiGram order payment")}`;
+    totalEl.textContent = `₹${cart.getSubtotal()}`;
   }
 
   function customerData() {
@@ -78,18 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.open(`https://wa.me/919457831399?text=${encodeURIComponent(message)}`, "_blank", "noopener");
   }
 
-  paymentRadios.forEach(radio => radio.addEventListener("change", updatePaymentUI));
-  upiChoiceButtons.forEach(button => button.addEventListener("click", () => selectUpiChoice(button.dataset.upiChoice)));
-
-  copyUpiButton?.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(upiId);
-      copyUpiButton.textContent = "UPI ID Copied ✓";
-      window.setTimeout(() => { copyUpiButton.textContent = "Copy UPI ID"; }, 1800);
-    } catch {
-      status.textContent = `UPI ID: ${upiId}`;
-    }
-  });
+  paymentRadios.forEach(radio => radio.addEventListener("change", () => updatePaymentUI({ openApp: radio.value === "upi" && radio.checked })));
 
   whatsappButton.addEventListener("click", () => {
     const customer = customerData();
@@ -119,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("deshigram:cart-updated", render);
-  selectUpiChoice("app");
   updatePaymentUI();
   render();
 });
