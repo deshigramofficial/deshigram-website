@@ -1,109 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const cart = window.DESHIGRAM_CART;
-  const itemsEl = document.getElementById("checkoutItems");
-  const totalEl = document.getElementById("checkoutTotal");
-  const form = document.getElementById("checkoutForm");
-  const status = document.getElementById("checkoutStatus");
-  const confirmButton = document.getElementById("confirmPaymentButton");
-  const whatsappButton = document.getElementById("whatsappCheckoutButton");
-  const upiPaymentBox = document.getElementById("upiPaymentBox");
-  const transactionId = document.getElementById("transactionId");
-  const transactionLabel = transactionId?.closest("label");
-  const checkoutNotice = document.getElementById("checkoutNotice");
-  const paymentRadios = [...document.querySelectorAll('input[name="paymentMethod"]')];
-  const upiId = "singh.abhinendra5@ybl";
-  const receiverName = "Mr Abhinendra Singh";
-
-  function selectedPaymentMethod() {
-    return form.querySelector('input[name="paymentMethod"]:checked')?.value || "cod";
-  }
-
-  function upiLink() {
-    const total = cart.getSubtotal();
-    return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(receiverName)}&am=${total}&cu=INR&tn=${encodeURIComponent("DeshiGram order payment")}`;
-  }
-
-  function updatePaymentUI({ openApp = false } = {}) {
-    const isUpi = selectedPaymentMethod() === "upi";
-    upiPaymentBox.hidden = !isUpi;
-    if (transactionLabel) transactionLabel.hidden = !isUpi;
-    transactionId.required = isUpi;
-    confirmButton.textContent = isUpi ? "Confirm UPI Payment on WhatsApp" : "Confirm COD Order on WhatsApp";
-    checkoutNotice.innerHTML = isUpi
-      ? "<strong>Online Payment:</strong> UPI app me payment complete karke UTR number enter karein. Shipping charge aur courier serviceability WhatsApp confirmation ke samay batayi jayegi."
-      : "<strong>Cash on Delivery:</strong> Order WhatsApp par confirm hoga. Shipping charge aur courier serviceability confirmation ke samay batayi jayegi.";
-    status.textContent = "";
-
-    if (isUpi && openApp && cart.getCart().length) {
-      window.location.href = upiLink();
-    }
-  }
-
-  function render() {
-    const items = cart.getCart();
-    if (!items.length) {
-      itemsEl.innerHTML = '<div class="checkout-empty"><p>Your cart is empty.</p><a href="index.html#products">Choose a pack</a></div>';
-      confirmButton.disabled = true;
-      whatsappButton.disabled = true;
-      totalEl.textContent = "₹0";
-      return;
-    }
-
-    itemsEl.innerHTML = items.map(item => `<article class="checkout-item"><img src="${item.image}" alt="${item.name}"><div><h3>${item.name}</h3><p>${item.weight} × ${item.quantity}</p></div><strong>₹${item.price * item.quantity}</strong></article>`).join("");
-    totalEl.textContent = `₹${cart.getSubtotal()}`;
-  }
-
-  function customerData() {
-    return Object.fromEntries(new FormData(form).entries());
-  }
-
-  function validForm() {
-    if (!form.reportValidity()) return false;
-    if (!cart.getCart().length) {
-      status.textContent = "Your cart is empty.";
-      return false;
-    }
-    return true;
-  }
-
-  function orderLines() {
-    return cart.getCart().map(item => `• ${item.name} (${item.weight}) × ${item.quantity} = ₹${item.price * item.quantity}`);
-  }
-
-  function openWhatsapp(message) {
-    window.open(`https://wa.me/919457831399?text=${encodeURIComponent(message)}`, "_blank", "noopener");
-  }
-
-  paymentRadios.forEach(radio => radio.addEventListener("change", () => updatePaymentUI({ openApp: radio.value === "upi" && radio.checked })));
-
-  whatsappButton.addEventListener("click", () => {
-    const customer = customerData();
-    const message = `Hello DeshiGram, mujhe order/payment me help chahiye.\n\n${orderLines().join("\n")}\n\nTotal: ₹${cart.getSubtotal()}\nName: ${customer.name || "Not filled"}\nPhone: ${customer.phone || "Not filled"}`;
-    openWhatsapp(message);
-  });
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    if (!validForm()) return;
-
-    const customer = customerData();
-    const isUpi = selectedPaymentMethod() === "upi";
-    const paymentText = isUpi
-      ? `Payment Method: Online UPI\nTotal Paid: ₹${cart.getSubtotal()}\nUPI ID Paid To: ${upiId}\nTransaction ID / UTR: ${customer.transactionId}`
-      : `Payment Method: Cash on Delivery\nOrder Total: ₹${cart.getSubtotal()}`;
-    const intro = isUpi
-      ? "Hello DeshiGram, maine UPI payment kar diya hai aur order confirm karna hai."
-      : "Hello DeshiGram, mujhe Cash on Delivery par order confirm karna hai.";
-
-    const message = `${intro}\n\n${orderLines().join("\n")}\n\n${paymentText}\n\nCustomer Details:\nName: ${customer.name}\nPhone: ${customer.phone}\nEmail: ${customer.email || "Not provided"}\nAddress: ${customer.address}, ${customer.city}, ${customer.state} - ${customer.pincode}${isUpi ? "\n\nMain payment screenshot WhatsApp par attach kar raha/rahi hoon." : ""}`;
-
-    status.innerHTML = isUpi
-      ? "WhatsApp khul raha hai. <strong>Payment screenshot manually attach karke message send karein.</strong>"
-      : "WhatsApp khul raha hai. Order details check karke message send karein.";
-    openWhatsapp(message);
-  });
-
-  document.addEventListener("deshigram:cart-updated", render);
-  updatePaymentUI();
-  render();
+document.addEventListener("DOMContentLoaded",()=>{
+  const cart=window.DESHIGRAM_CART;const itemsEl=document.getElementById("checkoutItems"),mrpEl=document.getElementById("checkoutMrpTotal"),discountEl=document.getElementById("checkoutDiscount"),totalEl=document.getElementById("checkoutTotal"),form=document.getElementById("checkoutForm"),status=document.getElementById("checkoutStatus"),confirmButton=document.getElementById("confirmPaymentButton"),payButton=document.getElementById("payWithUpiButton"),qrFallback=document.getElementById("upiQrFallback");
+  const FEES={logistics:55,platform:10,packaging:5,payment:5};const feeTotal=Object.values(FEES).reduce((a,b)=>a+b,0);const upiId="singh.abhinendra5@ybl",receiverName="Mr Abhinendra Singh";const money=value=>cart.money?cart.money(value):`₹${Number(value).toFixed(2)}`;
+  const totals=()=>{const product=cart.getSubtotal(),mrp=cart.getMrpTotal?cart.getMrpTotal():product/0.7,discount=mrp-product,total=product+feeTotal;return{product,mrp,discount,total};};
+  function upiLink(){const {total}=totals();return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(receiverName)}&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("DeshiGram order payment")}`;}
+  function render(){const items=cart.getCart();if(!items.length){itemsEl.innerHTML='<div class="checkout-empty"><p>Your cart is empty.</p><a href="products.html">Choose a pack</a></div>';confirmButton.disabled=true;payButton.disabled=true;mrpEl.textContent=discountEl.textContent=totalEl.textContent=money(0);return;}confirmButton.disabled=false;payButton.disabled=false;itemsEl.innerHTML=items.map(item=>`<article class="checkout-item"><img src="${item.image}" alt="${item.name}"><div><h3>${item.name}</h3><p>${item.weight} × ${item.quantity}</p><small>30% off MRP</small></div><strong>${money(item.price*item.quantity)}</strong></article>`).join("");const t=totals();mrpEl.textContent=money(t.mrp);discountEl.textContent=`− ${money(t.discount)}`;totalEl.textContent=money(t.total);}
+  function customerData(){return Object.fromEntries(new FormData(form).entries());}
+  function validForm(){if(!form.reportValidity())return false;if(!cart.getCart().length){status.textContent="Your cart is empty.";return false;}return true;}
+  function orderLines(){return cart.getCart().map(item=>`• ${item.name} (${item.weight}) × ${item.quantity} = ${money(item.price*item.quantity)}`);}
+  function openWhatsapp(message){window.open(`https://wa.me/919457831399?text=${encodeURIComponent(message)}`,"_blank","noopener");}
+  payButton.addEventListener("click",()=>{if(!cart.getCart().length)return;window.location.href=upiLink();setTimeout(()=>{qrFallback.hidden=false;},900);});
+  form.addEventListener("submit",event=>{event.preventDefault();if(!validForm())return;const c=customerData(),t=totals();const msg=`Hello DeshiGram, I have completed the UPI payment and want to confirm my order.\n\n${orderLines().join("\n")}\n\nMRP total: ${money(t.mrp)}\n30% discount: -${money(t.discount)}\nLogistics / delivery: ₹55.00\nPlatform handling: ₹10.00\nSecure packaging: ₹5.00\nPayment handling: ₹5.00\nTotal paid: ${money(t.total)}\nUPI ID: ${upiId}\nTransaction ID / UTR: ${c.transactionId}\n\nCustomer Details:\nName: ${c.name}\nPhone: ${c.phone}\nEmail: ${c.email||"Not provided"}\nAddress: ${c.address}, ${c.city}, ${c.state} - ${c.pincode}`;status.innerHTML='Opening WhatsApp to send your order confirmation.';openWhatsapp(msg);});
+  document.addEventListener("deshigram:cart-updated",render);render();
 });

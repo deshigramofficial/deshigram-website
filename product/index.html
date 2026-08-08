@@ -26,25 +26,25 @@
   <link rel="stylesheet" href="css/product.css">
 </head>
 <body>
-<div class="announcement-bar">Available Now • First 10 Confirmed Orders Launch Offer</div>
+<div class="announcement-bar">Available Now • 30% Off MRP</div>
 <header class="header"><div class="container navbar">
 <a href="index.html" class="brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh ki parampara har ghar tak</span></div></a>
 <div class="site-search" id="siteSearch"><button class="search-toggle" id="searchToggle" type="button" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg></button><div class="search-panel" id="searchPanel"><label class="sr-only" for="productSearchInput">Search products</label><input id="productSearchInput" type="search" placeholder="Search products..." autocomplete="off"><div class="search-results" id="searchResults"></div></div></div>
 <button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button>
-<nav class="navigation" id="navigation"><a href="index.html">Home</a><a href="index.html#products">Products</a><a href="about.html">About Us</a><a href="index.html#promise">Our Promise</a><a href="contact.html">Contact</a><a href="distributors.html">Distributors</a>
+<nav class="navigation" id="navigation"><a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="distributors.html">Distributors</a>
 <a href="policies.html">Policies</a>
 </nav>
 </div></header>
 <main>
-<section class="product-error" id="productError" hidden><div class="container product-error-box"><span class="eyebrow">Product Not Found</span><h1>This product is not available.</h1><a href="index.html#products" class="button button-primary">Explore Products</a></div></section>
+<section class="product-error" id="productError" hidden><div class="container product-error-box"><span class="eyebrow">Product Not Found</span><h1>This product is not available.</h1><a href="products.html" class="button button-primary">Explore Products</a></div></section>
 <section class="product-detail-page" id="productDetailPage" hidden><div class="container">
-<div class="product-breadcrumb"><a href="index.html">Home</a><span>›</span><a href="index.html#products">Products</a><span>›</span><strong id="breadcrumbName">Product</strong></div>
+<div class="product-breadcrumb"><a href="index.html">Home</a><span>›</span><a href="products.html">Products</a><span>›</span><strong id="breadcrumbName">Product</strong></div>
 <div class="product-detail-layout">
 <div class="dynamic-product-gallery"><div class="dynamic-main-image"><span class="dynamic-product-badge" id="productBadge">Available Now</span><img src="" alt="" id="mainProductImage"></div><div class="dynamic-thumbnails" id="productThumbnails"></div></div>
 <div class="dynamic-product-content"><p class="dynamic-product-category" id="productCategory"></p><h1 id="productName"></h1><div class="dynamic-rating"><span>★★★★★</span><small>Launch Product</small></div><p class="dynamic-product-intro" id="productShortDescription"></p>
 <div class="dynamic-price-row"><div><span class="price-label">Launch Offer</span><div class="price-values"><strong id="productPrice"></strong><del id="productOldPrice"></del></div></div><span class="dynamic-weight" id="productWeight"></span></div>
 <div class="product-feature-list"><h2>Product Highlights</h2><div id="productFeatures"></div></div>
-<div class="dynamic-product-actions"><button class="button button-primary" id="addProductToCart">Add to Cart</button><a href="#" class="button button-secondary" id="productWhatsAppButton" target="_blank" rel="noopener noreferrer">Ask on WhatsApp</a></div>
+<div class="product-rating-summary"><span class="review-stars">★★★★★</span><strong>4.6/5</strong><small>4 customer ratings</small></div><div class="dynamic-product-actions"><button class="button button-primary" id="addProductToCart">Add to Cart</button><a href="index.html#reviews" class="button button-secondary">Customer Reviews</a></div>
 <div class="launch-information"><strong>Important label note</strong><p>Nutrition and protein-related claims will be updated after laboratory testing. Always follow the final printed label for serving and statutory information.</p></div>
 </div></div></div></section>
 <section class="dynamic-information-section" id="productInformation" hidden><div class="container"><div class="dynamic-tabs"><button class="dynamic-tab active" data-tab-target="descriptionPanel">Description</button><button class="dynamic-tab" data-tab-target="ingredientsPanel">Ingredients</button><button class="dynamic-tab" data-tab-target="usagePanel">How to Use</button><button class="dynamic-tab" data-tab-target="storagePanel">Storage</button></div><div class="dynamic-tab-content">
@@ -54,7 +54,7 @@
 <article class="dynamic-panel" id="storagePanel"><span class="eyebrow">Keep It Fresh</span><h2>Storage Instructions</h2><p id="productStorage"></p></article>
 </div></div></section>
 </main>
-<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh ki parampara har ghar tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="index.html#products">Products</a><a href="about.html">About Us</a><a href="distributors.html">Distributors</a><a href="policies.html">Policies</a><a href="contact.html">Contact</a></div>
+<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh ki parampara har ghar tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About Us</a><a href="distributors.html">Distributors</a><a href="policies.html">Policies</a><a href="contact.html">Contact</a></div>
 <p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div><div class="legal-quick-link"><a href="policies.html">Privacy, Shipping, Refund & Terms</a></div></footer>
 <script src="js/products-data.js"></script><script src="js/utils.js"></script><script src="js/cart.js"></script><script src="js/product-page.js"></script><script src="js/script.js"></script>
 </body></html>

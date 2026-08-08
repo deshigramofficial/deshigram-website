@@ -11,3 +11,9 @@
 /* Single-step UPI: selecting Pay with UPI opens the installed app directly. */
 .transaction-label[hidden], .upi-payment-box[hidden] { display:none !important; }
 .upi-payment-box .upi-detail-row { margin-top:14px; }
+
+
+/* === FINAL CHECKOUT SIMPLIFICATION === */
+.checkout-summary-card{position:sticky;top:110px}.checkout-breakdown{display:grid;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}.checkout-breakdown>div{display:flex;justify-content:space-between;gap:18px;color:#55645c}.checkout-breakdown strong{color:#123f2b}.checkout-breakdown .discount-line span,.checkout-breakdown .discount-line strong{color:#159447}.checkout-item small{display:block;margin-top:3px;color:#159447;font-size:11px;font-weight:700}.cod-disabled{opacity:.58;cursor:not-allowed!important;background:#f3f3ef!important}.cod-disabled input{pointer-events:none}.active-upi{border-color:var(--green)!important;background:#f1f8f3!important}.pay-upi-button{width:100%;margin:16px 0 10px}.upi-qr-fallback{display:grid;place-items:center;gap:8px;margin-top:16px;padding:14px;border:1px solid rgba(18,63,43,.1);border-radius:16px;background:#fff}.upi-qr-fallback[hidden]{display:none!important}.upi-qr-fallback img{width:min(100%,280px);max-height:280px;object-fit:contain}.upi-qr-fallback small{color:var(--muted)}.transaction-label{margin-top:18px}.checkout-notice strong{display:block;margin-bottom:3px}.checkout-total{margin-top:18px}.checkout-trust{margin-top:18px}.checkout-whatsapp-button{display:none!important}
+@media(max-width:900px){.checkout-summary-card{position:static;order:-1}}
+@media(max-width:560px){.checkout-hero h1{font-size:38px}.checkout-hero p{font-size:15px}.checkout-summary-card h2,.checkout-form-card>h2{font-size:27px}.checkout-item{grid-template-columns:58px 1fr auto}.checkout-item img{width:58px;height:58px}.checkout-total strong{font-size:25px}}

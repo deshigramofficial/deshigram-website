@@ -4,7 +4,6 @@ const contactFormStatus = document.getElementById("contactFormStatus");
 if (contactForm) {
   contactForm.addEventListener("submit", (event) => {
     event.preventDefault();
-
     if (!contactForm.checkValidity()) {
       contactForm.reportValidity();
       return;
@@ -14,28 +13,23 @@ if (contactForm) {
     const name = String(formData.get("name") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
     const email = String(formData.get("email") || "").trim();
-    const subject = String(formData.get("subject") || "").trim();
+    const subject = String(formData.get("subject") || "General enquiry").trim();
     const message = String(formData.get("message") || "").trim();
 
-    const whatsappMessage = [
-      "Hello DeshiGram,",
-      "",
+    const body = [
       `Name: ${name}`,
       `Phone: ${phone}`,
       email ? `Email: ${email}` : null,
       `Subject: ${subject}`,
       "",
-      `Message: ${message}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
+      `Message: ${message}`
+    ].filter(Boolean).join("\n");
 
-    const whatsappUrl = `https://wa.me/919457831399?text=${encodeURIComponent(whatsappMessage)}`;
+    const mailto = `mailto:deshigramofficial@gmail.com?subject=${encodeURIComponent(`DeshiGram Website Enquiry - ${subject}`)}&body=${encodeURIComponent(body)}`;
 
     if (contactFormStatus) {
-      contactFormStatus.textContent = "Opening WhatsApp with your message…";
+      contactFormStatus.textContent = "Opening your email app to send the enquiry…";
     }
-
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    window.location.href = mailto;
   });
 }

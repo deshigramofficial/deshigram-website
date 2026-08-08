@@ -1,318 +1,102 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="DeshiGram brings trusted Indian foods made with care." name="description"/>
-<title>DeshiGram | Desh ki parampara har ghar tak</title>
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=3">
-<link href="images/favicon.png" rel="icon" type="image/png"/>
-<link href="css/style.css" rel="stylesheet"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DeshiGram brings thoughtfully made everyday products rooted in Indian values.">
+<title>DeshiGram | Desh Ki Parampara, Har Ghar Tak</title>
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=3">
+<link rel="icon" type="image/png" href="images/favicon.png?v=3">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<!-- Announcement Bar -->
-<div class="announcement-bar">Available Now • Dry Fruits Energy Powder • Order on WhatsApp</div>
-<!-- Header -->
+<div class="announcement-bar">Available Now • Dry Fruits Energy Powder • 30% Off MRP</div>
 <header class="header">
-<div class="container navbar">
-<a class="brand" href="index.html">
-<img alt="DeshiGram Logo" src="images/logo.webp"/>
-<div>
-<span class="brand-name">DeshiGram</span>
-<span class="brand-tagline">Desh ki parampara har ghar tak</span>
-</div>
-</a>
-<div class="site-search" id="siteSearch">
-<button aria-expanded="false" aria-label="Search products" class="search-toggle" id="searchToggle" type="button">
-<svg aria-hidden="true" viewbox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path></svg>
-</button>
-<div class="search-panel" id="searchPanel">
-<label class="sr-only" for="productSearchInput">Search products</label>
-<input autocomplete="off" id="productSearchInput" placeholder="Search products..." type="search"/>
-<div class="search-results" id="searchResults"></div>
-</div>
-</div>
-<button aria-label="Open navigation menu" class="menu-button" id="menuButton">
-        ☰
-      </button>
-<nav class="navigation" id="navigation">
-<a href="#home">Home</a>
-<a href="#products">Products</a>
-<a href="about.html">About Us</a>
-<a href="#promise">Our Promise</a>
-<a href="distributors.html">Distributors</a>
-<a href="policies.html">Policies</a>
-<a href="contact.html">Contact</a>
-</nav>
-</div>
+  <div class="container navbar">
+    <a class="brand" href="index.html" aria-label="DeshiGram home">
+      <img src="images/logo.webp" alt="DeshiGram Logo">
+      <div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div>
+    </a>
+    <div class="site-search" id="siteSearch">
+      <button class="search-toggle" id="searchToggle" type="button" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path></svg></button>
+      <div class="search-panel" id="searchPanel"><label class="sr-only" for="productSearchInput">Search products</label><input id="productSearchInput" type="search" placeholder="Search products..." autocomplete="off"><div class="search-results" id="searchResults"></div></div>
+    </div>
+    <button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button>
+    <nav class="navigation" id="navigation">
+      <a class="active-link" href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About Us</a><a href="distributors.html">Distributors</a><a href="policies.html">Policies</a><a href="contact.html">Contact</a>
+    </nav>
+  </div>
 </header>
 <main>
-<!-- Hero Section -->
-<section class="hero home-hero-slider" id="home">
+<section class="dg-hero" id="home">
+  <div class="container dg-hero-grid">
+    <div class="dg-hero-copy">
+      <span class="dg-eyebrow">WELCOME TO DESHIGRAM</span>
+      <h1>Pure goodness<br>for everyday homes.</h1>
+      <p>Thoughtfully made products inspired by Indian values, presented with clean quality and modern convenience.</p>
+      <div class="dg-hero-actions"><a class="button button-primary" href="products.html">Explore Products</a><a class="button button-secondary" href="about.html">Learn More</a></div>
+      <div class="dg-trust-row"><span>30% Off MRP</span><span>100% Veg</span><span>FSSAI Licensed</span></div>
+    </div>
+    <div class="dg-hero-visual"><div class="dg-hero-orb"></div><img src="images/dry-fruits-product.webp" alt="DeshiGram Dry Fruits Energy Powder"></div>
+  </div>
+</section>
+
+<section class="dg-feature-strip">
+  <div class="container dg-feature-grid">
+    <div><strong>6 familiar ingredients</strong><span>Makhana, cashew, almond, peanuts, white sesame & cardamom</span></div>
+    <div><strong>No added sugar</strong><span>Simple everyday food with clear ingredient information</span></div>
+    <div><strong>Packed with care</strong><span>Clean presentation with thoughtful packaging</span></div>
+  </div>
+</section>
+
+<section class="section dg-home-products" id="featured-products">
   <div class="container">
-    <div class="home-banner-carousel" data-home-carousel>
-      <div class="home-banner-track">
-        <article class="home-banner-slide home-slide-main home-slide-safe active">
-          <div class="home-banner-copy">
-            <span class="hero-kicker">AVAILABLE NOW • 100% VEG</span>
-            <h1>Pure Indian goodness<br>for every family.</h1>
-            <p>Discover DeshiGram Dry Fruits Energy Powder — made with makhana, kaju, badam, moongfali, safed til and elaichi for everyday nourishment.</p>
-            <div class="hero-buttons">
-              <button class="button button-primary" type="button" data-add-to-cart="pack-1">Add Pack of 1</button>
-              <a class="button button-secondary" href="https://wa.me/919457831399" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
-            </div>
-            <div class="hero-mini-points"><span>6 Familiar Ingredients</span><span>No Added Sugar</span><span>No Preservatives</span></div>
-          </div>
-          <div class="home-banner-visual">
-            <div class="hero-glow"></div>
-            <img src="images/dry-fruits-product.webp" alt="DeshiGram Dry Fruits Energy Powder 100g pouch">
-            <div class="hero-price-chip"><small>Launch pack</small><strong>100g</strong></div>
-          </div>
-        </article>
+    <div class="dg-section-head"><span class="dg-eyebrow">OUR COLLECTION</span><h2>Choose your pack</h2><p>Simple pack options for DeshiGram Dry Fruits Energy Powder.</p></div>
+    <div class="dg-home-card-grid">
+      <article class="dg-home-product-card">
+        <span class="dg-sale-badge">30% OFF MRP</span>
+        <div class="dg-home-product-image"><img src="images/pack-1.webp" alt="Pack of 1"></div>
+        <div class="dg-home-product-copy"><small>100g × 1</small><h3>Pack of 1</h3><div class="dg-price"><s>₹199</s><strong>₹139.30</strong></div><div class="dg-card-actions"><button class="button button-primary" type="button" data-add-to-cart="pack-1">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-1">Details</a></div></div>
+      </article>
+      <article class="dg-home-product-card dg-featured-card">
+        <span class="dg-sale-badge">30% OFF MRP</span><span class="dg-best-badge">Best Value</span>
+        <div class="dg-home-product-image"><img src="images/pack-2.webp" alt="Pack of 2"></div>
+        <div class="dg-home-product-copy"><small>100g × 2</small><h3>Pack of 2</h3><div class="dg-price"><s>₹379</s><strong>₹265.30</strong></div><div class="dg-card-actions"><button class="button button-primary" type="button" data-add-to-cart="pack-2">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-2">Details</a></div></div>
+      </article>
+      <article class="dg-home-product-card">
+        <span class="dg-sale-badge">30% OFF MRP</span>
+        <div class="dg-home-product-image"><img src="images/pack-3.webp" alt="Pack of 3"></div>
+        <div class="dg-home-product-copy"><small>100g × 3</small><h3>Pack of 3</h3><div class="dg-price"><s>₹549</s><strong>₹384.30</strong></div><div class="dg-card-actions"><button class="button button-primary" type="button" data-add-to-cart="pack-3">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-3">Details</a></div></div>
+      </article>
+    </div>
+    <div class="dg-centered-action"><a class="button button-secondary" href="products.html">View All Products</a></div>
+  </div>
+</section>
 
-        <article class="home-banner-slide home-slide-ingredients home-slide-safe">
-          <div class="home-banner-copy dark-copy">
-            <span class="hero-kicker light-kicker">WHAT MAKES IT SPECIAL</span>
-            <h2>Six familiar ingredients.<br>One easy daily routine.</h2>
-            <p>Makhana, kaju, badam, moongfali, safed til aur elaichi — carefully combined for taste, nourishment and everyday convenience.</p>
-            <div class="ingredient-chips"><span>Makhana</span><span>Kaju</span><span>Badam</span><span>Moongfali</span><span>Safed Til</span><span>Elaichi</span></div>
-            <a class="button button-primary" href="#products">Choose Your Pack</a>
-          </div>
-          <div class="home-banner-visual info-visual">
-            <img src="images/product-ingredients.webp" alt="Six natural ingredients in DeshiGram Dry Fruits Energy Powder">
-          </div>
-        </article>
+<section class="section dg-story-preview">
+  <div class="container dg-story-preview-grid">
+    <div><span class="dg-eyebrow">ABOUT DESHIGRAM</span><h2>Rooted in tradition. Built for today.</h2></div>
+    <div><p>DeshiGram is an Indian FMCG brand beginning with food and growing towards trusted everyday categories for modern households.</p><a class="text-link" href="about.html">Read our story →</a></div>
+  </div>
+</section>
 
-        <article class="home-banner-slide home-slide-coming home-slide-safe clean-coming-slide">
-          <div class="home-banner-copy coming-copy-clean">
-            <span class="hero-kicker">COMING SOON</span>
-            <h2>More DeshiGram<br>products are on the way.</h2>
-            <p>Dry Fruits Energy Powder se journey shuru hui hai. Sattu, Annaprashan aur Banana Chips ki final packaging jaldi reveal hogi.</p>
-            <a class="button button-primary" href="contact.html">Stay Updated</a>
-          </div>
-          <div class="coming-products-grid clean-coming-products" aria-label="Upcoming DeshiGram products">
-            <figure><img src="images/sattu.webp" alt="Upcoming Sattu pack"><figcaption>Sattu</figcaption></figure>
-            <figure><img src="images/annaprashan.webp" alt="Upcoming Annaprashan pack"><figcaption>Annaprashan</figcaption></figure>
-            <figure><img src="images/banana-chips.webp" alt="Upcoming Banana Chips pack"><figcaption>Banana Chips</figcaption></figure>
-          </div>
-        </article>
-      </div>
-      <button class="home-banner-arrow prev" type="button" aria-label="Previous banner">‹</button>
-      <button class="home-banner-arrow next" type="button" aria-label="Next banner">›</button>
-      <div class="home-banner-dots">
-        <button class="active" type="button" aria-label="Banner 1"></button>
-        <button type="button" aria-label="Banner 2"></button>
-        <button type="button" aria-label="Banner 3"></button>
-      </div>
+<section class="section customer-reviews-section" id="reviews">
+  <div class="container">
+    <div class="dg-section-head"><span class="dg-eyebrow">CUSTOMER REVIEWS</span><h2>Early customer ratings</h2><p><strong>4.6/5</strong> average from 4 customer ratings.</p></div>
+    <div class="customer-review-grid">
+      <article class="customer-review-card"><div class="review-stars">★★★★★ <span>5.0</span></div><p>“Taste aur quality dono bahut achhe lage. Product ka texture bhi sahi hai aur packaging clean, neat aur premium feel deti hai. Overall product use karne ka experience kaafi achha raha.”</p><strong>Zym Boy</strong></article>
+      <article class="customer-review-card"><div class="review-stars">★★★★½ <span>4.5</span></div><p>“Product ka taste balanced laga aur overall quality achhi hai. Packaging bhi decent aur convenient hai. Daily use ke liye product easy laga aur overall experience positive raha.”</p><strong>Deeksha Dixit</strong></article>
+      <article class="customer-review-card"><div class="review-stars">★★★★½ <span>4.5</span></div><p>“Packaging achhi hai aur product fresh laga. Taste bhi pleasant hai aur quality par dhyan diya gaya hai. Overall experience kaafi achha raha aur product presentation bhi impressive hai.”</p><strong>Rashmi Yadav</strong></article>
+      <article class="customer-review-card"><div class="review-stars">★★★★½ <span>4.5</span></div><p>“Quality aur presentation dono impressive lage. Product ki packaging premium feel deti hai aur overall taste bhi achha hai. Workout ya gym routine follow karne walon ke liye bhi ye ek convenient option lagta hai.”</p><strong>Harsh Chaturvedi</strong></article>
     </div>
   </div>
 </section>
-<!-- Promise Strip -->
-<section class="benefit-strip">
-<div class="container benefit-grid benefit-grid-four">
-<div class="benefit-item"><span class="benefit-icon">🌾</span><div><h3>6 Natural Ingredients</h3><p>Makhana, kaju, badam, moongfali, safed til and elaichi.</p></div></div>
-<div class="benefit-item"><span class="benefit-icon">🌿</span><div><h3>No Added Sugar</h3><p>Simple everyday nourishment without added sugar.</p></div></div>
-<div class="benefit-item"><span class="benefit-icon">🛡️</span><div><h3>FSSAI Licensed Food Business</h3><p>FSSAI Lic. No.: 22726302000355</p></div></div>
-<div class="benefit-item"><span class="benefit-icon">📦</span><div><h3>Packed with Care</h3><p>Clean, hygienic and thoughtful packaging.</p></div></div>
-</div>
-</section>
-<!-- Products -->
-<section class="section products-section" id="products">
-  <div class="container">
-    <div class="section-heading compact-heading">
-      <span class="eyebrow">Choose Your Pack</span>
-      <h2>Dry Fruits Energy Powder launch packs</h2>
-      <p>First 10 customers ke liye special launch offer. Har pouch 100g ka hai.</p>
-    </div>
 
-    <div class="launch-pack-grid">
-      <article class="launch-pack-card">
-        <span class="first-ten-badge">First 10 customers offer</span>
-        <div class="pack-image-carousel" data-pack-carousel>
-          <button class="pack-carousel-arrow prev" type="button" aria-label="Previous slide">‹</button>
-          <div class="pack-carousel-track">
-            <figure class="pack-slide pack-slide-product active"><img src="images/pack-1.webp" alt="DeshiGram Dry Fruits Energy Powder pack of 1"></figure>
-            <figure class="pack-slide"><img src="images/product-ingredients.webp" alt="Dry fruits energy powder ingredients"><figcaption>Product me kya hai</figcaption></figure>
-            <figure class="pack-slide"><img src="images/product-how-to-use.webp" alt="How to use dry fruits energy powder"><figcaption>Kaise use karein</figcaption></figure>
-          </div>
-          <button class="pack-carousel-arrow next" type="button" aria-label="Next slide">›</button>
-          <div class="pack-carousel-dots" aria-label="Pack of 1 image slider">
-            <button class="active" type="button" aria-label="Slide 1"></button>
-            <button type="button" aria-label="Slide 2"></button>
-            <button type="button" aria-label="Slide 3"></button>
-          </div>
-        </div>
-        <div class="pack-card-copy">
-          <p class="product-category">100g × 1</p>
-          <h3>Pack of 1</h3>
-          <p class="pack-subline">1 pouch • First 10 customers offer</p>
-          <div class="pack-pricing"><span class="pack-mrp">MRP ₹199</span><strong>₹179</strong></div>
-          <div class="pack-action-row"><button class="button button-primary" type="button" data-add-to-cart="pack-1">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-1">View Details</a></div>
-        </div>
-      </article>
-
-      <article class="launch-pack-card featured-pack">
-        <span class="popular-badge">Best Value</span>
-        <span class="first-ten-badge">First 10 customers offer</span>
-        <div class="pack-image-carousel" data-pack-carousel>
-          <button class="pack-carousel-arrow prev" type="button" aria-label="Previous slide">‹</button>
-          <div class="pack-carousel-track">
-            <figure class="pack-slide pack-slide-product active"><img src="images/pack-2.webp" alt="DeshiGram Dry Fruits Energy Powder pack of 2"></figure>
-            <figure class="pack-slide"><img src="images/product-ingredients.webp" alt="Dry fruits energy powder ingredients"><figcaption>Product me kya hai</figcaption></figure>
-            <figure class="pack-slide"><img src="images/product-how-to-use.webp" alt="How to use dry fruits energy powder"><figcaption>Kaise use karein</figcaption></figure>
-          </div>
-          <button class="pack-carousel-arrow next" type="button" aria-label="Next slide">›</button>
-          <div class="pack-carousel-dots" aria-label="Pack of 2 image slider">
-            <button class="active" type="button" aria-label="Slide 1"></button>
-            <button type="button" aria-label="Slide 2"></button>
-            <button type="button" aria-label="Slide 3"></button>
-          </div>
-        </div>
-        <div class="pack-card-copy">
-          <p class="product-category">100g × 2</p>
-          <h3>Pack of 2</h3>
-          <p class="pack-subline">2 pouches • First 10 customers offer</p>
-          <div class="pack-pricing"><span class="pack-mrp">MRP ₹379</span><strong>₹299</strong></div>
-          <div class="pack-action-row"><button class="button button-primary" type="button" data-add-to-cart="pack-2">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-2">View Details</a></div>
-        </div>
-      </article>
-
-      <article class="launch-pack-card">
-        <span class="first-ten-badge">First 10 customers offer</span>
-        <div class="pack-image-carousel" data-pack-carousel>
-          <button class="pack-carousel-arrow prev" type="button" aria-label="Previous slide">‹</button>
-          <div class="pack-carousel-track">
-            <figure class="pack-slide pack-slide-product active"><img src="images/pack-3.webp" alt="DeshiGram Dry Fruits Energy Powder pack of 3"></figure>
-            <figure class="pack-slide"><img src="images/product-ingredients.webp" alt="Dry fruits energy powder ingredients"><figcaption>Product me kya hai</figcaption></figure>
-            <figure class="pack-slide"><img src="images/product-how-to-use.webp" alt="How to use dry fruits energy powder"><figcaption>Kaise use karein</figcaption></figure>
-          </div>
-          <button class="pack-carousel-arrow next" type="button" aria-label="Next slide">›</button>
-          <div class="pack-carousel-dots" aria-label="Pack of 3 image slider">
-            <button class="active" type="button" aria-label="Slide 1"></button>
-            <button type="button" aria-label="Slide 2"></button>
-            <button type="button" aria-label="Slide 3"></button>
-          </div>
-        </div>
-        <div class="pack-card-copy">
-          <p class="product-category">100g × 3</p>
-          <h3>Pack of 3</h3>
-          <p class="pack-subline">3 pouches • First 10 customers offer</p>
-          <div class="pack-pricing"><span class="pack-mrp">MRP ₹549</span><strong>₹399</strong></div>
-          <div class="pack-action-row"><button class="button button-primary" type="button" data-add-to-cart="pack-3">Add to Cart</button><a class="button button-secondary" href="product/index.html?id=pack-3">View Details</a></div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-<!-- Story -->
-<section class="section story-section" id="story">
-<div class="container story-grid compact-story-grid">
-<div class="story-visual story-visual-rich story-visual-plain">
-<div class="story-card story-card-plain">
-<span>Desh Ki Parampara</span>
-<strong>Har Ghar Tak</strong>
-<p>Bharosemand, saaf-suthre aur parampara se jude food products har parivaar tak pahunchana hamara sankalp hai.</p>
-</div>
-</div>
-<div class="story-content">
-<span class="eyebrow">Our Story</span>
-<h2>Rooted in tradition, created for today.</h2>
-<p>DeshiGram ka focus simple hai — trusted ingredients, saaf packaging aur aisa product jo modern family ke routine me easily fit ho jaye.</p>
-<p>Hum Indian taste aur everyday nutrition ko ek premium, easy-to-use format me lekar aa rahe hain, jahan quality aur trust sabse important hai.</p>
-<a class="text-link" href="about.html">Discover more about DeshiGram →</a>
-</div>
-</div>
-</section>
-<!-- Promise -->
-<section class="section promise-section" id="promise">
-<div class="container">
-<div class="section-heading light-heading">
-<span class="eyebrow eyebrow-light">The DeshiGram Promise</span>
-<h2>Care in every detail</h2>
-</div>
-<div class="promise-grid">
-<div class="promise-card">
-<span>01</span>
-<h3>Simple Ingredients</h3>
-<p>
-              Carefully selected ingredients without unnecessary
-              complications.
-            </p>
-</div>
-<div class="promise-card">
-<span>02</span>
-<h3>Trusted Quality</h3>
-<p>
-              Thoughtful preparation and hygienic packaging for your
-              family.
-            </p>
-</div>
-<div class="promise-card">
-<span>03</span>
-<h3>Indian Roots</h3>
-<p>
-              Products inspired by familiar traditions and everyday
-              Indian food culture.
-            </p>
-</div>
-</div>
-</div>
-</section>
-<!-- Contact -->
-<section class="section contact-section contact-home-enhanced" id="contact">
-<div class="container contact-box contact-box-enhanced">
-<div class="contact-home-copy">
-<span class="eyebrow">Contact DeshiGram</span>
-<h2>We’d love to hear from you.</h2>
-<p>Product question, order help ya business enquiry? WhatsApp par message kijiye — DeshiGram team jaldi reply karegi.</p>
-<div class="contact-home-points">
-<span>Quick WhatsApp support</span>
-<span>Order assistance</span>
-<span>Retail & distributor enquiries</span>
-</div>
-</div>
-<div class="contact-home-visual">
-<img src="images/dry-fruits-product.webp" alt="DeshiGram Dry Fruits Energy Powder pouch" class="contact-home-pack">
-<div class="contact-home-actions">
-<a class="button button-primary" href="https://instagram.com/deshigram.in" rel="noopener noreferrer" target="_blank">Follow on Instagram</a>
-<a class="button button-secondary" href="https://wa.me/919457831399" rel="noopener noreferrer" target="_blank">Chat on WhatsApp</a>
-</div>
-</div>
-</div>
+<section class="section dg-contact-cta">
+  <div class="container dg-contact-cta-box"><div><span class="dg-eyebrow">NEED HELP?</span><h2>Questions about products, orders or distribution?</h2></div><a class="button button-primary" href="contact.html">Contact DeshiGram</a></div>
 </section>
 </main>
-<!-- Footer -->
-<footer class="footer">
-<div class="container footer-grid">
-<div class="footer-brand">
-<img alt="DeshiGram Logo" src="images/logo.webp"/>
-<div>
-<strong>DeshiGram</strong>
-<p>Desh ki parampara har ghar tak</p>
-</div>
-</div>
-<div class="footer-links">
-<a href="#home">Home</a>
-<a href="#products">Product</a>
-<a href="#story">Our Story</a>
-<a href="contact.html">Contact</a>
-<a href="distributors.html">Distributors</a><a href="policies.html">Policies</a>
-</div>
-
-<p class="copyright">
-        © <span id="currentYear"></span> DeshiGram. All rights reserved.
-      </p>
-</div>
-</footer>
-<script src="js/products-data.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/script.js"></script>
-<a aria-label="Chat on WhatsApp" class="whatsapp-float" href="https://wa.me/919457831399?text=Hello%20DeshiGram,%20I%20would%20like%20to%20know%20more%20about%20your%20products." target="_blank">
-<svg fill="currentColor" height="34" viewbox="0 0 32 32" width="34" xmlns="http://www.w3.org/2000/svg">
-<path d="M19.11 17.24c-.3-.15-1.78-.88-2.06-.98-.27-.1-.47-.15-.67.15-.2.3-.77.98-.94 1.18-.17.2-.35.22-.65.08-.3-.15-1.28-.47-2.43-1.5-.9-.8-1.5-1.8-1.67-2.1-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.45 1.07 2.86 1.22 3.06.15.2 2.1 3.2 5.08 4.48.71.3 1.26.48 1.69.61.71.23 1.35.2 1.86.12.57-.08 1.78-.73 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.28-.2-.58-.35z"></path>
-<path d="M16.02 3C8.84 3 3 8.78 3 15.9c0 2.53.74 4.99 2.14 7.1L3 29l6.22-2.03a13.07 13.07 0 006.8 1.87C23.2 28.84 29 23.06 29 15.94 29 8.82 23.2 3 16.02 3zm0 23.5c-2.06 0-4.08-.56-5.83-1.63l-.42-.25-3.69 1.2 1.2-3.6-.27-.44a10.4 10.4 0 01-1.6-5.58c0-5.75 4.72-10.43 10.6-10.43 5.85 0 10.58 4.67 10.58 10.42 0 5.76-4.73 10.3-10.57 10.3z"></path>
-</svg>
-</a>
+<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh Ki Parampara, Har Ghar Tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="distributors.html">Distributors</a><a href="policies.html">Policies</a></div><p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div></footer>
+<script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/script.js"></script>
 </body>
 </html>

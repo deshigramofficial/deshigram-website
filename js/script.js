@@ -42,9 +42,9 @@ const searchResults = document.getElementById("searchResults");
 
 const searchableProducts = [
   { name: "Dry Fruits Energy Powder", description: "100g nutrition pouch", href: "index.html#products" },
-  { name: "Pack of 1", description: "Launch offer ₹179", href: "index.html#products" },
-  { name: "Pack of 2", description: "Launch offer ₹299", href: "index.html#products" },
-  { name: "Pack of 3", description: "Launch offer ₹399", href: "index.html#products" }
+  { name: "Pack of 1", description: "30% off MRP • ₹139.30", href: "index.html#products" },
+  { name: "Pack of 2", description: "30% off MRP • ₹265.30", href: "index.html#products" },
+  { name: "Pack of 3", description: "30% off MRP • ₹384.30", href: "index.html#products" }
 ];
 
 function renderSearchResults(query = "") {
