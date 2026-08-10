@@ -23,7 +23,6 @@ The website contains only the publishable key. Never place a Supabase secret/ser
 
 OWNER DASHBOARD ACCESS
 ----------------------
-Private URL: https://deshigram.in/admin.html
 Authorized owner email: deshigramofficial@gmail.com
 The dashboard shows visitor counts, total/today orders, total sales, reviews, complete searchable order history, payment/order status, courier, AWB and tracking details.
 If the owner Auth user has not yet been created, create it once in Supabase > Authentication > Users > Add user using deshigramofficial@gmail.com and a strong password.

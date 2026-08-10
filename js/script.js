@@ -166,7 +166,7 @@ document.querySelectorAll('[data-contact-subject]').forEach((link) => {
   });
 });
 
-// DeshiGram customer account indicator in the main navigation.
+// DeshiGram customer login/account indicator.
 (function(){
   function readSupabaseSession(){
     try{
@@ -181,28 +181,24 @@ document.querySelectorAll('[data-contact-subject]').forEach((link) => {
     const name=(user?.user_metadata?.full_name||'').trim();
     if(name) return name.split(/\s+/)[0];
     const phone=(user?.user_metadata?.phone||'').replace(/\D/g,'');
-    return phone ? `••${phone.slice(-4)}` : 'Account';
+    return phone ? `••${phone.slice(-4)}` : 'Customer';
   }
   function applyAccountIndicator(){
-    const nav=document.getElementById('navigation');
-    if(!nav) return;
-    let link=[...nav.querySelectorAll('a')].find(a=>/account\.html(?:$|[?#])/.test(a.getAttribute('href')||''));
-    if(!link){
-      link=document.createElement('a');
-      link.href=location.pathname.includes('/product/')?'../account.html':'account.html';
-      link.textContent='My Account';
-      nav.appendChild(link);
-    }
-    link.classList.add('dg-account-link');
     const s=readSupabaseSession();
-    if(s?.user){
-      link.classList.add('is-logged-in');
-      link.innerHTML=`<span class="dg-account-dot" aria-hidden="true"></span><span>Hi, ${displayName(s)}</span>`;
-      link.setAttribute('aria-label',`My Account, logged in as ${displayName(s)}`);
-    }else{
-      link.classList.remove('is-logged-in');
-      link.textContent='My Account';
-    }
+    const loggedIn=!!s?.user;
+    const links=[...document.querySelectorAll('a[href$="account.html"], a[href*="account.html?"]')];
+    links.forEach(link=>{
+      link.classList.add('dg-account-link');
+      if(loggedIn){
+        link.classList.add('is-logged-in');
+        link.innerHTML=`<span class="dg-account-dot" aria-hidden="true"></span><span>Hi, ${displayName(s)} · My Account</span>`;
+        link.setAttribute('aria-label',`My Account, logged in as ${displayName(s)}`);
+      }else{
+        link.classList.remove('is-logged-in');
+        link.textContent='Login';
+        link.setAttribute('aria-label','Customer Login');
+      }
+    });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyAccountIndicator); else applyAccountIndicator();
   window.addEventListener('storage',applyAccountIndicator);

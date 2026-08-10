@@ -3630,3 +3630,13 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 .dg-account-link.is-logged-in{padding:8px 12px!important;border-radius:999px;background:#eef7ef;color:#0d4d35!important;font-weight:800}
 .dg-account-dot{width:8px;height:8px;border-radius:50%;background:#1a9a52;box-shadow:0 0 0 3px rgba(26,154,82,.14)}
 @media(max-width:900px){.dg-account-link.is-logged-in{border-radius:10px;padding:10px 12px!important}}
+
+/* Final requested banner behavior: full artwork, no crop. */
+.dg-showcase-slider{aspect-ratio:1672/941!important;}
+.dg-click-banner img{object-fit:contain!important;object-position:center center!important;width:100%!important;height:100%!important;}
+@media(max-width:760px){.dg-showcase-slider{aspect-ratio:1672/941!important;}}
+/* Click map aligned to the full Coming Soon artwork. */
+.dg-banner-hotspot.hs-update{left:5.8%;top:76.4%;width:17.8%;height:9.3%}
+.dg-banner-hotspot.hs-sattu{left:42.6%;top:22.5%;width:16.8%;height:60.5%}
+.dg-banner-hotspot.hs-annaprashan{left:59.8%;top:22.5%;width:16.6%;height:60.5%}
+.dg-banner-hotspot.hs-banana{left:76.8%;top:22.5%;width:16.8%;height:60.5%}

@@ -1,8 +1,69 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d4d35"><title>DeshiGram Admin Dashboard</title><link rel="icon" href="images/favicon.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="css/admin.css"></head><body class="admin-body"><div class="admin-shell"><div class="admin-top"><div class="admin-brand"><img src="images/logo.webp" alt="DeshiGram"><div><h1>DeshiGram Dashboard</h1><p>Private business overview</p></div></div><div><button id="refreshBtn" class="admin-btn secondary hidden" type="button">Refresh</button> <button id="logoutBtn" class="admin-btn hidden" type="button">Log out</button></div></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d4d35"><title>DeshiGram Admin Dashboard</title><link rel="icon" href="images/favicon.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="css/admin.css"></head><body class="admin-body"><div class="admin-shell"><div class="admin-top"><div class="admin-brand"><div><h1>DeshiGram Admin</h1><p>Private business overview</p></div></div><div><button id="refreshBtn" class="admin-btn secondary hidden" type="button">Refresh</button> <button id="logoutBtn" class="admin-btn hidden" type="button">Log out</button></div></div>
 <section id="loginBox" class="login-card"><h2>Admin Login</h2><p>Sign in with the DeshiGram admin account to view visitors, orders, sales and reviews.</p><form id="adminLoginForm"><div class="admin-field"><label>Email</label><input id="adminEmail" type="email" value="deshigramofficial@gmail.com" autocomplete="username" required></div><div class="admin-field"><label>Password</label><input id="adminPassword" type="password" autocomplete="current-password" required></div><button class="admin-btn" type="submit" style="width:100%">Open Dashboard</button><div id="loginMessage" class="admin-message"></div></form></section>
-<section id="dashboard" class="dashboard"><div class="metrics"><div class="metric"><span>Total Visitors</span><strong id="visitorsTotal">0</strong></div><div class="metric"><span>Visitors Today</span><strong id="visitorsToday">0</strong></div><div class="metric"><span>This Month</span><strong id="visitorsMonth">0</strong></div><div class="metric"><span>Total Page Views</span><strong id="pageviewsTotal">0</strong></div><div class="metric"><span>Total Orders</span><strong id="ordersTotal">0</strong></div><div class="metric"><span>Orders Today</span><strong id="ordersToday">0</strong></div><div class="metric"><span>Total Sales</span><strong id="salesTotal">₹0</strong></div><div class="metric"><span>Reviews</span><strong id="reviewsTotal">0</strong></div><div class="metric"><span>Average Rating</span><strong id="avgRating">0.0 ★</strong></div></div>
-<div class="admin-grid"><div class="panel"><h2>Latest Orders</h2><div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Phone</th><th>Product</th><th>Qty</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersBody"></tbody></table></div></div><div class="panel"><h2>Latest Reviews</h2><div id="reviewList"></div></div></div>
-<section class="panel order-history-panel"><div class="history-head"><div><span class="admin-eyebrow">ORDER MANAGEMENT</span><h2>Complete Order History</h2><p>Search orders, update payment/order status and keep courier tracking ready.</p></div><div class="history-controls"><input id="orderSearch" type="search" placeholder="Order ID, customer, phone, product…"><select id="orderStatusFilter"><option value="">All statuses</option><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select><button id="orderSearchBtn" class="admin-btn secondary" type="button">Search</button></div></div><div class="history-count" id="historyCount">0 orders</div><div class="table-wrap"><table class="history-table"><thead><tr><th>Order</th><th>Customer</th><th>Products</th><th>Total</th><th>Payment</th><th>Order status</th><th>Courier / AWB</th><th>Date</th><th>Action</th></tr></thead><tbody id="historyBody"></tbody></table></div><div class="history-pagination"><button id="historyPrev" class="admin-btn secondary" type="button">← Previous</button><span id="historyPage">Page 1</span><button id="historyNext" class="admin-btn secondary" type="button">Next →</button></div></section>
+<section id="dashboard" class="dashboard">
+  <div class="admin-dashboard-layout">
+    <aside class="admin-sidebar" aria-label="Admin navigation">
+      <div class="admin-sidebar-title">ADMIN</div>
+      <a class="active" href="#adminOverview">Dashboard</a>
+      <a href="#recentOrdersPanel">Orders</a>
+      <a href="#reviewsPanel">Reviews</a>
+      <a href="#customersPanel">Customers</a>
+      <a href="#reportsPanel">Reports</a>
+      <button id="sidebarLogout" type="button">Log out</button>
+    </aside>
+
+    <div class="admin-dashboard-main">
+      <div id="adminOverview" class="overview-title-row">
+        <div><span class="admin-eyebrow">BUSINESS OVERVIEW</span><h2>Admin Dashboard</h2><p>Your private DeshiGram business overview.</p></div>
+      </div>
+
+      <div class="metrics primary-metrics">
+        <div class="metric"><span>Total Visitors</span><strong id="visitorsTotal">0</strong><small id="visitorsTodayMini">0 today</small></div>
+        <div class="metric"><span>Total Orders</span><strong id="ordersTotal">0</strong><small id="ordersTodayMini">0 today</small></div>
+        <div class="metric"><span>Total Sales</span><strong id="salesTotal">₹0</strong><small>excluding cancelled</small></div>
+        <div class="metric"><span>Total Reviews</span><strong id="reviewsTotal">0</strong><small id="avgRatingMini">0.0 ★ average</small></div>
+      </div>
+
+      <div class="admin-overview-grid">
+        <section class="panel recent-orders-panel" id="recentOrdersPanel">
+          <div class="panel-head"><div><span class="admin-eyebrow">RECENT ACTIVITY</span><h2>Recent Orders</h2></div><a class="panel-link" href="#orderHistory">View all</a></div>
+          <div class="table-wrap"><table class="compact-orders"><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+        </section>
+
+        <div class="admin-right-stack">
+          <section class="panel sales-panel" id="reportsPanel">
+            <div class="panel-head"><div><span class="admin-eyebrow">RECENT ORDERS</span><h2>Sales Overview</h2></div></div>
+            <div class="sales-chart" id="salesChart" aria-label="Recent sales chart"><svg viewBox="0 0 360 170" preserveAspectRatio="none"><path class="chart-grid" d="M0 42.5H360M0 85H360M0 127.5H360"></path><polyline id="salesLine" points="0,150 360,150"></polyline></svg></div>
+            <div class="chart-caption"><span>Older</span><strong id="recentSalesTotal">₹0</strong><span>Latest</span></div>
+          </section>
+
+          <section class="panel top-products-panel">
+            <div class="panel-head"><div><span class="admin-eyebrow">RECENT ORDER MIX</span><h2>Top Products</h2></div></div>
+            <div id="topProductsList" class="top-products-list"><p class="admin-note">No orders yet.</p></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="admin-secondary-grid">
+        <section class="panel" id="customersPanel"><div class="panel-head"><div><span class="admin-eyebrow">CUSTOMERS</span><h2>Recent Customers</h2></div></div><div id="customerList" class="customer-list"><p class="admin-note">No customers yet.</p></div></section>
+        <section class="panel" id="reviewsPanel"><div class="panel-head"><div><span class="admin-eyebrow">REVIEWS</span><h2>Latest Reviews</h2></div><div class="mini-kpi"><span>Average</span><strong id="avgRating">0.0 ★</strong></div></div><div id="reviewList"></div></section>
+      </div>
+
+      <div class="secondary-metrics">
+        <div><span>Visitors Today</span><strong id="visitorsToday">0</strong></div>
+        <div><span>This Month</span><strong id="visitorsMonth">0</strong></div>
+        <div><span>Total Page Views</span><strong id="pageviewsTotal">0</strong></div>
+        <div><span>Orders Today</span><strong id="ordersToday">0</strong></div>
+      </div>
+
+      <section class="panel order-history-panel" id="orderHistory">
+        <div class="history-head"><div><span class="admin-eyebrow">ORDER MANAGEMENT</span><h2>Complete Order History</h2><p>Search orders, update payment/order status and keep courier tracking ready.</p></div><div class="history-controls"><input id="orderSearch" type="search" placeholder="Order ID, customer, phone, product…"><select id="orderStatusFilter"><option value="">All statuses</option><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select><button id="orderSearchBtn" class="admin-btn secondary" type="button">Search</button></div></div>
+        <div class="history-count" id="historyCount">0 orders</div>
+        <div class="table-wrap"><table class="history-table"><thead><tr><th>Order</th><th>Customer</th><th>Products</th><th>Total</th><th>Payment</th><th>Order status</th><th>Courier / AWB</th><th>Date</th><th>Action</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+        <div class="history-pagination"><button id="historyPrev" class="admin-btn secondary" type="button">← Previous</button><span id="historyPage">Page 1</span><button id="historyNext" class="admin-btn secondary" type="button">Next →</button></div>
+      </section>
+    </div>
+  </div>
 </section></div>
 <div id="orderModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-order></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-order>×</button><span class="admin-eyebrow">ORDER DETAILS</span><h2 id="modalOrderNumber">Order</h2><div id="modalOrderDetails" class="order-detail-grid"></div><form id="orderUpdateForm"><input type="hidden" id="modalOrderId"><div class="update-grid"><label>Payment status<select id="modalPaymentStatus"><option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="refunded">Refunded</option></select></label><label>Order status<select id="modalOrderStatus"><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label><label>Courier name<input id="modalCourier" placeholder="e.g. Delhivery"></label><label>AWB / Tracking no.<input id="modalAwb" placeholder="AWB number"></label><label class="wide">Tracking URL<input id="modalTracking" type="url" placeholder="https://..."></label></div><button class="admin-btn" type="submit">Save Order Update</button><p id="orderUpdateMessage" class="admin-message"></p></form></div></div>
 <script src="js/admin.js"></script></body></html>

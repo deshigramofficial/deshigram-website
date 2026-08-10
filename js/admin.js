@@ -39,8 +39,28 @@
   function renderStats(d){
     put('visitorsTotal',d.visitors_total||0);put('visitorsToday',d.visitors_today||0);put('visitorsMonth',d.visitors_month||0);put('pageviewsTotal',d.pageviews_total||0);
     put('ordersTotal',d.orders_total||0);put('ordersToday',d.orders_today||0);put('salesTotal',rupees(d.sales_total));put('reviewsTotal',d.reviews_total||0);put('avgRating',`${Number(d.average_rating||0).toFixed(1)} ★`);
+    put('visitorsTodayMini',`${d.visitors_today||0} today`);put('ordersTodayMini',`${d.orders_today||0} today`);put('avgRatingMini',`${Number(d.average_rating||0).toFixed(1)} ★ average`);
+    const recent=d.latest_orders||[];
     const orders=document.getElementById('ordersBody');
-    orders.innerHTML=(d.latest_orders||[]).map(o=>`<tr><td><strong>${esc(o.order_number)}</strong></td><td>${esc(o.customer_name)}</td><td>${esc(o.phone)}</td><td>${esc(o.product_name)}</td><td>${esc(o.quantity)}</td><td>${rupees(o.total_amount)}</td><td>${badge(o.payment_status,'payment')}</td><td>${badge(o.order_status)}</td><td>${date(o.created_at)}</td></tr>`).join('')||'<tr><td colspan="9">No orders yet.</td></tr>';
+    orders.innerHTML=recent.map(o=>`<tr><td><strong>${esc(o.order_number)}</strong></td><td>${esc(o.customer_name)}</td><td>${rupees(o.total_amount)}</td><td>${badge(o.payment_status,'payment')}</td><td>${badge(o.order_status)}</td><td>${date(o.created_at)}</td></tr>`).join('')||'<tr><td colspan="6">No orders yet.</td></tr>';
+
+    const vals=recent.slice().reverse().map(o=>Number(o.total_amount||0));
+    const line=document.getElementById('salesLine');
+    if(line){
+      if(vals.length<2){line.setAttribute('points','0,145 360,145');}
+      else{const max=Math.max(...vals,1),min=Math.min(...vals,0),range=Math.max(max-min,1);const pts=vals.map((v,i)=>`${(i/(vals.length-1)*360).toFixed(1)},${(145-((v-min)/range)*120).toFixed(1)}`).join(' ');line.setAttribute('points',pts);}
+    }
+    put('recentSalesTotal',rupees(vals.reduce((a,b)=>a+b,0)));
+
+    const productCounts={}; recent.forEach(o=>{const n=o.product_name||'Product';productCounts[n]=(productCounts[n]||0)+Number(o.quantity||1)});
+    const top=Object.entries(productCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const topBox=document.getElementById('topProductsList');
+    if(topBox) topBox.innerHTML=top.map(([name,count])=>`<div class="top-product-row"><b>${esc(name)}</b><span>${count}</span></div>`).join('')||'<p class="admin-note">No orders yet.</p>';
+
+    const seen=new Set(); const customers=[]; recent.forEach(o=>{const key=(o.phone||o.customer_name||'').toLowerCase();if(key&&!seen.has(key)){seen.add(key);customers.push(o)}});
+    const customerBox=document.getElementById('customerList');
+    if(customerBox) customerBox.innerHTML=customers.slice(0,6).map(o=>{const initials=String(o.customer_name||'C').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();return `<div class="customer-row"><span class="customer-avatar">${esc(initials)}</span><div><b>${esc(o.customer_name||'Customer')}</b><small>${esc(o.phone||'')}</small></div><em>${esc(o.order_number||'')}</em></div>`}).join('')||'<p class="admin-note">No customers yet.</p>';
+
     const reviews=document.getElementById('reviewList');
     reviews.innerHTML=(d.latest_reviews||[]).map(r=>`<div class="review-row"><b><span>${esc(r.name||'Customer')} ${r.verified?'<span class="verified">Verified</span>':''}</span><span class="stars">${'★'.repeat(Math.max(1,Math.min(5,Math.round(Number(r.rating||0)))))} ${Number(r.rating||0).toFixed(1)}</span></b><p>${esc(r.review||'Rating submitted.')}</p></div>`).join('')||'<p class="admin-note">No reviews yet.</p>';
   }
@@ -81,7 +101,7 @@
     catch(e){clearSession();loginBox.classList.remove('hidden');dashboard.style.display='none';logout.classList.add('hidden');refresh.classList.add('hidden');msg.textContent=e.message.includes('Not authorized')?'This account is not authorized for the DeshiGram dashboard.':'';}
   }
   document.getElementById('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Signing in...';try{const s=await login(document.getElementById('adminEmail').value.trim(),document.getElementById('adminPassword').value);saveSession(s);msg.textContent='';await load();}catch(err){msg.textContent=err.message;}});
-  logout.addEventListener('click',()=>{clearSession();location.reload()});refresh.addEventListener('click',load);
+  logout.addEventListener('click',()=>{clearSession();location.reload()});document.getElementById('sidebarLogout')?.addEventListener('click',()=>{clearSession();location.reload()});refresh.addEventListener('click',load);
   document.getElementById('orderSearchBtn')?.addEventListener('click',()=>{page=0;loadHistory();});
   document.getElementById('orderSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();page=0;loadHistory();}});
   document.getElementById('orderStatusFilter')?.addEventListener('change',()=>{page=0;loadHistory();});
