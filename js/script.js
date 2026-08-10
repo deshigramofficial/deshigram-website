@@ -165,3 +165,45 @@ document.querySelectorAll('[data-contact-subject]').forEach((link) => {
     window.setTimeout(() => document.getElementById('contactName')?.focus(), 500);
   });
 });
+
+// DeshiGram customer account indicator in the main navigation.
+(function(){
+  function readSupabaseSession(){
+    try{
+      const key=Object.keys(localStorage).find(k=>/^sb-.*-auth-token$/.test(k));
+      if(!key) return null;
+      const raw=JSON.parse(localStorage.getItem(key)||'null');
+      return raw?.user ? raw : raw?.currentSession || raw?.session || null;
+    }catch(_){return null;}
+  }
+  function displayName(session){
+    const user=session?.user;
+    const name=(user?.user_metadata?.full_name||'').trim();
+    if(name) return name.split(/\s+/)[0];
+    const phone=(user?.user_metadata?.phone||'').replace(/\D/g,'');
+    return phone ? `••${phone.slice(-4)}` : 'Account';
+  }
+  function applyAccountIndicator(){
+    const nav=document.getElementById('navigation');
+    if(!nav) return;
+    let link=[...nav.querySelectorAll('a')].find(a=>/account\.html(?:$|[?#])/.test(a.getAttribute('href')||''));
+    if(!link){
+      link=document.createElement('a');
+      link.href=location.pathname.includes('/product/')?'../account.html':'account.html';
+      link.textContent='My Account';
+      nav.appendChild(link);
+    }
+    link.classList.add('dg-account-link');
+    const s=readSupabaseSession();
+    if(s?.user){
+      link.classList.add('is-logged-in');
+      link.innerHTML=`<span class="dg-account-dot" aria-hidden="true"></span><span>Hi, ${displayName(s)}</span>`;
+      link.setAttribute('aria-label',`My Account, logged in as ${displayName(s)}`);
+    }else{
+      link.classList.remove('is-logged-in');
+      link.textContent='My Account';
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyAccountIndicator); else applyAccountIndicator();
+  window.addEventListener('storage',applyAccountIndicator);
+})();

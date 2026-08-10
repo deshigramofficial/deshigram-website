@@ -3593,3 +3593,40 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 
 /* Verified customer review carousel */
 .review-slider-shell{position:relative;padding:0 52px}.review-slider-viewport{overflow:hidden;scroll-snap-type:x mandatory}.review-slider-viewport .customer-review-grid{display:flex!important;gap:18px;overflow:visible!important;grid-template-columns:none!important}.review-slider-viewport .customer-review-card{flex:0 0 calc((100% - 36px)/3);min-width:0;scroll-snap-align:start}.review-slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:42px;height:42px;border:1px solid #ded5c3;border-radius:50%;background:#fff;color:#0d4d35;font-size:29px;line-height:1;box-shadow:0 8px 20px rgba(0,0,0,.08);cursor:pointer}.review-slider-arrow.prev{left:0}.review-slider-arrow.next{right:0}.verified-review-note{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:22px;padding:14px 18px;border:1px solid #e6dcc7;border-radius:16px;background:#fffaf0;color:#59645c}.verified-review-note span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#0d4d35;color:#fff;font-weight:900}.verified-review-note p{margin:0}.verified-review-note a{color:#0d4d35;font-weight:800}@media(max-width:900px){.review-slider-viewport .customer-review-card{flex-basis:calc((100% - 18px)/2)}}@media(max-width:620px){.review-slider-shell{padding:0 38px}.review-slider-viewport .customer-review-card{flex-basis:100%}.review-slider-arrow{width:34px;height:34px}.verified-review-note{align-items:flex-start;font-size:13px}}
+
+/* === Final responsive showcase: keep every banner fully visible === */
+.dg-showcase-slider{
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1504/830;
+  background:#102f22;
+}
+.dg-showcase-slide img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+}
+.dg-click-banner{position:absolute!important;inset:0;overflow:hidden;background:#102f22!important}
+.dg-banner-hotspot{position:absolute;z-index:3;display:block;border-radius:22px;text-decoration:none}
+.dg-banner-hotspot:focus-visible{outline:3px solid #ffd76d;outline-offset:3px;background:rgba(255,215,109,.10)}
+.dg-banner-hotspot.hs-update{left:1%;top:85%;width:22%;height:11%}
+.dg-banner-hotspot.hs-sattu{left:42%;top:24%;width:19%;height:70%}
+.dg-banner-hotspot.hs-annaprashan{left:61%;top:24%;width:19%;height:70%}
+.dg-banner-hotspot.hs-banana{left:80%;top:24%;width:19%;height:70%}
+@media(max-width:760px){
+  .dg-showcase-slider{height:auto!important;min-height:0!important;aspect-ratio:1504/830!important}
+  .dg-showcase-slide img{object-fit:contain!important}
+  .dg-showcase-arrow{width:36px;height:36px;font-size:24px}.dg-showcase-arrow.prev{left:7px}.dg-showcase-arrow.next{right:7px}
+  .dg-showcase-dots{bottom:6px;padding:5px 7px;gap:5px}
+  .dg-showcase-dots button{width:6px;height:6px}.dg-showcase-dots button.is-active{width:18px}
+}
+
+/* Hidden auth forms must actually stay hidden until their tab is clicked. */
+.auth-form[hidden]{display:none!important}
+
+/* Logged-in customer indicator used across the website header. */
+.dg-account-link{display:inline-flex!important;align-items:center;gap:7px;white-space:nowrap}
+.dg-account-link.is-logged-in{padding:8px 12px!important;border-radius:999px;background:#eef7ef;color:#0d4d35!important;font-weight:800}
+.dg-account-dot{width:8px;height:8px;border-radius:50%;background:#1a9a52;box-shadow:0 0 0 3px rgba(26,154,82,.14)}
+@media(max-width:900px){.dg-account-link.is-logged-in{border-radius:10px;padding:10px 12px!important}}

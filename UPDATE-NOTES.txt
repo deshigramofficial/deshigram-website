@@ -1,0 +1,7 @@
+DESHIGRAM FINAL UI / ACCOUNT FIXES
+
+1. Create Account form no longer appears automatically. Login remains the default view; Create Account opens only after the customer clicks its tab.
+2. After customer login, the top navigation changes from My Account to a green logged-in indicator such as “Hi, Abhinendra”.
+3. All three home showcase banners now keep their full artwork visible on mobile instead of being cropped.
+4. The third Coming Soon slide has been restored to the earlier premium banner artwork. Embedded screenshot-style slider arrows/dots were cropped away, and the Stay Updated + Sattu + Annaprashan + Banana Chips areas are real clickable hotspots.
+5. Owner dashboard remains private at https://deshigram.in/admin.html and includes visitor/order/sales/review stats plus full searchable order history and shipment fields.
