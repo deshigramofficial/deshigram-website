@@ -1,0 +1,22 @@
+DESHIGRAM FINAL TRACKING / REVIEWS SETUP
+
+Already built into this website ZIP:
+1. Google Analytics 4: G-8DCB4RP5XZ on every page.
+2. Supabase connection using the browser-safe publishable key.
+3. Live permanent review form.
+4. Existing four real customer reviews shown with Verified Customer styling.
+5. Secure order-saving flow prepared through Supabase RPC.
+6. GA4 add_to_cart, begin_checkout and purchase tracking events.
+7. After an order is saved, the WhatsApp confirmation includes a unique Verified Review link that can be forwarded to that customer.
+8. Contact banner details are clickable: FSSAI, Instagram/QR, Facebook, email, address, WhatsApp and product image.
+
+ONE REQUIRED SUPABASE STEP:
+Open Supabase > SQL Editor > New query.
+Open the file: supabase-final-setup.sql
+Copy all of it, paste it into the SQL Editor, and press Run once.
+
+Why this one SQL step is required:
+It securely creates the place_order and submit_verified_review functions without exposing customer order data publicly.
+
+Security:
+The website contains only the publishable key. Never place a Supabase secret/service-role key in website files.

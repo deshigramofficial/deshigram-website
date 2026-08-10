@@ -693,3 +693,5 @@ a.contact-info-item:hover {
     font-size: 32px;
   }
 }
+/* Keep the restored contact artwork proportional so clickable hotspots stay aligned. */
+.dg-contact-banner-clickmap .dg-contact-banner-image{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important}

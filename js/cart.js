@@ -8,7 +8,7 @@
   const money = value => `₹${Number(value).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
   function getCart(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");}catch{return[];}}
   function saveCart(cart){localStorage.setItem(STORAGE_KEY,JSON.stringify(cart));renderCart();document.dispatchEvent(new CustomEvent("deshigram:cart-updated",{detail:cart}));}
-  function add(id,quantity=1){const product=catalog[id];if(!product)return;const cart=getCart();const existing=cart.find(item=>item.id===id);if(existing)existing.quantity+=quantity;else cart.push({...product,quantity});saveCart(cart);openDrawer();}
+  function add(id,quantity=1){const product=catalog[id];if(!product)return;const cart=getCart();const existing=cart.find(item=>item.id===id);if(existing)existing.quantity+=quantity;else cart.push({...product,quantity});saveCart(cart);if(window.DESHIGRAM_INTEGRATIONS)window.DESHIGRAM_INTEGRATIONS.track("add_to_cart",{currency:"INR",value:Number(product.price)*quantity,items:[{item_id:product.id,item_name:product.name,price:product.price,quantity}]});openDrawer();}
   function update(id,quantity){const cart=getCart();const item=cart.find(row=>row.id===id);if(!item)return;if(quantity<=0)return remove(id);item.quantity=Math.min(10,quantity);saveCart(cart);}
   function remove(id){saveCart(getCart().filter(item=>item.id!==id));}
   function clear(){saveCart([]);}

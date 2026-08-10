@@ -130,3 +130,38 @@ function setupCarousel(rootSelector, options = {}) {
 setupCarousel('[data-pack-carousel]', { auto: false, trackSelector: '.pack-carousel-track', prevSelector: '.pack-carousel-arrow.prev', nextSelector: '.pack-carousel-arrow.next', dotSelector: '.pack-carousel-dots button' });
 setupCarousel('[data-home-carousel]', { auto: true, delay: 4200, trackSelector: '.home-banner-track', prevSelector: '.home-banner-arrow.prev', nextSelector: '.home-banner-arrow.next', dotSelector: '.home-banner-dots button' });
 setupCarousel('[data-about-full-carousel]', { auto: true, delay: 4200, trackSelector: '.about-full-track', prevSelector: '.about-full-arrow.prev', nextSelector: '.about-full-arrow.next', dotSelector: '.about-full-dots button' });
+
+// Full-width DeshiGram showcase slider: auto-rotate + arrows + swipe.
+(() => {
+  const root = document.getElementById('dgShowcaseSlider');
+  if (!root) return;
+  const slides = [...root.querySelectorAll('.dg-showcase-slide')];
+  const dots = [...root.querySelectorAll('.dg-showcase-dots button')];
+  const prev = root.querySelector('.dg-showcase-arrow.prev');
+  const next = root.querySelector('.dg-showcase-arrow.next');
+  if (!slides.length) return;
+  let index = 0, timer, touchStartX = null;
+  const show = (i) => {
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s,n)=>s.classList.toggle('is-active',n===index));
+    dots.forEach((d,n)=>d.classList.toggle('is-active',n===index));
+  };
+  const stop = () => timer && clearInterval(timer);
+  const start = () => { stop(); timer = setInterval(()=>show(index+1), 4800); };
+  prev?.addEventListener('click',()=>{show(index-1);start();});
+  next?.addEventListener('click',()=>{show(index+1);start();});
+  dots.forEach((d,n)=>d.addEventListener('click',()=>{show(n);start();}));
+  root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
+  root.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].clientX;stop();},{passive:true});
+  root.addEventListener('touchend',e=>{if(touchStartX!==null){const dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>45)show(index+(dx<0?1:-1));touchStartX=null;}start();},{passive:true});
+  show(0); start();
+})();
+
+// Contact shortcut pills: scroll to form and preselect the right enquiry type.
+document.querySelectorAll('[data-contact-subject]').forEach((link) => {
+  link.addEventListener('click', () => {
+    const select = document.getElementById('contactSubject');
+    if (select) select.value = link.dataset.contactSubject || '';
+    window.setTimeout(() => document.getElementById('contactName')?.focus(), 500);
+  });
+});
