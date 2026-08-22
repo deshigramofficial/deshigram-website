@@ -9,12 +9,24 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const ordersEl=document.getElementById('myOrders');
   const logoutBtn=document.getElementById('logoutBtn');
   const switchBtns=document.querySelectorAll('[data-auth-tab]');
-  const next=new URLSearchParams(location.search).get('next') || '';
+  const params=new URLSearchParams(location.search); const next=params.get('next') || ''; let recoveryMode=params.get('recovery')==='1' || location.hash.includes('type=recovery');
+  const forgotForm=document.getElementById('forgotPasswordForm');
+  const newPasswordForm=document.getElementById('newPasswordForm');
+  const showForgot=document.getElementById('showForgotPassword');
+  const backFromForgot=document.getElementById('backFromForgot');
 
+  function setStatus(el,msg,type=''){if(!el)return;el.textContent=msg||'';el.classList.remove('is-error','is-success');if(type)el.classList.add(type==='error'?'is-error':'is-success');}
+
+  function showLoginForms(){
+    if(loginForm) loginForm.hidden=false;
+    if(signupForm) signupForm.hidden=true;
+    if(forgotForm) forgotForm.hidden=true;
+    if(newPasswordForm) newPasswordForm.hidden=true;
+  }
   function showTab(name){
     document.querySelectorAll('.auth-form').forEach(x=>x.hidden=x.dataset.form!==name);
     switchBtns.forEach(x=>x.classList.toggle('active',x.dataset.authTab===name));
-    authStatus.textContent='';
+    setStatus(authStatus,'');
   }
   switchBtns.forEach(btn=>btn.addEventListener('click',()=>showTab(btn.dataset.authTab)));
 
@@ -42,19 +54,26 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     document.querySelectorAll('.rate-order-btn').forEach(btn=>btn.addEventListener('click',()=>openReview(btn.dataset.orderId,btn.dataset.orderNumber)));
   }
 
+  showForgot?.addEventListener('click',()=>{loginForm.hidden=true;signupForm.hidden=true;forgotForm.hidden=false;setStatus(authStatus,'');});
+  backFromForgot?.addEventListener('click',()=>{showTab('login');forgotForm.hidden=true;});
+  forgotForm?.addEventListener('submit',async e=>{e.preventDefault();setStatus(authStatus,'Sending reset link…');try{await api.sendPasswordReset(new FormData(forgotForm).get('email'));setStatus(authStatus,'Password reset link sent. Check your email.','success');}catch(err){setStatus(authStatus,err.message||'Could not send reset link','error');}});
+  newPasswordForm?.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(newPasswordForm).entries());if(d.password!==d.confirm_password){setStatus(authStatus,'Passwords do not match.','error');return;}setStatus(authStatus,'Updating password…');try{await api.updatePassword(d.password);setStatus(authStatus,'Password updated. You can continue to your account.','success');history.replaceState({},'',location.pathname);await loadDashboard();}catch(err){setStatus(authStatus,err.message||'Could not update password','error');}});
+  api.getClient()?.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){recoveryMode=true;authPanel.hidden=false;dashboard.hidden=true;loginForm.hidden=true;signupForm.hidden=true;forgotForm.hidden=true;newPasswordForm.hidden=false;setStatus(authStatus,'Choose a new password.');}});
+  if(recoveryMode){authPanel.hidden=false;dashboard.hidden=true;loginForm.hidden=true;signupForm.hidden=true;forgotForm.hidden=true;newPasswordForm.hidden=false;}
+
   loginForm?.addEventListener('submit',async e=>{
-    e.preventDefault(); authStatus.textContent='Logging in…';
+    e.preventDefault(); setStatus(authStatus,'Logging in…');
     try{await api.signInCustomer(Object.fromEntries(new FormData(loginForm).entries())); if(next){location.href=next;return;} await loadDashboard();}
-    catch(err){authStatus.textContent=err.message||'Login failed';}
+    catch(err){setStatus(authStatus,err.message||'Login failed','error');}
   });
   signupForm?.addEventListener('submit',async e=>{
     e.preventDefault(); const d=Object.fromEntries(new FormData(signupForm).entries());
-    if(d.password!==d.confirm_password){authStatus.textContent='Passwords do not match.';return;}
-    authStatus.textContent='Creating account…';
-    try{const out=await api.signUpCustomer(d); if(!out?.session){authStatus.textContent='Account created, but automatic login is off. Disable Confirm email in Supabase Auth settings, then login.';return;} if(next){location.href=next;return;} await loadDashboard();}
-    catch(err){authStatus.textContent=err.message||'Account could not be created';}
+    if(d.password!==d.confirm_password){setStatus(authStatus,'Passwords do not match.','error');return;}
+    setStatus(authStatus,'Creating account…');
+    try{const out=await api.signUpCustomer(d); if(!out?.session){setStatus(authStatus,'Account created. Please login.','success');return;} if(next){location.href=next;return;} await loadDashboard();}
+    catch(err){setStatus(authStatus,err.message||'Account could not be created','error');}
   });
-  profileForm?.addEventListener('submit',async e=>{e.preventDefault();const s=document.getElementById('profileStatus');s.textContent='Saving…';try{await api.updateProfile(Object.fromEntries(new FormData(profileForm).entries()));s.textContent='Profile updated.';await loadDashboard();}catch(err){s.textContent=err.message||'Could not update profile';}});
+  profileForm?.addEventListener('submit',async e=>{e.preventDefault();const s=document.getElementById('profileStatus');setStatus(s,'Saving…');try{await api.updateProfile(Object.fromEntries(new FormData(profileForm).entries()));setStatus(s,'Profile updated.','success');await loadDashboard();}catch(err){setStatus(s,err.message||'Could not update profile','error');}});
   logoutBtn?.addEventListener('click',async()=>{await api.signOut();location.href='account.html';});
 
   const modal=document.getElementById('reviewModal');
@@ -62,8 +81,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   function openReview(id,num){reviewForm.order_id.value=id;document.getElementById('reviewOrderNumber').textContent=num;document.getElementById('accountReviewStatus').textContent='';modal.hidden=false;document.body.classList.add('account-modal-open');}
   function closeReview(){modal.hidden=true;document.body.classList.remove('account-modal-open');reviewForm.reset();}
   document.querySelectorAll('[data-close-review]').forEach(x=>x.addEventListener('click',closeReview));
-  reviewForm?.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(reviewForm).entries());const st=document.getElementById('accountReviewStatus');st.textContent='Submitting…';try{await api.submitOrderReview({orderId:d.order_id,rating:d.rating,review:d.review});api.track('review_submit',{rating:Number(d.rating),verified:true});st.textContent='Thank you. Your verified review is now live.';setTimeout(async()=>{closeReview();await loadDashboard();},900);}catch(err){st.textContent=err.message||'Could not submit review';}});
+  reviewForm?.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(reviewForm).entries());const st=document.getElementById('accountReviewStatus');setStatus(st,'Submitting…');try{await api.submitOrderReview({orderId:d.order_id,rating:d.rating,review:d.review});api.track('review_submit',{rating:Number(d.rating),verified:true});setStatus(st,'Review submitted.','success');setTimeout(async()=>{closeReview();await loadDashboard();},900);}catch(err){setStatus(st,err.message||'Could not submit review','error');}});
 
-  showTab('login');
-  await loadDashboard();
+  if(!recoveryMode){showTab('login');await loadDashboard();}
 });

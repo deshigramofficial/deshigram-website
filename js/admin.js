@@ -8,7 +8,7 @@
   const refresh=document.getElementById('refreshBtn');
   const storeKey='dg_admin_session';
   const PAGE_SIZE=25;
-  let page=0, totalOrders=0, currentOrders=[], marketplace={sellers:[],products:[]};
+  let page=0, totalOrders=0, currentOrders=[], marketplace={sellers:[],products:[]}, fulfillment={items:[],settlements:[]};
 
   function saveSession(s){localStorage.setItem(storeKey,JSON.stringify(s));}
   function getSession(){try{return JSON.parse(localStorage.getItem(storeKey)||'null')}catch{return null}}
@@ -34,6 +34,9 @@
   async function marketOverview(){return request('/rest/v1/rpc/admin_marketplace_overview',{method:'POST',body:'{}'});}
   async function reviewSeller(payload){return request('/rest/v1/rpc/admin_review_seller',{method:'POST',body:JSON.stringify(payload)});}
   async function reviewSellerProduct(payload){return request('/rest/v1/rpc/admin_review_seller_product',{method:'POST',body:JSON.stringify(payload)});}
+  async function fulfillmentOverview(){return request('/rest/v1/rpc/admin_fulfillment_overview',{method:'POST',body:'{}'});}
+  async function updateFulfillment(payload){return request('/rest/v1/rpc/admin_update_fulfillment_item',{method:'POST',body:JSON.stringify(payload)});}
+  async function settleSeller(payload){return request('/rest/v1/rpc/admin_settle_seller_available',{method:'POST',body:JSON.stringify(payload)});}
   const rupees=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n||0));
   const date=v=>v?new Date(v).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'—';
   function put(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
@@ -93,6 +96,19 @@
   function openProductReview(i){const x=marketplace.products[i];if(!x)return;document.getElementById('productReviewId').value=x.id;put('productReviewName',x.name);document.getElementById('productReviewStatus').value=x.status==='under_review'?'live':x.status;document.getElementById('productReviewPayout').value=x.seller_payout??'';document.getElementById('productReviewNote').value=x.review_note||'';document.getElementById('productReviewDetails').innerHTML=`<div><span>Seller</span><strong>${esc(x.business_name||x.full_name)}</strong><small>${esc(x.category)}</small></div><div><span>Price</span><strong>${rupees(x.selling_price)}</strong><small>MRP ${rupees(x.mrp)} • ${esc(x.net_quantity)}</small></div>`;document.getElementById('productReviewModal').classList.remove('hidden');}
   function closeProductReview(){document.getElementById('productReviewModal').classList.add('hidden');}
 
+  function renderFulfillment(d){
+    fulfillment={items:d?.items||[],settlements:d?.settlements||[]};
+    put('readyPickupCount',d?.ready_count||0);put('pickupBookedCount',d?.pickup_booked_count||0);put('inTransitCount',d?.in_transit_count||0);put('availableSettlement',rupees(d?.available_payout||0));
+    const fb=document.getElementById('fulfillmentBody');if(fb)fb.innerHTML=fulfillment.items.map((x,i)=>`<tr><td><strong>${esc(x.order_number)}</strong><small>${date(x.created_at)}</small></td><td>${esc(x.business_name||x.full_name)}<small>${esc(x.seller_phone||'')}</small></td><td>${esc([x.pickup_city,x.pickup_pincode].filter(Boolean).join(' • ')||'—')}</td><td>${esc(x.product_name)} × ${esc(x.quantity)}</td><td>${badge(String(x.fulfillment_status||'new').replace(/_/g,' '))}</td><td><button class="admin-btn tiny" data-fulfillment-row="${i}">Open</button></td></tr>`).join('')||'<tr><td colspan="6">No seller pickups yet.</td></tr>';
+    const st=document.getElementById('settlementBody');if(st)st.innerHTML=fulfillment.settlements.map((x,i)=>`<tr><td><strong>${esc(x.business_name||x.full_name)}</strong></td><td>${esc(x.available_orders)}</td><td><strong>${rupees(x.available_amount)}</strong></td><td><button class="admin-btn tiny" data-settle-row="${i}">Mark Paid</button></td></tr>`).join('')||'<tr><td colspan="4">No seller settlement is available yet.</td></tr>';
+    document.querySelectorAll('[data-fulfillment-row]').forEach(b=>b.addEventListener('click',()=>openFulfillment(Number(b.dataset.fulfillmentRow))));
+    document.querySelectorAll('[data-settle-row]').forEach(b=>b.addEventListener('click',()=>settleAvailable(Number(b.dataset.settleRow))));
+  }
+  async function loadFulfillment(){try{renderFulfillment(await fulfillmentOverview())}catch(e){const b=document.getElementById('fulfillmentBody');if(b)b.innerHTML=`<tr><td colspan="6">${esc(e.message)}</td></tr>`}}
+  function openFulfillment(i){const x=fulfillment.items[i];if(!x)return;document.getElementById('fulfillmentItemId').value=x.item_id;put('fulfillmentOrderTitle',x.order_number||'Pickup');document.getElementById('fulfillmentStatus').value=x.fulfillment_status||'ready';document.getElementById('fulfillmentCourier').value=x.courier_name||'';document.getElementById('fulfillmentTracking').value=x.tracking_id||'';document.getElementById('fulfillmentDetails').innerHTML=`<div><span>Seller Pickup</span><strong>${esc(x.business_name||x.full_name)}</strong><small>${esc([x.pickup_address,x.pickup_city,x.pickup_state,x.pickup_pincode].filter(Boolean).join(', '))}</small></div><div><span>Customer Delivery</span><strong>${esc(x.customer_name)}</strong><small>${esc([x.shipping_address,x.delivery_city,x.delivery_state,x.delivery_pincode].filter(Boolean).join(', '))}</small></div><div><span>Product</span><strong>${esc(x.product_name)} × ${esc(x.quantity)}</strong><small>Seller settlement ${rupees(Number(x.seller_payout_unit||0)*Number(x.quantity||0))}</small></div><div><span>Payment</span><strong>${esc(x.payment_method||'—')}</strong><small>${esc(x.payment_status||'pending')}</small></div>`;document.getElementById('fulfillmentMessage').textContent='';document.getElementById('fulfillmentModal').classList.remove('hidden');}
+  function closeFulfillment(){document.getElementById('fulfillmentModal')?.classList.add('hidden')}
+  async function settleAvailable(i){const x=fulfillment.settlements[i];if(!x)return;const ref=prompt(`Enter bank/UPI reference after paying ${rupees(x.available_amount)} to ${x.business_name||x.full_name}:`);if(!ref)return;try{await settleSeller({p_seller_id:x.seller_id,p_reference:ref.trim()});await loadFulfillment();alert('Seller settlement marked paid.')}catch(e){alert(e.message)}}
+
   function openOrder(index){
     const o=currentOrders[index]; if(!o)return;
     document.getElementById('modalOrderId').value=o.id;
@@ -113,7 +129,7 @@
   function closeOrder(){document.getElementById('orderModal').classList.add('hidden');document.body.classList.remove('modal-open');}
 
   async function load(){
-    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await Promise.all([loadHistory(),loadMarketplace()]);}
+    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await Promise.all([loadHistory(),loadMarketplace(),loadFulfillment()]);}
     catch(e){clearSession();loginBox.classList.remove('hidden');dashboard.style.display='none';logout.classList.add('hidden');refresh.classList.add('hidden');msg.textContent=e.message.includes('Not authorized')?'This account is not authorized for the DeshiGram dashboard.':'';}
   }
   document.getElementById('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Signing in...';try{const s=await login(document.getElementById('adminEmail').value.trim(),document.getElementById('adminPassword').value);saveSession(s);msg.textContent='';await load();}catch(err){msg.textContent=err.message;}});
@@ -133,5 +149,9 @@
   document.querySelectorAll('[data-close-product-review]').forEach(x=>x.addEventListener('click',closeProductReview));
   document.getElementById('sellerReviewForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('sellerReviewMessage');m.textContent='Saving…';try{await reviewSeller({p_seller_id:document.getElementById('sellerReviewId').value,p_status:document.getElementById('sellerReviewStatus').value,p_note:document.getElementById('sellerReviewNote').value});m.textContent='Seller review saved.';await loadMarketplace();setTimeout(closeSellerReview,500);}catch(err){m.textContent=err.message;}});
   document.getElementById('productReviewForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('productReviewMessage');m.textContent='Saving…';try{const payout=document.getElementById('productReviewPayout').value;await reviewSellerProduct({p_product_id:document.getElementById('productReviewId').value,p_status:document.getElementById('productReviewStatus').value,p_note:document.getElementById('productReviewNote').value,p_seller_payout:payout===''?null:Number(payout)});m.textContent='Product review saved.';await loadMarketplace();setTimeout(closeProductReview,500);}catch(err){m.textContent=err.message;}});
+
+  document.getElementById('fulfillmentRefresh')?.addEventListener('click',loadFulfillment);
+  document.querySelectorAll('[data-close-fulfillment]').forEach(x=>x.addEventListener('click',closeFulfillment));
+  document.getElementById('fulfillmentForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('fulfillmentMessage');m.textContent='Saving…';try{await updateFulfillment({p_item_id:document.getElementById('fulfillmentItemId').value,p_status:document.getElementById('fulfillmentStatus').value,p_courier:document.getElementById('fulfillmentCourier').value,p_tracking_id:document.getElementById('fulfillmentTracking').value});m.textContent='Pickup status updated.';await Promise.all([loadFulfillment(),loadHistory()]);setTimeout(closeFulfillment,500)}catch(err){m.textContent=err.message}});
   if(getSession()?.access_token) load();
 })();

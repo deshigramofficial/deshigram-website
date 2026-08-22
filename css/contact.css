@@ -55,7 +55,7 @@
   max-width: 850px;
   margin: 24px auto 0;
   color: var(--green-dark);
-  font-family: "Playfair Display", serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(48px, 6vw, 76px);
   line-height: 1.06;
   letter-spacing: -2px;
@@ -122,7 +122,7 @@
 .contact-info-card h2,
 .contact-form-card h2,
 .contact-social-card h2 {
-  font-family: "Playfair Display", serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.18;
 }
 
@@ -325,7 +325,7 @@ a.contact-info-item:hover {
 .contact-map-section .section-heading h2 {
   margin-top: 20px;
   color: var(--green-dark);
-  font-family: "Playfair Display", serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(38px, 5vw, 58px);
   line-height: 1.15;
 }
@@ -366,7 +366,7 @@ a.contact-info-item:hover {
 
 .contact-map-placeholder h3 {
   color: var(--green-dark);
-  font-family: "Playfair Display", serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 30px;
 }
 
@@ -603,7 +603,7 @@ a.contact-info-item:hover {
   color: #fff;
 }
 .contact-banner-box .eyebrow { margin-bottom: 14px; }
-.contact-banner-box h3 { font-family: "Playfair Display", serif; font-size: 38px; line-height: 1.1; }
+.contact-banner-box h3 { font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 38px; line-height: 1.1; }
 .contact-banner-box p { margin-top: 10px; color: rgba(255,255,255,.86); max-width: 520px; }
 .contact-banner-box img { width: 100%; border-radius: 24px; }
 .contact-social-section { padding-top: 0; }
@@ -656,7 +656,7 @@ a.contact-info-item:hover {
 .contact-qr-card h3 {
   margin-top: 14px;
   color: var(--green-dark);
-  font-family: "Playfair Display", serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 40px;
   line-height: 1.12;
 }
@@ -695,3 +695,39 @@ a.contact-info-item:hover {
 }
 /* Keep the restored contact artwork proportional so clickable hotspots stay aligned. */
 .dg-contact-banner-clickmap .dg-contact-banner-image{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important}
+
+/* DeshiGram unified typography */
+html, body, button, input, select, textarea {
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+body {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 0;
+}
+h1 { font-weight: 700; }
+h2 { font-weight: 700; }
+h3, h4 { font-weight: 600; }
+nav a, .navigation a, .sidebar a, .button, button {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+input, select, textarea {
+  font-size: 14px;
+  font-weight: 400;
+}
+small, .muted, .hint, .subtext {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.price, .product-price, .amount, .metric-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}

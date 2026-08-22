@@ -9,6 +9,14 @@
   <link rel="icon" href="images/favicon.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/seller.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body,button,input,select,textarea{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important}
+body{font-size:15px;line-height:1.5}
+h1,h2,h3,h4,h5,h6{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important;letter-spacing:-.02em;line-height:1.2}
+h1,h2{font-weight:700}h3,h4{font-weight:600}
+button,.button,nav a,.sidebar a{font-weight:600}
+</style>
 </head>
 <body class="seller-body">
 <header class="seller-topbar">
@@ -20,18 +28,16 @@
 </header>
 
 <main>
-  <section id="sellerAuth" class="auth-shell">
+  <section id="sellerAuth" class="auth-shell" hidden>
     <div class="auth-intro">
       <span class="eyebrow">SELL ON DESHIGRAM</span>
       <h1>Grow your business with DeshiGram.</h1>
-      <p>Keep your stock at your own location. List your products, receive orders and keep them ready for pickup.</p>
-      <div class="intro-points">
-        <span>₹0 Joining Fee</span><span>Simple Listings</span><span>Clear Review Status</span><span>Pickup Support</span>
-      </div>
+      <p>List your products, receive orders and keep them ready for pickup.</p>
+      
     </div>
 
     <div class="auth-card" id="loginCard">
-      <div class="auth-title"><h2>Seller Login</h2><p>Login to manage your DeshiGram store.</p></div>
+      <div class="auth-title"><h2>Seller Login</h2></div>
       <form id="sellerLoginForm" class="clean-form">
         <label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" placeholder="Enter 10-digit mobile number" required></label>
         <label>Password<input type="password" name="password" minlength="6" placeholder="Enter password" required></label>
@@ -44,7 +50,7 @@
 
     <div class="auth-card signup-card" id="signupCard" hidden>
       <button id="backToLogin" class="text-back" type="button">← Back to Login</button>
-      <div class="auth-title"><h2>Create Seller Account</h2><p>Start with your basic details. Business documents can be completed after login.</p></div>
+      <div class="auth-title"><h2>Create Seller Account</h2></div>
       <form id="sellerSignupForm" class="clean-form">
         <div class="two-col">
           <label>Full Name<input name="full_name" maxlength="120" required></label>
@@ -114,7 +120,7 @@
 
       <section class="portal-view" data-view-panel="reports">
         <div class="page-head"><div><h1>Reports</h1><p>Sales and order reports will appear here.</p></div></div>
-        <section class="content-card empty-state"><h2>Reports are ready for the next phase</h2><p>Once orders start coming in, this section can show date-wise sales, orders, returns and payout reports.</p></section>
+        <section class="content-card empty-state"><h2>No report data yet</h2><p>Your sales and settlement data will appear here after orders are delivered.</p></section>
       </section>
 
       <section class="portal-view" data-view-panel="account">
@@ -160,7 +166,10 @@
       <label>Description<textarea name="description" rows="3" required></textarea></label>
       <label>Ingredients<textarea name="ingredients" rows="3" required></textarea></label>
       <label>Allergen Information <small>(if applicable)</small><textarea name="allergen_info" rows="2"></textarea></label>
-      <div class="three-col"><label>Net Quantity<input name="net_quantity" placeholder="e.g. 250 g" required></label><label>MRP ₹<input type="number" name="mrp" min="0" step="0.01" required></label><label>Selling Price ₹<input type="number" name="selling_price" min="0" step="0.01" required></label></div>
+      <div class="three-col"><label>Net Quantity<input name="net_quantity" placeholder="e.g. 250 g" required></label><label>MRP ₹<input type="number" name="mrp" min="0" step="0.01" required></label><label>Bank Settlement ₹<input type="number" name="bank_settlement" min="0" step="1" required placeholder="Amount you want to receive"></label></div>
+      <h3 class="listing-subhead">Shipping Package Details</h3><p class="listing-hint">Enter final packed parcel weight and dimensions. Logistics: ₹80 for first 500g + ₹30 for every additional started 500g.</p>
+      <div class="four-col"><label>Packed Weight (g)<input type="number" name="packed_weight_grams" min="1" step="1" required placeholder="e.g. 400"></label><label>Length (cm)<input type="number" name="package_length_cm" min="0.1" step="0.1" required></label><label>Width (cm)<input type="number" name="package_width_cm" min="0.1" step="0.1" required></label><label>Height (cm)<input type="number" name="package_height_cm" min="0.1" step="0.1" required></label></div>
+      <div class="listing-price-box"><div><small>Listing Price</small><strong id="listingPricePreview">₹13</strong></div><button type="button" class="price-detail-toggle" id="priceDetailToggle">See details</button><div class="price-detail-panel" id="priceDetailPanel" hidden><div><span>Bank Settlement</span><b id="priceSettlement">₹0</b></div><div><span>Logistics Charge</span><b id="priceLogistics">₹0</b></div><div><span>Platform Fee</span><b>₹10</b></div><div><span>Payment Processing</span><b>₹3</b></div><div class="price-total"><span>Listing Price</span><b id="priceTotal">₹13</b></div></div></div>
       <div class="two-col"><label>Shelf Life / Best Before<input name="shelf_life" placeholder="e.g. 6 months" required></label><label>Available Stock<input type="number" name="stock_quantity" min="0" step="1" value="0" required></label></div>
       <label>Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label>
       <label>Product Images <small>(up to 4)</small><input name="images" type="file" accept="image/*" multiple></label>

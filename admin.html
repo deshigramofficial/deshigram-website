@@ -1,4 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d4d35"><title>DeshiGram Admin Dashboard</title><link rel="icon" href="images/favicon.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="css/admin.css"></head><body class="admin-body"><div class="admin-shell"><div class="admin-top"><div class="admin-brand"><div><h1>DeshiGram Admin</h1><p>Private business overview</p></div></div><div><button id="refreshBtn" class="admin-btn secondary hidden" type="button">Refresh</button> <button id="logoutBtn" class="admin-btn hidden" type="button">Log out</button></div></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d4d35"><title>DeshiGram Admin Dashboard</title><link rel="icon" href="images/favicon.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="css/admin.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body,button,input,select,textarea{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important}
+body{font-size:15px;line-height:1.5}
+h1,h2,h3,h4,h5,h6{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important;letter-spacing:-.02em;line-height:1.2}
+h1,h2{font-weight:700}h3,h4{font-weight:600}
+button,.button,nav a,.sidebar a{font-weight:600}
+</style>
+</head><body class="admin-body"><div class="admin-shell"><div class="admin-top"><div class="admin-brand"><div><h1>DeshiGram Admin</h1><p>Private business overview</p></div></div><div><button id="refreshBtn" class="admin-btn secondary hidden" type="button">Refresh</button> <button id="logoutBtn" class="admin-btn hidden" type="button">Log out</button></div></div>
 <section id="loginBox" class="login-card"><h2>Admin Login</h2><p>Sign in with the DeshiGram admin account to view visitors, orders, sales and reviews.</p><form id="adminLoginForm"><div class="admin-field"><label>Email</label><input id="adminEmail" type="email" value="deshigramofficial@gmail.com" autocomplete="username" required></div><div class="admin-field"><label>Password</label><input id="adminPassword" type="password" autocomplete="current-password" required></div><button class="admin-btn" type="submit" style="width:100%">Open Dashboard</button><div id="loginMessage" class="admin-message"></div></form></section>
 <section id="dashboard" class="dashboard">
   <div class="admin-dashboard-layout">
@@ -7,7 +15,7 @@
       <a class="active" href="#adminOverview">Dashboard</a>
       <a href="#recentOrdersPanel">Orders</a>
       <a href="#reviewsPanel">Reviews</a>
-      <a href="#customersPanel">Customers</a><a href="#marketplacePanel">Sellers</a>
+      <a href="#customersPanel">Customers</a><a href="#marketplacePanel">Sellers</a><a href="#fulfillmentPanel">Pickups</a>
       <a href="#reportsPanel">Reports</a>
       <button id="sidebarLogout" type="button">Log out</button>
     </aside>
@@ -66,6 +74,16 @@
         </div>
       </section>
 
+
+      <section class="panel marketplace-panel" id="fulfillmentPanel">
+        <div class="panel-head"><div><span class="admin-eyebrow">FULFILMENT</span><h2>Pickup & Settlements</h2><p>Seller marks a parcel ready; you handle pickup, delivery and settlement here.</p></div><button id="fulfillmentRefresh" class="admin-btn secondary" type="button">Refresh</button></div>
+        <div class="marketplace-metrics"><div><span>Ready for Pickup</span><strong id="readyPickupCount">0</strong></div><div><span>Pickup Booked</span><strong id="pickupBookedCount">0</strong></div><div><span>In Transit</span><strong id="inTransitCount">0</strong></div><div><span>Available Settlement</span><strong id="availableSettlement">₹0</strong></div></div>
+        <div class="marketplace-grid">
+          <div><h3>Seller Pickups</h3><div class="table-wrap"><table class="history-table"><thead><tr><th>Order</th><th>Seller</th><th>Pickup</th><th>Product</th><th>Status</th><th>Action</th></tr></thead><tbody id="fulfillmentBody"><tr><td colspan="6">No pickup data.</td></tr></tbody></table></div></div>
+          <div><h3>Available Settlements</h3><div class="table-wrap"><table class="history-table"><thead><tr><th>Seller</th><th>Orders</th><th>Amount</th><th>Action</th></tr></thead><tbody id="settlementBody"><tr><td colspan="4">No settlements available.</td></tr></tbody></table></div></div>
+        </div>
+      </section>
+
       <section class="panel order-history-panel" id="orderHistory">
         <div class="history-head"><div><span class="admin-eyebrow">ORDER MANAGEMENT</span><h2>Complete Order History</h2><p>Search orders, update payment/order status and keep courier tracking ready.</p></div><div class="history-controls"><input id="orderSearch" type="search" placeholder="Order ID, customer, phone, product…"><select id="orderStatusFilter"><option value="">All statuses</option><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select><button id="orderSearchBtn" class="admin-btn secondary" type="button">Search</button></div></div>
         <div class="history-count" id="historyCount">0 orders</div>
@@ -79,4 +97,6 @@
 
 <div id="sellerReviewModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-seller-review></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-seller-review>×</button><span class="admin-eyebrow">SELLER REVIEW</span><h2 id="sellerReviewName">Seller</h2><input type="hidden" id="sellerReviewId"><div id="sellerReviewDetails" class="order-detail-grid"></div><form id="sellerReviewForm"><div class="update-grid"><label>Status<select id="sellerReviewStatus"><option value="approved">Approved</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option><option value="pending">Pending</option></select></label><label class="wide">Reason / Note<textarea id="sellerReviewNote" rows="4" placeholder="Write a clear reason if changes are required or rejected"></textarea></label></div><button class="admin-btn" type="submit">Save Seller Review</button><p id="sellerReviewMessage" class="admin-message"></p></form></div></div>
 <div id="productReviewModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-product-review></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-product-review>×</button><span class="admin-eyebrow">PRODUCT REVIEW</span><h2 id="productReviewName">Product</h2><input type="hidden" id="productReviewId"><div id="productReviewDetails" class="order-detail-grid"></div><form id="productReviewForm"><div class="update-grid"><label>Status<select id="productReviewStatus"><option value="live">Approve & Live</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="paused">Paused</option><option value="under_review">Under Review</option></select></label><label>Seller Payout ₹<input id="productReviewPayout" type="number" min="0" step="0.01"></label><label class="wide">Reason / Note<textarea id="productReviewNote" rows="4" placeholder="Write a clear reason if changes are required or rejected"></textarea></label></div><button class="admin-btn" type="submit">Save Product Review</button><p id="productReviewMessage" class="admin-message"></p></form></div></div>
+
+<div id="fulfillmentModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-fulfillment></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-fulfillment>×</button><span class="admin-eyebrow">PICKUP</span><h2 id="fulfillmentOrderTitle">Pickup</h2><input type="hidden" id="fulfillmentItemId"><div id="fulfillmentDetails" class="order-detail-grid"></div><form id="fulfillmentForm"><div class="update-grid"><label>Status<select id="fulfillmentStatus"><option value="ready">Ready for Pickup</option><option value="pickup_booked">Pickup Booked</option><option value="picked_up">Picked Up</option><option value="shipped">In Transit</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label><label>Courier<input id="fulfillmentCourier" placeholder="e.g. Delhivery"></label><label>AWB / Tracking ID<input id="fulfillmentTracking" placeholder="Tracking number"></label></div><button class="admin-btn" type="submit">Save Pickup Status</button><p id="fulfillmentMessage" class="admin-message"></p></form></div></div>
 <script src="js/admin.js"></script></body></html>

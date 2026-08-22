@@ -43,26 +43,45 @@
   const normalizePhone = value => String(value||'').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'').slice(-10);
   const phoneEmail = value => `${normalizePhone(value)}@customer.deshigram.in`;
 
-  async function signUpCustomer({name,phone,password}){
+  async function signUpCustomer({name,phone,email,password}){
     const c=getClient();
     if(!c) throw new Error('Account service did not load');
     const cleanPhone=normalizePhone(phone);
+    const cleanEmail=String(email||'').trim().toLowerCase();
     if(cleanPhone.length!==10) throw new Error('Enter a valid 10-digit mobile number');
+    if(!cleanEmail || !cleanEmail.includes('@')) throw new Error('Enter a valid email address');
     const {data,error}=await c.auth.signUp({
-      email:phoneEmail(cleanPhone), password,
+      email:cleanEmail, password,
       options:{ data:{ full_name:String(name||'').trim(), phone:cleanPhone } }
     });
     if(error) throw error;
     return data;
   }
 
-  async function signInCustomer({phone,password}){
+  async function signInCustomer({identifier,phone,password}){
     const c=getClient();
     if(!c) throw new Error('Account service did not load');
-    const cleanPhone=normalizePhone(phone);
-    const {data,error}=await c.auth.signInWithPassword({email:phoneEmail(cleanPhone),password});
+    const raw=String(identifier||phone||'').trim();
+    const loginEmail=raw.includes('@')?raw.toLowerCase():phoneEmail(normalizePhone(raw));
+    const {data,error}=await c.auth.signInWithPassword({email:loginEmail,password});
     if(error) throw error;
     return data;
+  }
+  async function sendPasswordReset(email){
+    const c=getClient(); if(!c) throw new Error('Account service did not load');
+    const clean=String(email||'').trim().toLowerCase();
+    if(!clean.includes('@')) throw new Error('Enter your registered email address');
+    const redirectTo=`${location.origin}${location.pathname}?recovery=1`;
+    const {error}=await c.auth.resetPasswordForEmail(clean,{redirectTo});
+    if(error) throw error;
+    return true;
+  }
+  async function updatePassword(password){
+    const c=getClient(); if(!c) throw new Error('Account service did not load');
+    if(String(password||'').length<6) throw new Error('Password must be at least 6 characters');
+    const {error}=await c.auth.updateUser({password});
+    if(error) throw error;
+    return true;
   }
   async function signOut(){ const c=getClient(); if(c) await c.auth.signOut(); }
   async function getSession(){ const c=getClient(); if(!c) return null; const {data}=await c.auth.getSession(); return data?.session||null; }
@@ -104,6 +123,6 @@
 
   window.DESHIGRAM_INTEGRATIONS={
     getClient,getSession,requireSession,signUpCustomer,signInCustomer,signOut,getProfile,updateProfile,getMyOrders,
-    getApprovedReviews,submitOrderReview,placeOrder,placeMarketplaceOrder,track,emailNotice,normalizePhone
+    getApprovedReviews,submitOrderReview,placeOrder,placeMarketplaceOrder,sendPasswordReset,updatePassword,track,emailNotice,normalizePhone
   };
 })();

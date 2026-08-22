@@ -183,7 +183,7 @@
 .dynamic-product-content h1 {
   margin-top: 12px;
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(46px, 5.5vw, 72px);
   line-height: 1.04;
   letter-spacing: -2px;
@@ -264,7 +264,7 @@
 
 .product-feature-list h2 {
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 28px;
 }
 
@@ -391,7 +391,7 @@
 .dynamic-panel h2 {
   margin-top: 18px;
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(36px, 5vw, 52px);
 }
 
@@ -510,7 +510,7 @@
 .dynamic-related-content h3 {
   margin-top: 7px;
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 28px;
 }
 
@@ -552,7 +552,7 @@
 .dynamic-modal-card h2 {
   margin-top: 16px;
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 42px;
 }
 
@@ -646,7 +646,7 @@
 .product-error-box h1 {
   margin-top: 20px;
   color: var(--pd-green);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 55px;
 }
 
@@ -783,4 +783,40 @@
   .product-error-box h1 {
     font-size: 42px;
   }
+}
+
+/* DeshiGram unified typography */
+html, body, button, input, select, textarea {
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+body {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 0;
+}
+h1 { font-weight: 700; }
+h2 { font-weight: 700; }
+h3, h4 { font-weight: 600; }
+nav a, .navigation a, .sidebar a, .button, button {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+input, select, textarea {
+  font-size: 14px;
+  font-weight: 400;
+}
+small, .muted, .hint, .subtext {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.price, .product-price, .amount, .metric-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
