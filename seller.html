@@ -1,36 +1,175 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d4d35"><title>Sell on DeshiGram</title><link rel="icon" href="images/favicon.png"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/seller.css"></head><body class="seller-body">
-<header class="seller-top"><a class="seller-brand" href="index.html"><img src="images/logo.webp" alt="DeshiGram"><div><strong>DeshiGram Seller</strong><small>Chhoti Shuruaat, Badi Pehchaan.</small></div></a><a href="index.html" class="seller-home-link">← Main website</a></header>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0d4d35">
+  <title>DeshiGram Seller</title>
+  <link rel="icon" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/seller.css">
+</head>
+<body class="seller-body">
+<header class="seller-topbar">
+  <a class="seller-logo" href="index.html">
+    <img src="images/logo.webp" alt="DeshiGram">
+    <div><strong>DeshiGram Seller</strong><small>Chhoti Shuruaat, Badi Pehchaan.</small></div>
+  </a>
+  <a href="index.html" class="seller-back-link">Main Website</a>
+</header>
+
 <main>
-<section id="sellerAuth" class="seller-auth-wrap">
-  <div class="seller-auth-copy"><span class="seller-kicker">DESHIGRAM SELLER</span><h1>Start selling without keeping stock with us.</h1><p>Keep your products at your own location. When an order comes, prepare it for pickup. DeshiGram coordinates the marketplace experience and pickup workflow.</p><div class="seller-benefits"><span>₹0 Joining Fee</span><span>Simple Product Listing</span><span>Clear Review Status</span><span>Pickup Coordination</span></div></div>
-  <div class="seller-auth-card"><div class="seller-tabs"><button type="button" class="active" data-seller-tab="login">Login</button><button type="button" data-seller-tab="signup">Create Seller Account</button></div>
-    <form id="sellerLoginForm" class="seller-form" data-seller-form="login"><label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" required></label><label>Password<input type="password" name="password" minlength="6" required></label><button class="seller-btn primary" type="submit">Login</button></form>
-    <form id="sellerSignupForm" class="seller-form" data-seller-form="signup" hidden><label>Full Name<input name="full_name" maxlength="120" required></label><label>Business / Brand Name <small>(optional)</small><input name="business_name" maxlength="160"></label><label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" required></label><label>Create Password<input type="password" name="password" minlength="6" required></label><label>Confirm Password<input type="password" name="confirm_password" minlength="6" required></label><button class="seller-btn primary" type="submit">Create Account</button></form>
-    <p id="sellerAuthStatus" class="seller-status"></p>
-  </div>
-</section>
+  <section id="sellerAuth" class="auth-shell">
+    <div class="auth-intro">
+      <span class="eyebrow">SELL ON DESHIGRAM</span>
+      <h1>Grow your business with DeshiGram.</h1>
+      <p>Keep your stock at your own location. List your products, receive orders and keep them ready for pickup.</p>
+      <div class="intro-points">
+        <span>₹0 Joining Fee</span><span>Simple Listings</span><span>Clear Review Status</span><span>Pickup Support</span>
+      </div>
+    </div>
 
-<section id="sellerDashboard" class="seller-dashboard" hidden>
-  <aside class="seller-sidebar"><div class="seller-side-title">SELLER</div><button class="active" data-view="overview">Overview</button><button data-view="products">Products</button><button data-view="orders">Orders</button><button data-view="payments">Payments</button><button data-view="account">Account & Documents</button><button id="sellerLogout" class="logout">Log out</button></aside>
-  <div class="seller-main">
-    <section class="seller-view active" data-view-panel="overview"><div class="seller-heading"><div><span class="seller-kicker">OVERVIEW</span><h2>Welcome, <span id="sellerName">Seller</span></h2><p id="sellerVerificationText">Complete your account to start listing products.</p></div><span id="sellerVerificationBadge" class="seller-badge pending">Pending</span></div>
-      <div class="seller-metrics"><article><span>Total Sales</span><strong id="sellerTotalSales">₹0</strong></article><article><span>Total Orders</span><strong id="sellerTotalOrders">0</strong></article><article><span>Live Products</span><strong id="sellerLiveProducts">0</strong></article><article><span>Pending Payout</span><strong id="sellerPendingPayout">₹0</strong></article></div>
-      <div class="seller-overview-grid"><section class="seller-panel"><div class="seller-panel-head"><div><small>ACTION REQUIRED</small><h3>Things to complete</h3></div></div><div id="sellerActions" class="seller-action-list"></div></section><section class="seller-panel"><div class="seller-panel-head"><div><small>PRODUCT STATUS</small><h3>Your listings</h3></div><button class="seller-link-btn" data-jump="products">View products</button></div><div id="sellerProductSummary" class="seller-status-grid"></div></section></div>
-      <section class="seller-panel seller-recent"><div class="seller-panel-head"><div><small>RECENT ORDERS</small><h3>Latest activity</h3></div><button class="seller-link-btn" data-jump="orders">View all</button></div><div id="sellerRecentOrders"></div></section>
-    </section>
+    <div class="auth-card" id="loginCard">
+      <div class="auth-title"><h2>Seller Login</h2><p>Login to manage your DeshiGram store.</p></div>
+      <form id="sellerLoginForm" class="clean-form">
+        <label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" placeholder="Enter 10-digit mobile number" required></label>
+        <label>Password<input type="password" name="password" minlength="6" placeholder="Enter password" required></label>
+        <button class="primary-btn" type="submit">Login</button>
+      </form>
+      <div class="auth-separator"><span>New to DeshiGram?</span></div>
+      <button id="showSignup" class="outline-btn" type="button">Create Seller Account</button>
+      <p id="sellerAuthStatus" class="form-status"></p>
+    </div>
 
-    <section class="seller-view" data-view-panel="products"><div class="seller-heading"><div><span class="seller-kicker">PRODUCTS</span><h2>Your Products</h2><p>Add a product, submit it for review, and follow the status here.</p></div><button id="openAddProduct" class="seller-btn primary">+ Add Product</button></div><div id="sellerProductsList" class="seller-product-list"></div></section>
+    <div class="auth-card signup-card" id="signupCard" hidden>
+      <button id="backToLogin" class="text-back" type="button">← Back to Login</button>
+      <div class="auth-title"><h2>Create Seller Account</h2><p>Start with your basic details. Business documents can be completed after login.</p></div>
+      <form id="sellerSignupForm" class="clean-form">
+        <div class="two-col">
+          <label>Full Name<input name="full_name" maxlength="120" required></label>
+          <label>Business / Brand Name <small>(optional)</small><input name="business_name" maxlength="160"></label>
+        </div>
+        <label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" required></label>
+        <div class="two-col">
+          <label>Create Password<input type="password" name="password" minlength="6" required></label>
+          <label>Confirm Password<input type="password" name="confirm_password" minlength="6" required></label>
+        </div>
+        <button class="primary-btn" type="submit">Create Account</button>
+      </form>
+      <p id="sellerSignupStatus" class="form-status"></p>
+    </div>
+  </section>
 
-    <section class="seller-view" data-view-panel="orders"><div class="seller-heading"><div><span class="seller-kicker">ORDERS</span><h2>Orders</h2><p>Prepare seller orders and mark them ready for DeshiGram pickup.</p></div></div><div id="sellerOrdersList" class="seller-table-card"></div></section>
+  <section id="sellerDashboard" class="portal-shell" hidden>
+    <aside class="portal-sidebar" id="sellerSidebar">
+      <div class="side-brand"><img src="images/logo.webp" alt=""><div><strong>Seller Hub</strong><small id="sideBusinessName">DeshiGram Partner</small></div></div>
+      <nav class="side-nav">
+        <button class="active" data-view="overview"><span>⌂</span> Home</button>
+        <button data-view="orders"><span>▦</span> Orders</button>
+        <button data-view="products"><span>▣</span> Listings</button>
+        <button data-view="payments"><span>▤</span> Payments</button>
+        <button data-view="reports"><span>↗</span> Reports</button>
+        <button data-view="account"><span>◉</span> Account & Documents</button>
+        <button data-view="help"><span>?</span> Help & Support</button>
+      </nav>
+      <button id="sellerLogout" class="side-logout">Log out</button>
+    </aside>
 
-    <section class="seller-view" data-view-panel="payments"><div class="seller-heading"><div><span class="seller-kicker">PAYMENTS</span><h2>Settlements</h2><p>See payout records and settlement status.</p></div></div><div id="sellerPayoutList" class="seller-table-card"></div></section>
+    <div class="portal-content">
+      <div class="mobile-bar"><button id="mobileMenuBtn" type="button">☰</button><strong>DeshiGram Seller</strong></div>
 
-    <section class="seller-view" data-view-panel="account"><div class="seller-heading"><div><span class="seller-kicker">ACCOUNT</span><h2>Account & Documents</h2><p>These details are verified once and reused for your product listings.</p></div></div><div class="seller-account-grid"><form id="sellerProfileForm" class="seller-panel seller-form wide-form"><h3>Business Details</h3><label>Full Name<input name="full_name" required></label><label>Business / Brand Name<input name="business_name"></label><label>Mobile Number<input name="phone" readonly></label><label>Pickup Address<textarea name="pickup_address" rows="3"></textarea></label><div class="form-row"><label>City<input name="city"></label><label>State<input name="state"></label><label>PIN Code<input name="pincode" inputmode="numeric"></label></div><div class="form-row"><label>FSSAI Number<input name="fssai_number"></label><label>FSSAI Expiry<input type="date" name="fssai_expiry"></label></div><div class="form-row"><label>PAN<input name="pan"></label><label>GSTIN <small>(if applicable)</small><input name="gstin"></label></div><button class="seller-btn primary" type="submit">Save Details</button><p id="sellerProfileStatus" class="seller-status"></p></form>
-        <section class="seller-panel"><h3>Documents</h3><p class="seller-note">Upload only the documents that apply to your business. FSSAI is required for food seller verification.</p><div id="sellerDocumentList" class="seller-doc-list"></div><form id="sellerDocumentForm" class="seller-form compact"><label>Document Type<select name="document_type"><option value="fssai">FSSAI</option><option value="pan">PAN</option><option value="gst">GST (if applicable)</option><option value="bank">Bank Proof</option><option value="other">Other</option></select></label><label>Choose File<input type="file" name="file" accept="image/*,.pdf" required></label><button class="seller-btn secondary" type="submit">Upload Document</button><p id="sellerDocumentStatus" class="seller-status"></p></form></section>
-      </div></section>
-  </div>
-</section>
+      <section class="portal-view active" data-view-panel="overview">
+        <div class="page-head">
+          <div><h1>Welcome, <span id="sellerName">Seller</span></h1><p id="sellerVerificationText">Complete your account to start selling.</p></div>
+          <span id="sellerVerificationBadge" class="status-pill pending">Pending</span>
+        </div>
+        <div class="metric-grid">
+          <article><span>Total Sales</span><strong id="sellerTotalSales">₹0</strong></article>
+          <article><span>Total Orders</span><strong id="sellerTotalOrders">0</strong></article>
+          <article><span>Live Listings</span><strong id="sellerLiveProducts">0</strong></article>
+          <article><span>Pending Payout</span><strong id="sellerPendingPayout">₹0</strong></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="content-card"><div class="card-head"><div><h2>Action Required</h2><p>Things that need your attention</p></div></div><div id="sellerActions" class="action-list"></div></section>
+          <section class="content-card"><div class="card-head"><div><h2>Listing Status</h2><p>Current status of your products</p></div><button class="link-btn" data-jump="products">View Listings</button></div><div id="sellerProductSummary" class="summary-grid"></div></section>
+        </div>
+        <section class="content-card"><div class="card-head"><div><h2>Recent Orders</h2><p>Your latest marketplace orders</p></div><button class="link-btn" data-jump="orders">View All</button></div><div id="sellerRecentOrders"></div></section>
+      </section>
+
+      <section class="portal-view" data-view-panel="orders">
+        <div class="page-head"><div><h1>Orders</h1><p>Prepare orders and mark them ready for pickup.</p></div></div>
+        <div id="sellerOrdersList" class="content-card no-pad"></div>
+      </section>
+
+      <section class="portal-view" data-view-panel="products">
+        <div class="page-head"><div><h1>Listings</h1><p>Add products, submit them for review and track approval status.</p></div><button id="openAddProduct" class="primary-btn compact">+ Add New Listing</button></div>
+        <div id="sellerProductsList" class="listing-list"></div>
+      </section>
+
+      <section class="portal-view" data-view-panel="payments">
+        <div class="page-head"><div><h1>Payments</h1><p>Track your settlements and payout status.</p></div></div>
+        <div id="sellerPayoutList" class="content-card no-pad"></div>
+      </section>
+
+      <section class="portal-view" data-view-panel="reports">
+        <div class="page-head"><div><h1>Reports</h1><p>Sales and order reports will appear here.</p></div></div>
+        <section class="content-card empty-state"><h2>Reports are ready for the next phase</h2><p>Once orders start coming in, this section can show date-wise sales, orders, returns and payout reports.</p></section>
+      </section>
+
+      <section class="portal-view" data-view-panel="account">
+        <div class="page-head"><div><h1>Account & Documents</h1><p>Complete these details once. We reuse them for your listings.</p></div></div>
+        <div class="account-layout">
+          <form id="sellerProfileForm" class="content-card clean-form business-form">
+            <div class="card-head"><div><h2>Business Details</h2><p>Pickup and compliance information</p></div></div>
+            <div class="two-col"><label>Full Name<input name="full_name" required></label><label>Business / Brand Name<input name="business_name"></label></div>
+            <label>Mobile Number<input name="phone" readonly></label>
+            <label>Pickup Address<textarea name="pickup_address" rows="3"></textarea></label>
+            <div class="three-col"><label>City<input name="city"></label><label>State<input name="state"></label><label>PIN Code<input name="pincode" inputmode="numeric"></label></div>
+            <div class="two-col"><label>FSSAI Number<input name="fssai_number"></label><label>FSSAI Expiry<input type="date" name="fssai_expiry"></label></div>
+            <div class="two-col"><label>PAN<input name="pan"></label><label>GSTIN <small>(if applicable)</small><input name="gstin"></label></div>
+            <button class="primary-btn compact" type="submit">Save Details</button><p id="sellerProfileStatus" class="form-status"></p>
+          </form>
+          <section class="content-card documents-card">
+            <div class="card-head"><div><h2>Documents</h2><p>FSSAI is required for food seller verification.</p></div></div>
+            <div id="sellerDocumentList" class="document-list"></div>
+            <form id="sellerDocumentForm" class="clean-form document-form">
+              <label>Document Type<select name="document_type"><option value="fssai">FSSAI</option><option value="pan">PAN</option><option value="gst">GST (if applicable)</option><option value="bank">Bank Proof</option><option value="other">Other</option></select></label>
+              <label>Choose File<input type="file" name="file" accept="image/*,.pdf" required></label>
+              <button class="soft-btn" type="submit">Upload Document</button><p id="sellerDocumentStatus" class="form-status"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="portal-view" data-view-panel="help">
+        <div class="page-head"><div><h1>Help & Support</h1><p>Get help with listings, orders, pickup or payments.</p></div></div>
+        <section class="content-card support-card"><h2>Need help?</h2><p>Contact the DeshiGram team and mention your registered mobile number.</p><a class="primary-btn compact inline-btn" href="contact.html">Contact DeshiGram</a></section>
+      </section>
+    </div>
+  </section>
 </main>
 
-<div id="productModal" class="seller-modal" hidden><div class="seller-modal-backdrop" data-close-product></div><div class="seller-modal-card"><button class="seller-modal-close" data-close-product type="button">×</button><span class="seller-kicker">PRODUCT LISTING</span><h2 id="productModalTitle">Add Product</h2><form id="sellerProductForm" class="seller-form"><input type="hidden" name="product_id"><div class="form-row"><label>Product Name<input name="name" maxlength="180" required></label><label>Category<select name="category" required><option value="">Select</option><option>Pickles</option><option>Papad</option><option>Namkeen / Snacks</option><option>Masala / Spices</option><option>Dry Fruits / Seeds</option><option>Traditional Foods</option><option>Bakery</option><option>Sweets</option><option>Ready-to-Cook</option><option>Other</option></select></label></div><label>Description<textarea name="description" rows="3" required></textarea></label><label>Ingredients<textarea name="ingredients" rows="3" required></textarea></label><label>Allergen Information <small>(if applicable)</small><textarea name="allergen_info" rows="2"></textarea></label><div class="form-row three"><label>Net Quantity<input name="net_quantity" placeholder="e.g. 250 g" required></label><label>MRP ₹<input type="number" name="mrp" min="0" step="0.01" required></label><label>Selling Price ₹<input type="number" name="selling_price" min="0" step="0.01" required></label></div><div class="form-row"><label>Shelf Life / Best Before<input name="shelf_life" placeholder="e.g. 6 months" required></label><label>Available Stock<input type="number" name="stock_quantity" min="0" step="1" value="0" required></label></div><label>Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label><label>Product Images <small>(up to 4)</small><input name="images" type="file" accept="image/*" multiple></label><div id="existingProductImages" class="seller-image-preview"></div><button class="seller-btn primary" type="submit">Submit for Review</button><p id="sellerProductStatus" class="seller-status"></p></form></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/integrations.js"></script><script src="js/seller.js"></script></body></html>
+<div id="productModal" class="seller-modal" hidden>
+  <div class="seller-modal-backdrop" data-close-product></div>
+  <div class="seller-modal-card">
+    <button class="seller-modal-close" data-close-product type="button">×</button>
+    <div class="auth-title"><h2 id="productModalTitle">Add Listing</h2><p>Fill the product details clearly. Incomplete listings may be sent back for changes.</p></div>
+    <form id="sellerProductForm" class="clean-form"><input type="hidden" name="product_id">
+      <div class="two-col"><label>Product Name<input name="name" maxlength="180" required></label><label>Category<select name="category" required><option value="">Select</option><option>Pickles</option><option>Papad</option><option>Namkeen / Snacks</option><option>Masala / Spices</option><option>Dry Fruits / Seeds</option><option>Traditional Foods</option><option>Bakery</option><option>Sweets</option><option>Ready-to-Cook</option><option>Other</option></select></label></div>
+      <label>Description<textarea name="description" rows="3" required></textarea></label>
+      <label>Ingredients<textarea name="ingredients" rows="3" required></textarea></label>
+      <label>Allergen Information <small>(if applicable)</small><textarea name="allergen_info" rows="2"></textarea></label>
+      <div class="three-col"><label>Net Quantity<input name="net_quantity" placeholder="e.g. 250 g" required></label><label>MRP ₹<input type="number" name="mrp" min="0" step="0.01" required></label><label>Selling Price ₹<input type="number" name="selling_price" min="0" step="0.01" required></label></div>
+      <div class="two-col"><label>Shelf Life / Best Before<input name="shelf_life" placeholder="e.g. 6 months" required></label><label>Available Stock<input type="number" name="stock_quantity" min="0" step="1" value="0" required></label></div>
+      <label>Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label>
+      <label>Product Images <small>(up to 4)</small><input name="images" type="file" accept="image/*" multiple></label>
+      <div id="existingProductImages" class="image-preview"></div>
+      <button class="primary-btn" type="submit">Submit for Review</button><p id="sellerProductStatus" class="form-status"></p>
+    </form>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/integrations.js"></script>
+<script src="js/seller.js"></script>
+</body></html>
