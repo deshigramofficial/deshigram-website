@@ -3640,3 +3640,4 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 .dg-banner-hotspot.hs-sattu{left:42.6%;top:22.5%;width:16.8%;height:60.5%}
 .dg-banner-hotspot.hs-annaprashan{left:59.8%;top:22.5%;width:16.6%;height:60.5%}
 .dg-banner-hotspot.hs-banana{left:76.8%;top:22.5%;width:16.8%;height:60.5%}
+.seller-market-loading,.seller-market-error{grid-column:1/-1;padding:28px;text-align:center;border:1px dashed #ddd2bd;border-radius:18px;color:#69736d;background:#fff}.dg-shop-card .dg-sale-badge{z-index:2}

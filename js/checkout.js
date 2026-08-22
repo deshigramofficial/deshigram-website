@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const c=customerData(),t=totals();confirmButton.disabled=true;status.textContent='Saving your order to My Account…';
     let orderNumber='Not generated',saved=false;
     try{
-      const result=await integrations.placeOrder({p_customer_name:c.name,p_phone:c.phone,p_email:'',p_product_name:productSummary(),p_quantity:quantityTotal(),p_mrp:Number(t.mrp.toFixed(2)),p_discount:Number(t.discount.toFixed(2)),p_total_amount:Number(t.total.toFixed(2)),p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_transaction_id:c.transactionId});
+      const marketplaceItems=cart.getCart().map(i=>({seller_product_id:i.seller_product_id||null,name:i.name,quantity:i.quantity,price:i.price,mrp:i.mrp}));
+      const result=await integrations.placeMarketplaceOrder({p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_transaction_id:c.transactionId,p_items:marketplaceItems});
       const row=Array.isArray(result)?result[0]:result;if(row)orderNumber=row.order_number||orderNumber;saved=true;
       integrations.track('purchase',{transaction_id:c.transactionId||orderNumber,currency:'INR',value:Number(t.total.toFixed(2)),items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
       integrations.emailNotice('New DeshiGram Website Order',{Order_ID:orderNumber,Name:c.name,Phone:c.phone,Products:productSummary(),Total:money(t.total),Transaction_ID:c.transactionId,Account_Link:'https://deshigram.in/account.html'});

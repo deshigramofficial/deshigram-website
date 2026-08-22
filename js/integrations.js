@@ -91,6 +91,7 @@
     return api('/rpc/submit_order_review',{method:'POST',body:JSON.stringify({p_order_id:orderId,p_rating:Number(rating),p_review:review})});
   }
   async function placeOrder(payload){ return api('/rpc/place_order',{method:'POST',body:JSON.stringify(payload)}); }
+  async function placeMarketplaceOrder(payload){ return api('/rpc/place_marketplace_order',{method:'POST',body:JSON.stringify(payload)}); }
 
   function track(eventName, params = {}) { if (typeof window.gtag === 'function') window.gtag('event', eventName, params); }
   async function emailNotice(subject, fields = {}) {
@@ -103,6 +104,6 @@
 
   window.DESHIGRAM_INTEGRATIONS={
     getClient,getSession,requireSession,signUpCustomer,signInCustomer,signOut,getProfile,updateProfile,getMyOrders,
-    getApprovedReviews,submitOrderReview,placeOrder,track,emailNotice,normalizePhone
+    getApprovedReviews,submitOrderReview,placeOrder,placeMarketplaceOrder,track,emailNotice,normalizePhone
   };
 })();

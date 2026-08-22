@@ -7,7 +7,7 @@
       <a class="active" href="#adminOverview">Dashboard</a>
       <a href="#recentOrdersPanel">Orders</a>
       <a href="#reviewsPanel">Reviews</a>
-      <a href="#customersPanel">Customers</a>
+      <a href="#customersPanel">Customers</a><a href="#marketplacePanel">Sellers</a>
       <a href="#reportsPanel">Reports</a>
       <button id="sidebarLogout" type="button">Log out</button>
     </aside>
@@ -56,6 +56,16 @@
         <div><span>Orders Today</span><strong id="ordersToday">0</strong></div>
       </div>
 
+
+      <section class="panel marketplace-panel" id="marketplacePanel">
+        <div class="panel-head"><div><span class="admin-eyebrow">MARKETPLACE</span><h2>Seller Marketplace</h2><p>Review seller accounts and product listings.</p></div><button id="marketplaceRefresh" class="admin-btn secondary" type="button">Refresh</button></div>
+        <div class="marketplace-metrics"><div><span>Total Sellers</span><strong id="marketSellersTotal">0</strong></div><div><span>Pending Sellers</span><strong id="marketSellersPending">0</strong></div><div><span>Products to Review</span><strong id="marketProductsReview">0</strong></div><div><span>Live Seller Products</span><strong id="marketProductsLive">0</strong></div></div>
+        <div class="marketplace-grid">
+          <div><h3>Seller Verification</h3><div class="table-wrap"><table class="history-table"><thead><tr><th>Seller</th><th>Location</th><th>FSSAI</th><th>Status</th><th>Action</th></tr></thead><tbody id="marketSellerBody"><tr><td colspan="5">Marketplace setup not loaded.</td></tr></tbody></table></div></div>
+          <div><h3>Product Review</h3><div class="table-wrap"><table class="history-table"><thead><tr><th>Product</th><th>Seller</th><th>Price</th><th>Status</th><th>Action</th></tr></thead><tbody id="marketProductBody"><tr><td colspan="5">Marketplace setup not loaded.</td></tr></tbody></table></div></div>
+        </div>
+      </section>
+
       <section class="panel order-history-panel" id="orderHistory">
         <div class="history-head"><div><span class="admin-eyebrow">ORDER MANAGEMENT</span><h2>Complete Order History</h2><p>Search orders, update payment/order status and keep courier tracking ready.</p></div><div class="history-controls"><input id="orderSearch" type="search" placeholder="Order ID, customer, phone, product…"><select id="orderStatusFilter"><option value="">All statuses</option><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select><button id="orderSearchBtn" class="admin-btn secondary" type="button">Search</button></div></div>
         <div class="history-count" id="historyCount">0 orders</div>
@@ -66,4 +76,7 @@
   </div>
 </section></div>
 <div id="orderModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-order></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-order>×</button><span class="admin-eyebrow">ORDER DETAILS</span><h2 id="modalOrderNumber">Order</h2><div id="modalOrderDetails" class="order-detail-grid"></div><form id="orderUpdateForm"><input type="hidden" id="modalOrderId"><div class="update-grid"><label>Payment status<select id="modalPaymentStatus"><option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="refunded">Refunded</option></select></label><label>Order status<select id="modalOrderStatus"><option value="placed">Placed</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label><label>Courier name<input id="modalCourier" placeholder="e.g. Delhivery"></label><label>AWB / Tracking no.<input id="modalAwb" placeholder="AWB number"></label><label class="wide">Tracking URL<input id="modalTracking" type="url" placeholder="https://..."></label></div><button class="admin-btn" type="submit">Save Order Update</button><p id="orderUpdateMessage" class="admin-message"></p></form></div></div>
+
+<div id="sellerReviewModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-seller-review></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-seller-review>×</button><span class="admin-eyebrow">SELLER REVIEW</span><h2 id="sellerReviewName">Seller</h2><input type="hidden" id="sellerReviewId"><div id="sellerReviewDetails" class="order-detail-grid"></div><form id="sellerReviewForm"><div class="update-grid"><label>Status<select id="sellerReviewStatus"><option value="approved">Approved</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option><option value="pending">Pending</option></select></label><label class="wide">Reason / Note<textarea id="sellerReviewNote" rows="4" placeholder="Write a clear reason if changes are required or rejected"></textarea></label></div><button class="admin-btn" type="submit">Save Seller Review</button><p id="sellerReviewMessage" class="admin-message"></p></form></div></div>
+<div id="productReviewModal" class="admin-modal hidden"><div class="admin-modal-backdrop" data-close-product-review></div><div class="admin-modal-card"><button class="admin-modal-close" type="button" data-close-product-review>×</button><span class="admin-eyebrow">PRODUCT REVIEW</span><h2 id="productReviewName">Product</h2><input type="hidden" id="productReviewId"><div id="productReviewDetails" class="order-detail-grid"></div><form id="productReviewForm"><div class="update-grid"><label>Status<select id="productReviewStatus"><option value="live">Approve & Live</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="paused">Paused</option><option value="under_review">Under Review</option></select></label><label>Seller Payout ₹<input id="productReviewPayout" type="number" min="0" step="0.01"></label><label class="wide">Reason / Note<textarea id="productReviewNote" rows="4" placeholder="Write a clear reason if changes are required or rejected"></textarea></label></div><button class="admin-btn" type="submit">Save Product Review</button><p id="productReviewMessage" class="admin-message"></p></form></div></div>
 <script src="js/admin.js"></script></body></html>

@@ -8,7 +8,7 @@
   const refresh=document.getElementById('refreshBtn');
   const storeKey='dg_admin_session';
   const PAGE_SIZE=25;
-  let page=0, totalOrders=0, currentOrders=[];
+  let page=0, totalOrders=0, currentOrders=[], marketplace={sellers:[],products:[]};
 
   function saveSession(s){localStorage.setItem(storeKey,JSON.stringify(s));}
   function getSession(){try{return JSON.parse(localStorage.getItem(storeKey)||'null')}catch{return null}}
@@ -31,6 +31,9 @@
     return request('/rest/v1/rpc/admin_orders_history',{method:'POST',body:JSON.stringify({p_limit:PAGE_SIZE,p_offset:page*PAGE_SIZE,p_search:search,p_status:status})});
   }
   async function updateOrder(payload){return request('/rest/v1/rpc/admin_update_order',{method:'POST',body:payload});}
+  async function marketOverview(){return request('/rest/v1/rpc/admin_marketplace_overview',{method:'POST',body:'{}'});}
+  async function reviewSeller(payload){return request('/rest/v1/rpc/admin_review_seller',{method:'POST',body:JSON.stringify(payload)});}
+  async function reviewSellerProduct(payload){return request('/rest/v1/rpc/admin_review_seller_product',{method:'POST',body:JSON.stringify(payload)});}
   const rupees=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n||0));
   const date=v=>v?new Date(v).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'—';
   function put(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
@@ -76,6 +79,19 @@
   }
 
   async function loadHistory(){try{renderHistory(await history());}catch(e){document.getElementById('historyBody').innerHTML=`<tr><td colspan="9">${esc(e.message)}. Run admin-order-history-setup.sql in Supabase.</td></tr>`;}}
+  function renderMarketplace(d){
+    marketplace={sellers:d?.sellers||[],products:d?.products||[]};
+    put('marketSellersTotal',d?.sellers_total||0);put('marketSellersPending',d?.sellers_pending||0);put('marketProductsReview',d?.products_review||0);put('marketProductsLive',d?.products_live||0);
+    const sb=document.getElementById('marketSellerBody'); if(sb) sb.innerHTML=marketplace.sellers.map((x,i)=>`<tr><td><strong>${esc(x.business_name||x.full_name)}</strong><small>${esc(x.phone||'')}</small></td><td>${esc([x.city,x.state].filter(Boolean).join(', ')||'—')}</td><td>${esc(x.fssai_number||'Not added')}</td><td>${badge(String(x.verification_status||'pending').replace(/_/g,' '))}</td><td><button class="admin-btn tiny" data-seller-review="${i}">Review</button></td></tr>`).join('')||'<tr><td colspan="5">No sellers yet.</td></tr>';
+    const pb=document.getElementById('marketProductBody'); if(pb) pb.innerHTML=marketplace.products.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong><small>${esc(x.category||'')}</small></td><td>${esc(x.business_name||x.full_name)}</td><td>${rupees(x.selling_price)}<small>MRP ${rupees(x.mrp)}</small></td><td>${badge(String(x.status||'').replace(/_/g,' '))}</td><td><button class="admin-btn tiny" data-product-review="${i}">Review</button></td></tr>`).join('')||'<tr><td colspan="5">No seller products yet.</td></tr>';
+    document.querySelectorAll('[data-seller-review]').forEach(b=>b.addEventListener('click',()=>openSellerReview(Number(b.dataset.sellerReview))));
+    document.querySelectorAll('[data-product-review]').forEach(b=>b.addEventListener('click',()=>openProductReview(Number(b.dataset.productReview))));
+  }
+  async function loadMarketplace(){try{renderMarketplace(await marketOverview());}catch(e){const sb=document.getElementById('marketSellerBody'),pb=document.getElementById('marketProductBody');if(sb)sb.innerHTML=`<tr><td colspan="5">${esc(e.message)}. Run seller-marketplace-setup.sql.</td></tr>`;if(pb)pb.innerHTML='<tr><td colspan="5">Marketplace setup required.</td></tr>';}}
+  function openSellerReview(i){const x=marketplace.sellers[i];if(!x)return;document.getElementById('sellerReviewId').value=x.user_id;put('sellerReviewName',x.business_name||x.full_name);document.getElementById('sellerReviewStatus').value=x.verification_status||'pending';document.getElementById('sellerReviewNote').value=x.verification_note||'';document.getElementById('sellerReviewDetails').innerHTML=`<div><span>Owner</span><strong>${esc(x.full_name)}</strong><small>${esc(x.phone)}</small></div><div><span>Location</span><strong>${esc([x.city,x.state].filter(Boolean).join(', ')||'—')}</strong><small>${esc(x.fssai_number||'FSSAI not added')}</small></div>`;document.getElementById('sellerReviewModal').classList.remove('hidden');}
+  function closeSellerReview(){document.getElementById('sellerReviewModal').classList.add('hidden');}
+  function openProductReview(i){const x=marketplace.products[i];if(!x)return;document.getElementById('productReviewId').value=x.id;put('productReviewName',x.name);document.getElementById('productReviewStatus').value=x.status==='under_review'?'live':x.status;document.getElementById('productReviewPayout').value=x.seller_payout??'';document.getElementById('productReviewNote').value=x.review_note||'';document.getElementById('productReviewDetails').innerHTML=`<div><span>Seller</span><strong>${esc(x.business_name||x.full_name)}</strong><small>${esc(x.category)}</small></div><div><span>Price</span><strong>${rupees(x.selling_price)}</strong><small>MRP ${rupees(x.mrp)} • ${esc(x.net_quantity)}</small></div>`;document.getElementById('productReviewModal').classList.remove('hidden');}
+  function closeProductReview(){document.getElementById('productReviewModal').classList.add('hidden');}
 
   function openOrder(index){
     const o=currentOrders[index]; if(!o)return;
@@ -97,7 +113,7 @@
   function closeOrder(){document.getElementById('orderModal').classList.add('hidden');document.body.classList.remove('modal-open');}
 
   async function load(){
-    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await loadHistory();}
+    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await Promise.all([loadHistory(),loadMarketplace()]);}
     catch(e){clearSession();loginBox.classList.remove('hidden');dashboard.style.display='none';logout.classList.add('hidden');refresh.classList.add('hidden');msg.textContent=e.message.includes('Not authorized')?'This account is not authorized for the DeshiGram dashboard.':'';}
   }
   document.getElementById('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Signing in...';try{const s=await login(document.getElementById('adminEmail').value.trim(),document.getElementById('adminPassword').value);saveSession(s);msg.textContent='';await load();}catch(err){msg.textContent=err.message;}});
@@ -112,5 +128,10 @@
     e.preventDefault();const m=document.getElementById('orderUpdateMessage');m.textContent='Saving…';
     try{await updateOrder({p_order_id:document.getElementById('modalOrderId').value,p_order_status:document.getElementById('modalOrderStatus').value,p_payment_status:document.getElementById('modalPaymentStatus').value,p_courier_name:document.getElementById('modalCourier').value,p_awb_code:document.getElementById('modalAwb').value,p_tracking_url:document.getElementById('modalTracking').value});m.textContent='Order updated successfully.';await Promise.all([loadHistory(),stats().then(renderStats)]);setTimeout(closeOrder,700);}catch(err){m.textContent=err.message;}
   });
+  document.getElementById('marketplaceRefresh')?.addEventListener('click',loadMarketplace);
+  document.querySelectorAll('[data-close-seller-review]').forEach(x=>x.addEventListener('click',closeSellerReview));
+  document.querySelectorAll('[data-close-product-review]').forEach(x=>x.addEventListener('click',closeProductReview));
+  document.getElementById('sellerReviewForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('sellerReviewMessage');m.textContent='Saving…';try{await reviewSeller({p_seller_id:document.getElementById('sellerReviewId').value,p_status:document.getElementById('sellerReviewStatus').value,p_note:document.getElementById('sellerReviewNote').value});m.textContent='Seller review saved.';await loadMarketplace();setTimeout(closeSellerReview,500);}catch(err){m.textContent=err.message;}});
+  document.getElementById('productReviewForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('productReviewMessage');m.textContent='Saving…';try{const payout=document.getElementById('productReviewPayout').value;await reviewSellerProduct({p_product_id:document.getElementById('productReviewId').value,p_status:document.getElementById('productReviewStatus').value,p_note:document.getElementById('productReviewNote').value,p_seller_payout:payout===''?null:Number(payout)});m.textContent='Product review saved.';await loadMarketplace();setTimeout(closeProductReview,500);}catch(err){m.textContent=err.message;}});
   if(getSession()?.access_token) load();
 })();
