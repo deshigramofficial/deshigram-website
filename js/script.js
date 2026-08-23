@@ -41,10 +41,10 @@ const productSearchInput = document.getElementById("productSearchInput");
 const searchResults = document.getElementById("searchResults");
 
 const searchableProducts = [
-  { name: "Dry Fruits Energy Powder", description: "100g nutrition pouch", href: "index.html#products" },
-  { name: "Pack of 1", description: "30% off MRP • ₹139.30", href: "index.html#products" },
-  { name: "Pack of 2", description: "30% off MRP • ₹265.30", href: "index.html#products" },
-  { name: "Pack of 3", description: "30% off MRP • ₹384.30", href: "index.html#products" }
+  { name: "Dry Fruits Energy Powder", description: "DeshiGram food product", href: "products.html" },
+  { name: "Pack of 1", description: "100g pack", href: "products.html" },
+  { name: "Pack of 2", description: "200g value pack", href: "products.html" },
+  { name: "Pack of 3", description: "300g family pack", href: "products.html" }
 ];
 
 function renderSearchResults(query = "") {
@@ -54,31 +54,41 @@ function renderSearchResults(query = "") {
   searchResults.innerHTML = matches.length ? matches.map((product) => `<a class="search-result-item" href="${product.href}">${product.name}<small>${product.description}</small></a>`).join("") : '<p class="search-empty">No product found.</p>';
 }
 
-if (siteSearch && searchToggle && productSearchInput) {
-  searchToggle.addEventListener("click", () => {
-    const willOpen = !siteSearch.classList.contains("is-open");
-    siteSearch.classList.toggle("is-open", willOpen);
-    searchToggle.setAttribute("aria-expanded", String(willOpen));
-    if (willOpen) {
-      renderSearchResults(productSearchInput.value);
-      window.setTimeout(() => productSearchInput.focus(), 50);
+if (siteSearch && productSearchInput) {
+  const updateSearch = () => {
+    const query = productSearchInput.value.trim();
+    if (query) {
+      renderSearchResults(query);
+      siteSearch.classList.add("has-results");
+    } else {
+      siteSearch.classList.remove("has-results");
+      if (searchResults) searchResults.innerHTML = "";
     }
-  });
+  };
 
-  productSearchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+  productSearchInput.addEventListener("input", updateSearch);
+  productSearchInput.addEventListener("focus", updateSearch);
+
+  if (searchToggle) {
+    searchToggle.addEventListener("click", () => {
+      const willOpen = !siteSearch.classList.contains("is-open");
+      siteSearch.classList.toggle("is-open", willOpen);
+      searchToggle.setAttribute("aria-expanded", String(willOpen));
+      if (willOpen) window.setTimeout(() => productSearchInput.focus(), 50);
+    });
+  }
 
   document.addEventListener("click", (event) => {
     if (!siteSearch.contains(event.target)) {
-      siteSearch.classList.remove("is-open");
-      searchToggle.setAttribute("aria-expanded", "false");
+      siteSearch.classList.remove("is-open", "has-results");
+      if (searchToggle) searchToggle.setAttribute("aria-expanded", "false");
     }
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      siteSearch.classList.remove("is-open");
-      searchToggle.setAttribute("aria-expanded", "false");
-      searchToggle.focus();
+      siteSearch.classList.remove("is-open", "has-results");
+      if (searchToggle && window.innerWidth <= 900) searchToggle.focus();
     }
   });
 }

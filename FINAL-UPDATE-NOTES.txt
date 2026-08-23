@@ -1,0 +1,14 @@
+DESHIGRAM FINAL CLEAN BUILD
+
+Final changes:
+- Desktop search is now a clean inline search bar; mobile keeps compact search.
+- Footer duplicate Login removed.
+- Main header standardized to Home / Products / About Us / Contact / Login.
+- Policies and Distributorship remain footer/support links, not main header links.
+- Checkout no longer uses old ₹55 + ₹5 + ₹5 hard-coded fee system.
+- Partner seller products use their final Listing Price directly at checkout.
+- DeshiGram-owned products use logistics ₹80 for first 500g + ₹30 per additional started 500g, ₹10 platform fee, ₹3 payment processing.
+- Quantity +/- remains available in checkout.
+- Inter typography retained.
+- Password recovery flow retained.
+- Cashfree not integrated until merchant activation is approved.

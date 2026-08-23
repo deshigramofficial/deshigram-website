@@ -1,9 +1,9 @@
 (() => {
   const STORAGE_KEY = "deshigram_cart_v3";
   const catalog = {
-    "pack-1": { id: "pack-1", name: "Pack of 1", price: 139.30, mrp: 199, weight: "100g × 1", image: "images/pack-1.webp" },
-    "pack-2": { id: "pack-2", name: "Pack of 2", price: 265.30, mrp: 379, weight: "100g × 2", image: "images/pack-2.webp" },
-    "pack-3": { id: "pack-3", name: "Pack of 3", price: 384.30, mrp: 549, weight: "100g × 3", image: "images/pack-3.webp" }
+    "pack-1": { id: "pack-1", name: "Pack of 1", price: 139.30, mrp: 199, weight: "100g × 1", packed_weight_grams: 100, image: "images/pack-1.webp" },
+    "pack-2": { id: "pack-2", name: "Pack of 2", price: 265.30, mrp: 379, weight: "100g × 2", packed_weight_grams: 200, image: "images/pack-2.webp" },
+    "pack-3": { id: "pack-3", name: "Pack of 3", price: 384.30, mrp: 549, weight: "100g × 3", packed_weight_grams: 300, image: "images/pack-3.webp" }
   };
   const money = value => `₹${Number(value).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
   function getCart(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");}catch{return[];}}
