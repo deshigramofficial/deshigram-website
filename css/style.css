@@ -3826,3 +3826,30 @@ button,.button,input,select,textarea{
   }
   .header .dg-main-brand{gap:2px!important}
 }
+
+/* ===== APPROVED HEADER ALIGNMENT ===== */
+.header .container.navbar{
+  width:calc(100% - 22px)!important;
+  max-width:1320px!important;
+  margin:0 auto!important;
+  padding-left:8px!important;
+  padding-right:8px!important;
+}
+.header .dg-main-brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  margin:0 18px 0 0!important;
+  flex-shrink:0!important;
+}
+.header .dg-main-brand img{margin:0!important}
+.header .dg-main-brand .brand-name{margin:0!important}
+.header .site-search{margin-left:0!important}
+@media(max-width:900px){
+  .header .container.navbar{
+    width:calc(100% - 14px)!important;
+    padding-left:5px!important;
+    padding-right:5px!important;
+  }
+  .header .dg-main-brand{gap:3px!important;margin-right:10px!important}
+}

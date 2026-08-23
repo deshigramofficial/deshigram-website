@@ -121,3 +121,53 @@ small, .muted, .hint, .subtext {
   .dg-footer-bottom{align-items:flex-start!important}
   .dg-payment-row{width:100%;margin-top:2px}
 }
+
+/* ===== APPROVED COMPACT FOOTER ===== */
+.dg-market-footer{padding-top:20px!important}
+.dg-market-footer-grid{
+  display:grid!important;
+  grid-template-columns:1.15fr .9fr 1.05fr .9fr 1fr!important;
+  gap:18px!important;
+  padding-bottom:15px!important;
+  align-items:start!important;
+}
+.dg-footer-brand img{width:120px!important;margin-bottom:5px!important}
+.dg-footer-brand p{font-size:11.5px!important;margin:0 0 8px!important}
+.dg-socials{gap:7px!important;margin:7px 0 8px!important}
+.dg-social{width:30px!important;height:30px!important}
+.dg-social svg{width:17px!important;height:17px!important}
+.dg-youtube{background:#ff0000!important}
+.dg-footer-column{justify-self:center!important}
+.dg-footer-column h3{font-size:13px!important;margin:0 0 8px!important}
+.dg-footer-column a{font-size:11.5px!important;padding:2.5px 0!important}
+.dg-footer-meta{justify-self:end;display:flex;flex-direction:column;gap:12px;min-width:190px}
+.dg-fssai-compact,.dg-payments-compact{font-size:10.5px;color:#dce9e2}
+.dg-fssai-compact strong,.dg-payments-compact strong{display:block;color:#fff;font-size:11.5px;margin-bottom:4px}
+.dg-payment-badges{display:flex;gap:5px;flex-wrap:wrap}
+.dg-payment-badges span{background:#fff;border-radius:4px;padding:3px 6px;font-size:9px;font-weight:800;line-height:1.1}
+.dg-payment-badges .upi{color:#198754}.dg-payment-badges .rupay{color:#175ca7}
+.dg-payment-badges .visa{color:#1434cb}.dg-payment-badges .mastercard{color:#d64a27}
+.dg-footer-bottom{
+  display:grid!important;
+  grid-template-columns:1fr auto 1fr!important;
+  align-items:center!important;
+  gap:14px!important;
+  padding:9px 0 10px!important;
+  font-size:10.5px!important;
+  border-top:1px solid rgba(255,255,255,.14)!important
+}
+.dg-footer-bottom>span:last-child{text-align:right}
+.dg-made-india{text-align:center;color:#fff!important;font-weight:600}
+@media(max-width:900px){
+ .dg-market-footer-grid{grid-template-columns:1fr 1fr 1fr!important}
+ .dg-footer-brand{grid-column:1/-1!important}
+ .dg-footer-meta{justify-self:start!important}
+}
+@media(max-width:560px){
+ .dg-market-footer-grid{grid-template-columns:1fr 1fr!important;gap:14px 12px!important}
+ .dg-footer-brand,.dg-footer-meta{grid-column:1/-1!important}
+ .dg-footer-meta{display:grid!important;grid-template-columns:1fr 1fr!important;min-width:0!important;width:100%}
+ .dg-footer-bottom{grid-template-columns:1fr!important;gap:5px!important}
+ .dg-footer-bottom>span,.dg-footer-bottom>span:last-child{text-align:left!important}
+ .dg-made-india{text-align:left!important}
+}
