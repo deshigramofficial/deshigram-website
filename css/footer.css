@@ -90,3 +90,34 @@ small, .muted, .hint, .subtext {
  .dg-footer-column a{font-size:11.5px!important}
  .dg-footer-bottom{font-size:11px!important}
 }
+
+/* === PRECISE COMPACT FOOTER + PAYMENTS === */
+.dg-market-footer{padding-top:25px!important}
+.dg-market-footer-grid{padding-bottom:18px!important;gap:18px!important}
+.dg-footer-column h3{font-size:13px!important;margin-bottom:8px!important}
+.dg-footer-column a{font-size:11.5px!important;padding:2.5px 0!important}
+.dg-footer-brand p{font-size:11.5px!important}
+.dg-footer-brand img{width:126px!important}
+.dg-socials{margin:8px 0 10px!important;gap:7px!important}
+.dg-social{width:30px!important;height:30px!important}
+.dg-youtube{background:#ff0000!important}
+.dg-footer-bottom{padding:10px 0 12px!important;font-size:11px!important}
+.dg-payment-row{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  color:#dce9e2;font-size:10.5px
+}
+.dg-payment-row strong{color:#fff;font-size:10.5px;margin-right:2px}
+.dg-payment-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:39px;height:23px;padding:0 7px;border-radius:5px;
+  background:#fff;color:#133f2d!important;font-size:9.5px!important;
+  font-weight:800!important;letter-spacing:.1px
+}
+.dg-payment-badge.upi{color:#1b6b43!important}
+.dg-payment-badge.rupay{color:#175ca7!important}
+.dg-payment-badge.visa{color:#1434cb!important}
+.dg-payment-badge.mastercard{color:#d44c20!important}
+@media(max-width:700px){
+  .dg-footer-bottom{align-items:flex-start!important}
+  .dg-payment-row{width:100%;margin-top:2px}
+}

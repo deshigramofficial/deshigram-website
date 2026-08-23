@@ -3801,3 +3801,28 @@ button,.button,input,select,textarea{
  .header .brand{margin-left:2px!important}
  .dg-value-grid,.dg-quality-grid,.policy-grid{grid-template-columns:1fr}
 }
+
+/* === PRECISE HEADER FIX === */
+.header .container.navbar{
+  width:calc(100% - 24px)!important;
+  max-width:1320px!important;
+  margin-inline:auto!important;
+}
+.header .dg-main-brand{
+  gap:3px!important;
+  margin-left:0!important;
+}
+.header .dg-main-brand img{
+  margin:0!important;
+}
+.header .dg-main-brand .brand-name{
+  margin-left:0!important;
+}
+@media(max-width:900px){
+  .header .container.navbar{
+    width:calc(100% - 16px)!important;
+    padding-left:4px!important;
+    padding-right:4px!important;
+  }
+  .header .dg-main-brand{gap:2px!important}
+}
