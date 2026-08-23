@@ -66,3 +66,27 @@ small, .muted, .hint, .subtext {
  .dg-footer-column a{font-size:12.5px}
  .dg-footer-brand img{width:165px}
 }
+
+/* FINAL compact footer + payments */
+.dg-market-footer{padding-top:28px!important}
+.dg-market-footer-grid{gap:22px!important;padding-bottom:22px!important}
+.dg-footer-brand img{width:132px!important;margin-bottom:6px!important}
+.dg-footer-brand p,.dg-footer-column a{font-size:12px!important}
+.dg-footer-column h3{font-size:13.5px!important;margin-bottom:10px!important}
+.dg-footer-column a{padding:3px 0!important}
+.dg-socials{gap:8px!important;margin:10px 0 12px!important}
+.dg-social{width:31px!important;height:31px!important}
+.dg-social svg{width:17px!important;height:17px!important}
+.dg-youtube{background:#ff0000!important}
+.dg-footer-bottom{padding:12px 0 15px!important;font-size:11.5px!important;flex-wrap:wrap}
+.dg-payments{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.dg-payments span{margin-right:3px;color:#dce9e2}
+.dg-payments b{background:#fff;color:#123f2d;border-radius:5px;padding:4px 7px;font-size:10.5px;line-height:1}
+@media(max-width:560px){
+ .dg-market-footer{padding-top:24px!important}
+ .dg-market-footer-grid{gap:18px 14px!important}
+ .dg-footer-brand img{width:136px!important}
+ .dg-footer-column h3{font-size:13px!important}
+ .dg-footer-column a{font-size:11.5px!important}
+ .dg-footer-bottom{font-size:11px!important}
+}
