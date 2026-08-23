@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Guest checkout for DeshiGram Dry Fruits Energy Powder."><title>Checkout | DeshiGram</title><link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=3"><link rel="icon" type="image/png" href="images/favicon.png?v=3"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/checkout.css">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8DCB4RP5XZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','G-8DCB4RP5XZ');</script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d4d35">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body,button,input,select,textarea{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important}
+body{font-size:15px;line-height:1.5}
+h1,h2,h3,h4,h5,h6{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important;letter-spacing:-.02em;line-height:1.2}
+h1,h2{font-weight:700}h3,h4{font-weight:600}
+button,.button,nav a,.sidebar a{font-weight:600}
+</style>
+</head>
+<body>
+<div class="announcement-bar">Secure Checkout • DeshiGram Account Required</div>
+<header class="header"><div class="container navbar"><a class="brand" href="index.html"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><nav class="navigation checkout-nav"><a href="products.html">Continue Shopping</a><a href="account.html">Login</a></nav></div></header>
+<main class="checkout-page">
+<section class="checkout-hero"><div class="container"><span class="eyebrow">SECURE CHECKOUT</span><h1>Complete your order.</h1></div></section>
+<section class="checkout-section"><div class="container checkout-grid">
+<form class="checkout-form-card" id="checkoutForm">
+<h2>Delivery details</h2><div class="checkout-form-grid">
+<label>Full name<input type="text" name="name" autocomplete="name" required></label>
+<label>Phone number<input type="tel" name="phone" autocomplete="tel" inputmode="tel" pattern="[0-9+ -]{10,15}" required></label>
+
+<label>PIN code<input type="text" name="pincode" inputmode="numeric" pattern="[0-9]{6}" required></label>
+<label class="full">Full delivery address<textarea name="address" rows="4" required></textarea></label>
+<label>City<input type="text" name="city" required></label><label>State<input type="text" name="state" value="Uttar Pradesh" required></label>
+</div>
+<section class="payment-method-section" aria-labelledby="paymentMethodTitle"><span class="upi-kicker">Payment method</span><h2 id="paymentMethodTitle">Choose payment</h2><div class="payment-method-options">
+<label class="payment-method-card"><input type="radio" name="paymentMethod" value="upi"><span class="payment-method-icon">📱</span><span><strong>UPI</strong><small>Pay now with any UPI app</small></span></label>
+<label class="payment-method-card active-cod"><input type="radio" name="paymentMethod" value="cod" checked><span class="payment-method-icon">📦</span><span><strong>Cash on Delivery</strong><small>Pay when your order is delivered</small></span></label>
+</div></section>
+<div class="upi-payment-box" id="upiPaymentBox"><div class="upi-heading"><div><span class="upi-kicker">UPI payment</span><h2>Pay securely</h2></div><span class="upi-app-badge">Any UPI App</span></div><p class="upi-note">Tap the button below to open PhonePe, Google Pay, Paytm or another installed UPI app. If the app does not open, use the QR code shown below.</p><button class="button button-primary pay-upi-button" id="payWithUpiButton" type="button">Pay with UPI</button><div class="upi-detail-row"><span>UPI ID</span><strong>singh.abhinendra5@ybl</strong></div><div class="upi-qr-fallback" id="upiQrFallback" hidden><img src="images/payment-qr-phonepe.jpeg" alt="DeshiGram UPI payment QR code"><small>Scan with any UPI app</small></div></div>
+<label class="transaction-label" id="transactionLabel" hidden>UPI transaction ID / UTR number<input type="text" name="transactionId" id="transactionId" minlength="6" placeholder="Enter after payment"></label>
+<div class="checkout-notice" id="checkoutNotice"><strong>Cash on Delivery selected.</strong> Pay the order amount when your parcel is delivered.</div>
+<button class="button button-primary checkout-confirm-button" id="confirmPaymentButton" type="submit">Confirm Order</button><p class="checkout-status" id="checkoutStatus" aria-live="polite"></p>
+</form>
+<aside class="checkout-summary-card"><h2>Order summary</h2><div id="checkoutItems"></div><div class="checkout-breakdown"><div><span>Product total (MRP)</span><strong id="checkoutMrpTotal">₹0.00</strong></div><div class="discount-line"><span>30% discount</span><strong id="checkoutDiscount">− ₹0.00</strong></div><div><span>Logistics / delivery</span><strong>₹55.00</strong></div><div><span>Platform handling fee</span><strong>₹10.00</strong></div><div><span>Secure packaging</span><strong>₹5.00</strong></div><div><span>Payment handling fee</span><strong>₹5.00</strong></div></div><div class="checkout-total"><span>Total payable</span><strong id="checkoutTotal">₹0.00</strong></div><div class="checkout-trust"><span>✓ UPI & Cash on Delivery</span><span>✓ Account-linked Order</span><span>✓ FSSAI Lic. No. 22726302000355</span></div></aside>
+</div></section></main>
+<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh Ki Parampara, Har Ghar Tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="contact.html">Contact</a></div><p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/integrations.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/checkout.js"></script><script src="js/script.js"></script><script src="js/login-choice.js"></script></body></html>

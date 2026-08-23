@@ -1,0 +1,14 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  const id = new URLSearchParams(window.location.search).get("id") || "pack-1";
+  const list=await (window.DESHIGRAM_CATALOG?.load?.()||Promise.resolve(window.PRODUCTS||[]));
+  const product = list.find(item => item.id === id || item.slug===id);
+  const error = document.getElementById("productError");
+  if (!product) { error.hidden = false; return; }
+  document.getElementById("productDetailPage").hidden = false;document.getElementById("productInformation").hidden = false;document.title = `${product.name} | DeshiGram`;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value||''};const money=v=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(v||0));
+  set("breadcrumbName",product.name);set("productCategory",product.category);set("productName",product.name);set("productShortDescription",product.shortDescription);set("productPrice",money(product.price));set("productOldPrice",`MRP ${money(product.oldPrice)}`);set("productWeight",product.weight);set("descriptionHeading",product.name);set("productDescription",product.description);set("productStorage",product.storage);
+  document.getElementById("productFeatures").innerHTML=(product.features||[]).map(x=>`<div class="dynamic-feature-item"><span>✓</span><p>${x}</p></div>`).join("")||'<p>Product details available on the final label.</p>';
+  document.getElementById("productIngredients").innerHTML=(product.ingredients||[]).map(x=>`<li>${x}</li>`).join("");document.getElementById("productUsage").innerHTML=(product.usage||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,"0")}</span><p>${x}</p></article>`).join("");
+  const main=document.getElementById("mainProductImage"),thumbs=document.getElementById("productThumbnails");const imgs=product.images?.length?product.images:['images/favicon.png'];main.src=imgs[0];main.alt=product.name;thumbs.innerHTML='';imgs.forEach((src,i)=>{const b=document.createElement('button');b.type='button';b.className=`dynamic-thumbnail${i===0?' active':''}`;b.innerHTML=`<img src="${src}" alt="${product.name} image ${i+1}">`;b.addEventListener('click',()=>{main.src=src;thumbs.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active')});thumbs.appendChild(b)});
+  document.getElementById("addProductToCart").dataset.addToCart=product.id;document.querySelectorAll('.dynamic-tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.dynamic-tab,.dynamic-panel').forEach(el=>el.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.tabTarget).classList.add('active')}));
+});
