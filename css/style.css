@@ -3761,3 +3761,35 @@ body{
 button,.button,input,select,textarea{
   font-size:14px;
 }
+
+/* MOBILE MENU FIX */
+@media (max-width:900px){
+.header .navbar{min-height:72px!important;padding:10px 18px!important}
+.header .brand img{width:132px!important;height:auto!important;max-height:58px!important;object-fit:contain!important}
+.header .menu-toggle{display:flex!important;align-items:center!important;justify-content:center!important;width:48px!important;height:48px!important;margin-left:auto!important;padding:0!important;z-index:1002!important}
+.header .navigation{position:absolute!important;top:100%!important;left:12px!important;right:12px!important;width:auto!important;max-width:none!important;height:auto!important;max-height:calc(100vh - 105px)!important;padding:14px!important;margin:0!important;display:none!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;background:#fff!important;border:1px solid #e4e8e5!important;border-radius:16px!important;box-shadow:0 14px 38px rgba(12,65,44,.18)!important;overflow-y:auto!important;overflow-x:hidden!important;z-index:1001!important}
+.header .navigation.is-open,.header .navigation.active,.header.menu-open .navigation{display:flex!important}
+.header .navigation a{display:flex!important;width:100%!important;min-height:46px!important;align-items:center!important;padding:11px 13px!important;margin:0!important;border-radius:10px!important;font-size:14px!important;line-height:1.25!important;white-space:normal!important;overflow:visible!important}
+.header .navigation a::after{display:none!important}
+.header .navigation a.active{background:#eef6f1!important;color:#0d5a3d!important}
+.header .navigation .seller-link,.header .navigation a[href="seller.html"]{margin-top:5px!important;background:#d7b45a!important;color:#123f2d!important;border:1px solid #c6a247!important;font-weight:700!important}
+}
+
+/* FINAL LOGO SIZE TUNE */
+@media (min-width:901px){
+  .header .brand img{
+    width:90px !important;
+    height:90px !important;
+    max-height:90px !important;
+    object-fit:contain !important;
+  }
+  .header .navbar{min-height:94px !important;}
+}
+@media (max-width:900px){
+  .header .brand img{
+    width:145px !important;
+    height:auto !important;
+    max-height:64px !important;
+    object-fit:contain !important;
+  }
+}
