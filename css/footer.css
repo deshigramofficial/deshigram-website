@@ -34,3 +34,35 @@ small, .muted, .hint, .subtext {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
+
+/* ===== DESHIGRAM MARKETPLACE FOOTER ===== */
+.dg-market-footer{background:linear-gradient(145deg,#063e2a,#0a5739);color:#fff;margin-top:48px;padding:42px 0 0}
+.dg-market-footer-grid{display:grid;grid-template-columns:1.25fr 1fr 1.15fr 1fr;gap:34px;padding-bottom:36px}
+.dg-footer-brand img{width:150px;height:auto;margin-bottom:10px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.13))}
+.dg-footer-brand p{font-size:13px;color:#dce9e2;margin:0 0 16px}
+.dg-footer-column h3{font-size:15px;color:#fff;margin:0 0 15px;font-weight:700}
+.dg-footer-column a{display:block;color:#e5efe9;font-size:13px;line-height:1.4;padding:5px 0;transition:.2s ease}
+.dg-footer-column a:hover{color:#f0c758;transform:translateX(2px)}
+.dg-socials{display:flex;align-items:center;gap:10px;margin:14px 0 18px}
+.dg-social{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.dg-social svg{width:20px;height:20px;fill:#fff}
+.dg-instagram{background:radial-gradient(circle at 30% 110%,#fdf497 0 5%,#fd5949 38%,#d6249f 62%,#285AEB 90%)}
+.dg-facebook{background:#1877f2}
+.dg-whatsapp{background:#25d366}
+.dg-fssai-mini{display:flex;flex-direction:column;gap:2px;color:#dce9e2;font-size:12px}
+.dg-fssai-mini strong{color:#fff;font-size:13px}
+.dg-footer-bottom{border-top:1px solid rgba(255,255,255,.16);padding:18px 0 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#dce9e2;font-size:12.5px}
+.dg-footer-bottom strong{color:#f0c758}
+@media(max-width:900px){
+ .dg-market-footer{padding-top:34px}
+ .dg-market-footer-grid{grid-template-columns:1fr 1fr;gap:28px 22px}
+ .dg-footer-brand{grid-column:1/-1}
+ .dg-footer-brand img{width:158px}
+ .dg-footer-bottom{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:560px){
+ .dg-market-footer-grid{grid-template-columns:1fr 1fr;gap:25px 16px}
+ .dg-footer-column h3{font-size:14px}
+ .dg-footer-column a{font-size:12.5px}
+ .dg-footer-brand img{width:165px}
+}

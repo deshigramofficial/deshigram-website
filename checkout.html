@@ -13,7 +13,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, san
 h1,h2{font-weight:700}h3,h4{font-weight:600}
 button,.button,nav a,.sidebar a{font-weight:600}
 </style>
-</head>
+<link rel="stylesheet" href="css/footer.css"></head>
 <body>
 <div class="announcement-bar">Secure Checkout • DeshiGram Account Required</div>
 <header class="header"><div class="container navbar"><a class="brand" href="index.html"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><nav class="navigation checkout-nav"><a href="products.html">Continue Shopping</a><a href="account.html">Login</a></nav></div></header>
@@ -40,5 +40,58 @@ button,.button,nav a,.sidebar a{font-weight:600}
 </form>
 <aside class="checkout-summary-card"><h2>Order summary</h2><div id="checkoutItems"></div><div class="checkout-breakdown"><div><span>Product total (MRP)</span><strong id="checkoutMrpTotal">₹0.00</strong></div><div class="discount-line"><span>30% discount</span><strong id="checkoutDiscount">− ₹0.00</strong></div><div><span>Logistics / delivery</span><strong>₹55.00</strong></div><div><span>Platform handling fee</span><strong>₹10.00</strong></div><div><span>Secure packaging</span><strong>₹5.00</strong></div><div><span>Payment handling fee</span><strong>₹5.00</strong></div></div><div class="checkout-total"><span>Total payable</span><strong id="checkoutTotal">₹0.00</strong></div><div class="checkout-trust"><span>✓ UPI & Cash on Delivery</span><span>✓ Account-linked Order</span><span>✓ FSSAI Lic. No. 22726302000355</span></div></aside>
 </div></section></main>
-<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><img src="images/logo.webp" alt="DeshiGram Logo"><div><strong>DeshiGram</strong><p>Desh Ki Parampara, Har Ghar Tak</p></div></div><div class="footer-links"><a href="index.html">Home</a><a href="contact.html">Contact</a></div><p class="copyright">© <span id="currentYear"></span> DeshiGram. All rights reserved.</p></div></footer>
+<footer class="footer dg-market-footer">
+  <div class="container dg-market-footer-grid">
+    <div class="dg-footer-brand">
+      <img src="images/logo.webp" alt="DeshiGram">
+      <p>Desh Ki Parampara, Har Ghar Tak.</p>
+      <div class="dg-socials" aria-label="DeshiGram social media">
+        <a href="https://www.instagram.com/deshigram.in/" target="_blank" rel="noopener" aria-label="Instagram" class="dg-social dg-instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm11.2 1.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/deshigram.in" target="_blank" rel="noopener" aria-label="Facebook" class="dg-social dg-facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4.2c-.5-.1-2.2-.2-4.1-.2C9 4 6.4 6.4 6.4 10.8V14H3v4h3.4v6h4.2v-6H14l.6-4h-4v-2.8C10.6 9.9 11 8 14 8Z"/></svg>
+        </a>
+        <a href="https://wa.me/919457831399" target="_blank" rel="noopener" aria-label="WhatsApp" class="dg-social dg-whatsapp">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.5 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.6 4.8Zm5.4-7.4c-.3-.1-1.8-.9-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-2-.9-3.3-1.7-4.6-3.9-.3-.5.3-.5.9-1.7.1-.2.1-.4 0-.6 0-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.8 5.2 2.2 1 3.1 1.1 4.2.9.7-.1 1.8-.7 2.1-1.5.3-.7.3-1.3.2-1.5-.2-.1-.4-.2-.7-.3Z"/></svg>
+        </a>
+      </div>
+      <div class="dg-fssai-mini"><strong>FSSAI Registered</strong><span>22726302000355</span></div>
+    </div>
+
+    <div class="dg-footer-column">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="seller.html">Become a Seller</a>
+      <a href="distributors.html">Distributorship</a>
+    </div>
+
+    <div class="dg-footer-column">
+      <h3>Customer Service</h3>
+      <a href="shipping-delivery.html">Shipping &amp; Delivery</a>
+      <a href="returns-refunds.html">Returns &amp; Refunds</a>
+      <a href="faq.html">FAQs</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="policies.html">All Policies</a>
+    </div>
+
+    <div class="dg-footer-column">
+      <h3>Company</h3>
+      <a href="about.html">About DeshiGram</a>
+      <a href="about.html#our-values">Our Values</a>
+      <a href="policies.html#quality">Quality Promise</a>
+      <a href="contact.html">Support</a>
+      <a href="mailto:deshigramofficial@gmail.com">Email Us</a>
+    </div>
+  </div>
+
+  <div class="container dg-footer-bottom">
+    <span>© <span id="currentYear"></span> DeshiGram. All rights reserved.</span>
+    <span>Powered by <strong>RK &amp; Sons Retail Group</strong></span>
+  </div>
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/integrations.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/checkout.js"></script><script src="js/script.js"></script><script src="js/login-choice.js"></script></body></html>
