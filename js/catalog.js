@@ -17,11 +17,60 @@
   function card(p,home=false){
     const out=p.stock_quantity<=0;
     const imgs=(p.images||[]).slice(0,3);
-    const gallery=imgs.length?`<div class="dg-card-gallery">${imgs.map((src,i)=>`<button type="button" class="dg-card-photo${i===0?' active':''}" data-card-photo="${src}" aria-label="View image ${i+1}"><img src="${src}" alt="${p.name} image ${i+1}"></button>`).join('')}</div>`:'';
+    const gallery=imgs.length?`
+      <div class="dg-card-slider" data-slider>
+        <button class="dg-slide-arrow prev" type="button" data-slide-prev aria-label="Previous image">‹</button>
+        <div class="dg-card-slides">
+          ${imgs.map((src,i)=>`<img class="dg-card-slide${i===0?' active':''}" src="${src}" alt="${p.name} image ${i+1}" data-slide-index="${i}">`).join('')}
+        </div>
+        <button class="dg-slide-arrow next" type="button" data-slide-next aria-label="Next image">›</button>
+        <div class="dg-slide-dots">
+          ${imgs.map((_,i)=>`<button type="button" class="dg-slide-dot${i===0?' active':''}" data-slide-dot="${i}" aria-label="View image ${i+1}"></button>`).join('')}
+        </div>
+      </div>`:'';
     const save=Math.max(0,Number(p.oldPrice||0)-Number(p.price||0));
-    return `<article class="${home?'dg-home-product-card':'dg-shop-card'}"><span class="dg-sale-badge">30% OFF</span><div class="${home?'dg-home-product-image':'dg-shop-image'}"><img class="dg-card-main-image" src="${imgs[0]||'images/favicon.png'}" alt="${p.name}"></div>${gallery}<div class="${home?'dg-home-product-copy':'dg-shop-body'}"><small>${p.weight}</small><h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>${home?'':`<p>${p.shortDescription||p.description}</p>`}<div class="dg-price"><s>MRP ${money(p.oldPrice)}</s><strong>${money(p.price)}</strong></div>${home?'':`<small class="dg-offer-saving">You save ${money(save)} • 30% off MRP</small>`}<div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${out?'disabled':''}>${out?'Out of Stock':'Add to Cart'}</button><a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">${home?'Details':'View Details'}</a></div>${home?'':`<div class="dg-card-details"><strong>Product Details</strong><p>${p.description||p.shortDescription||''}</p><strong>How to Use</strong><p>${(p.usage||[]).join(' ')}</p></div>`}</div></article>`}
+    return `<article class="${home?'dg-home-product-card':'dg-shop-card'}">
+      <span class="dg-sale-badge">40% OFF</span>
+      ${gallery}
+      <div class="${home?'dg-home-product-copy':'dg-shop-body'}">
+        <small>${p.weight}</small>
+        <h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>
+        ${home?'':`<p>${p.shortDescription||p.description||''}</p>`}
+        <div class="dg-price"><s>MRP ${money(p.oldPrice)}</s><strong>${money(p.price)}</strong></div>
+        ${home?'':`<small class="dg-offer-saving">You save ${money(save)} • 40% off MRP</small>`}
+        <div class="dg-card-actions">
+          <button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${out?'disabled':''}>${out?'Out of Stock':'Add to Cart'}</button>
+          <a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">${home?'Details':'View Details'}</a>
+        </div>
+        ${home?'':`<div class="dg-card-details">
+          <strong>Product Details</strong>
+          <p>${p.description||p.shortDescription||''}</p>
+          <strong>How to Use</strong>
+          <p>${(p.usage||[]).join(' ')}</p>
+        </div>`}
+      </div>
+    </article>`}
   async function render(){const list=products.length?products:await load();document.querySelectorAll('[data-dg-catalog]').forEach(el=>{const limit=Number(el.dataset.limit||0);const rows=limit?list.slice(0,limit):list;el.innerHTML=rows.length?rows.map(p=>card(p,el.dataset.view==='home')).join(''):'<div class="account-empty"><h3>No products live yet</h3><p>Please check again soon.</p></div>'})}
   window.DESHIGRAM_CATALOG={load,render,get products(){return products},imageUrl,money};
-  document.addEventListener('click',e=>{const b=e.target.closest('[data-card-photo]');if(!b)return;const card=b.closest('article');const main=card?.querySelector('.dg-card-main-image');if(main){main.src=b.dataset.cardPhoto;card.querySelectorAll('.dg-card-photo').forEach(x=>x.classList.remove('active'));b.classList.add('active')}});
+    
+  document.addEventListener('click',e=>{
+    const slider=e.target.closest('[data-slider]');
+    if(!slider)return;
+    const slides=[...slider.querySelectorAll('.dg-card-slide')];
+    const dots=[...slider.querySelectorAll('.dg-slide-dot')];
+    if(!slides.length)return;
+    let current=slides.findIndex(x=>x.classList.contains('active'));
+    if(current<0)current=0;
+    if(e.target.closest('[data-slide-prev]')) current=(current-1+slides.length)%slides.length;
+    else if(e.target.closest('[data-slide-next]')) current=(current+1)%slides.length;
+    else{
+      const dot=e.target.closest('[data-slide-dot]');
+      if(!dot)return;
+      current=Number(dot.dataset.slideDot)||0;
+    }
+    slides.forEach((x,i)=>x.classList.toggle('active',i===current));
+    dots.forEach((x,i)=>x.classList.toggle('active',i===current));
+  });
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>load().then(render));else load().then(render);
 })();

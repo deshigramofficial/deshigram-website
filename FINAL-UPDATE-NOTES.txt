@@ -1,0 +1,15 @@
+DESHIGRAM CONSOLIDATED FINAL UPDATE
+
+Included:
+- Homepage/index updated to 40% Off MRP.
+- Pack 1: MRP 249 -> 149.40
+- Pack 2: MRP 449 -> 269.40
+- Pack 3: MRP 649 -> 389.40
+- Supabase prices already updated to the same 40% offer.
+- Product listings use a proper 3-image slider with arrows + dots; no duplicate main thumbnail.
+- Product Details + How to Use remain available.
+- Razorpay + One-click BharatPe UPI + COD checkout.
+- info@deshigram.in for general/business contact.
+- support@deshigram.in for customer/order support.
+- FSSAI Registered retained; GST Certified added (no GSTIN shown).
+- Existing approved footer/header/banner work preserved.

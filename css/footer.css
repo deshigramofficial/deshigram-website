@@ -171,3 +171,8 @@ small, .muted, .hint, .subtext {
  .dg-footer-bottom>span,.dg-footer-bottom>span:last-child{text-align:left!important}
  .dg-made-india{text-align:left!important}
 }
+
+.dg-gst-certified{display:block;margin-top:4px;color:#f0c758;font-weight:700}
+.dg-official-mails{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.dg-official-mails a{font-size:10.5px;color:#e4eee8}
+.dg-official-mails a:hover{color:#f0c758}
