@@ -820,3 +820,5 @@ small, .muted, .hint, .subtext {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
+
+.dg-card-gallery{display:flex;gap:8px;margin:10px 0}.dg-card-photo{width:58px;height:58px;padding:3px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer}.dg-card-photo.active{border:2px solid #0d4d35}.dg-card-photo img{width:100%;height:100%;object-fit:cover;border-radius:7px}.dg-offer-saving{display:block;color:#0d6b45;font-weight:700;margin-top:5px}.dg-card-details{margin-top:14px;padding-top:12px;border-top:1px solid #e7e2d8;font-size:.9rem;line-height:1.5}.dg-card-details strong{display:block;color:#0d4d35;margin-top:7px}.dg-card-details p{margin:3px 0 0}

@@ -1,0 +1,16 @@
+DESHIGRAM COMPLETE UPDATE
+
+Payment options:
+1. Razorpay (automatic verification)
+2. One-click BharatPe UPI (exact amount prefilled; UTR required)
+3. Cash on Delivery
+
+Product updates:
+- Pack 1: MRP Rs 249, 30% offer = Rs 174.30
+- Pack 2: MRP Rs 449, 30% offer = Rs 314.30
+- Pack 3: MRP Rs 649, 30% offer = Rs 454.30
+- All three product records already have 3 images. Listing cards now show all 3 thumbnails.
+- Product details and How to Use are visible on listing/detail page.
+- Buy Now added on product detail page.
+
+Razorpay secure backend was already deployed. Add your regenerated TEST Key ID and Secret to Supabase Edge Function secrets before Razorpay testing. Never upload the secret to GitHub.
