@@ -37,7 +37,7 @@
         <h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>
         ${home?'':`<p>${p.shortDescription||p.description||''}</p>`}
         <div class="dg-price"><s>MRP ${money(p.oldPrice)}</s><strong>${money(p.price)}</strong></div>
-        ${home?'':`<small class="dg-offer-saving">You save ${money(save)} • 40% off MRP</small>`}
+        ${home?'':`<small class="dg-offer-saving">You save ${money(save)}</small>`}
         <div class="dg-card-actions">
           <button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${out?'disabled':''}>${out?'Out of Stock':'Add to Cart'}</button>
           <a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">${home?'Details':'View Details'}</a>
