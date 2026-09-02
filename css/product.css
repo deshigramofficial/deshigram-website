@@ -838,12 +838,13 @@ small, .muted, .hint, .subtext {
 .dg-card-details strong{display:block;color:#0d4d35;margin-top:7px}
 .dg-card-details p{margin:3px 0 0}
 
+/* SLIDER ONLY FIX — NO PRICE CHANGES */
 .dg-product-slider{position:relative;width:100%;margin:0 0 12px;overflow:hidden}
 .dg-product-slider-frame{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:14px;background:#faf8f2}
-.dg-product-slider-frame .dg-product-slide{display:none!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;object-fit:contain!important}
+.dg-product-slider-frame .dg-product-slide{display:none!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;object-fit:contain!important;background:#faf8f2}
 .dg-product-slider-frame .dg-product-slide.is-active{display:block!important}
 .dg-slider-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:34px;height:34px;padding:0;border:0;border-radius:50%;background:rgba(13,77,53,.92);color:#fff;font-size:25px;cursor:pointer}
 .dg-slider-prev{left:8px}.dg-slider-next{right:8px}
-.dg-slider-dots{display:flex;justify-content:center;gap:6px;padding:7px 0 1px}
-.dg-slider-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#c8cfcb}
+.dg-slider-dots{display:flex;justify-content:center;align-items:center;gap:6px;padding:7px 0 1px}
+.dg-slider-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#c8cfcb;cursor:pointer}
 .dg-slider-dot.is-active{width:20px;border-radius:8px;background:#0d4d35}
