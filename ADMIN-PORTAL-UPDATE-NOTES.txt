@@ -1,0 +1,19 @@
+DeshiGram Admin Listing Manager
+
+Backend already upgraded:
+- Coming Soon / hidden / live / paused / out-of-stock statuses
+- Timed offers: none / percent / flat
+- Offer start/end dates and labels
+- Featured and custom badge
+- Visibility
+- Inventory + low-stock threshold
+- Max order quantity
+- COD and online-payment toggles
+- SEO title/description
+- Image upload for DeshiGram products
+- Seller listing review + merchandising controls
+
+Upload this ZIP to GitHub and replace same-name files.
+Open: https://deshigram.in/admin.html
+
+Admin access still uses the existing authorized Supabase admin account.

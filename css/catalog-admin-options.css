@@ -1,0 +1,6 @@
+
+.dg-shop-card,.dg-home-product-card{position:relative}
+.dg-admin-badge,.dg-coming-badge{position:absolute;z-index:6;top:10px;left:10px;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}
+.dg-admin-badge{background:#d6aa3f;color:#153027}.dg-coming-badge{background:#0b4d35;color:#fff}.dg-admin-badge+.dg-coming-badge{top:39px}
+.dg-launch-date,.dg-extra-offer{font-size:12px;color:#8a5d00;font-weight:800}
+.dg-product-status-note{display:inline-block;background:#fff3d4;color:#7a5600;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;margin-bottom:10px}
