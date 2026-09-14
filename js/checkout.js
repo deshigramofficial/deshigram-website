@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const totalEl = document.getElementById('checkoutTotal');
   const deliveryEl = document.getElementById('checkoutDeliveryFee');
   const platformEl = document.getElementById('checkoutPlatformFee');
+  const packagingEl = document.getElementById('checkoutPackagingFee');
   const processingEl = document.getElementById('checkoutProcessingFee');
   const form = document.getElementById('checkoutForm');
   const status = document.getElementById('checkoutStatus');
@@ -18,28 +19,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const payButton=document.getElementById('payWithUpiButton'); const upiBox=document.getElementById('upiPaymentBox'); const qrFallback=document.getElementById('upiQrFallback'); const transactionLabel=document.getElementById('transactionLabel'); const transactionInput=document.getElementById('transactionId');
   const upiId='BHARATPE09891189128@yesbankltd'; const receiverName='ABHINENDRA SINGH';
 
+  const DELIVERY_FEE = 55;
   const PLATFORM_FEE = 10;
-  const PAYMENT_PROCESSING = 3;
+  const PACKAGING_FEE = 5;
+  const PAYMENT_HANDLING_FEE = 5;
   const money = v => cart.money ? cart.money(v) : `₹${Number(v).toFixed(2)}`;
-
-  const logisticsForWeight = grams => {
-    const g = Number(grams) || 0;
-    if (g <= 0) return 0;
-    return 80 + (Math.ceil(g / 500) - 1) * 30;
-  };
 
   const totals = () => {
     const items = cart.getCart();
     const product = cart.getSubtotal();
     const mrp = cart.getMrpTotal ? cart.getMrpTotal() : product;
     const discount = Math.max(0, mrp - product);
-    const ownItems = items.filter(item => !item.seller_product_id);
-    const ownWeight = ownItems.reduce((sum,item)=>sum+(Number(item.packed_weight_grams)||0)*item.quantity,0);
-    const logistics = logisticsForWeight(ownWeight);
-    const platform = ownWeight > 0 ? PLATFORM_FEE : 0;
-    const payment = ownWeight > 0 ? PAYMENT_PROCESSING : 0;
-    const extra = logistics + platform + payment;
-    return { product, mrp, discount, logistics, platform, payment, extra, total: product + extra };
+    const hasItems = items.length > 0;
+    const logistics = hasItems ? DELIVERY_FEE : 0;
+    const platform = hasItems ? PLATFORM_FEE : 0;
+    const packaging = hasItems ? PACKAGING_FEE : 0;
+    const payment = hasItems ? PAYMENT_HANDLING_FEE : 0;
+    const extra = logistics + platform + packaging + payment;
+    return { product, mrp, discount, logistics, platform, packaging, payment, extra, total: product + extra };
   };
 
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
@@ -65,9 +62,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       itemsEl.innerHTML='<div class="checkout-empty"><p>Your cart is empty.</p><a href="products.html">Choose a product</a></div>';
       confirmButton.disabled=true;
       mrpEl.textContent=discountEl.textContent=totalEl.textContent=money(0);
-      if(deliveryEl)deliveryEl.textContent='Included';
-      if(platformEl)platformEl.textContent='Included';
-      if(processingEl)processingEl.textContent='Included';
+      if(deliveryEl)deliveryEl.textContent=money(0);
+      if(platformEl)platformEl.textContent=money(0);
+      if(packagingEl)packagingEl.textContent=money(0);
+      if(processingEl)processingEl.textContent=money(0);
       return;
     }
     confirmButton.disabled=false;
@@ -87,9 +85,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     mrpEl.textContent=money(t.mrp);
     discountEl.textContent=`− ${money(t.discount)}`;
     totalEl.textContent=money(t.total);
-    if(deliveryEl)deliveryEl.textContent=t.logistics?money(t.logistics):'Included';
-    if(platformEl)platformEl.textContent=t.platform?money(t.platform):'Included';
-    if(processingEl)processingEl.textContent=t.payment?money(t.payment):'Included';
+    if(deliveryEl)deliveryEl.textContent=money(t.logistics);
+    if(platformEl)platformEl.textContent=money(t.platform);
+    if(packagingEl)packagingEl.textContent=money(t.packaging);
+    if(processingEl)processingEl.textContent=money(t.payment);
   }
 
   try{
