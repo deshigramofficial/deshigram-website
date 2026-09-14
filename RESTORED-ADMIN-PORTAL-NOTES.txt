@@ -1,0 +1,15 @@
+DeshiGram restored combined admin portal.
+
+Restored / included:
+- Dashboard
+- Orders
+- Pickup & Fulfillment
+- Sellers & seller verification
+- Seller listing review
+- Settlements & payouts
+- DeshiGram products
+- Full Listing Manager
+- Coming Soon, timed offers, badges, featured, visibility, stock alerts, max order qty, COD/online toggles, SEO, image uploads.
+
+Backend RPC admin_full_portal_data has already been deployed.
+No existing product pricing was automatically changed.

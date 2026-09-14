@@ -3,52 +3,130 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DeshiGram Admin • Listing Manager</title>
+<title>DeshiGram Admin Portal</title>
 <link rel="icon" href="favicon.png">
-<link rel="stylesheet" href="css/admin-listings.css">
+<link rel="stylesheet" href="css/admin-portal.css">
 </head>
 <body>
 <header class="admin-topbar">
-  <div><strong>DeshiGram Admin</strong><span>Listing Manager</span></div>
+  <div class="brand"><strong>DeshiGram Admin</strong><span>Operations & Marketplace</span></div>
   <nav><a href="index.html" target="_blank">View Website</a><button id="logoutBtn" class="ghost" hidden>Logout</button></nav>
 </header>
 
 <main class="admin-shell">
 <section id="loginPanel" class="login-card">
   <h1>Admin Login</h1>
-  <p>Sign in with the DeshiGram admin account.</p>
+  <p>Sign in with the authorized DeshiGram admin account.</p>
   <form id="loginForm">
     <label>Email<input type="email" name="email" required></label>
     <label>Password<input type="password" name="password" required></label>
-    <button type="submit">Sign In</button>
+    <button type="submit" class="primary">Sign In</button>
     <p id="loginStatus" class="status"></p>
   </form>
 </section>
 
-<section id="adminApp" hidden>
-  <div class="admin-heading">
-    <div><span class="eyebrow">PRODUCT CONTROL CENTER</span><h1>Listings</h1><p>Products, inventory, offers, Coming Soon, visibility and seller approvals.</p></div>
-    <button id="newProductBtn" class="primary">+ New DeshiGram Product</button>
-  </div>
+<section id="adminApp" class="portal" hidden>
+  <aside class="sidebar">
+    <button class="side-link active" data-section="dashboard">Dashboard</button>
+    <button class="side-link" data-section="orders">Orders</button>
+    <button class="side-link" data-section="fulfillment">Pickup & Fulfillment</button>
+    <button class="side-link" data-section="sellers">Sellers</button>
+    <button class="side-link" data-section="sellerListings">Seller Listings</button>
+    <button class="side-link" data-section="payouts">Settlements & Payouts</button>
+    <button class="side-link" data-section="products">DeshiGram Products</button>
+    <button class="side-link" data-section="listings">Listing Manager</button>
+  </aside>
 
-  <div class="stats" id="stats"></div>
+  <section class="content">
+    <div class="portal-toolbar"><div><span class="eyebrow">DESHIGRAM CONTROL CENTER</span><h1 id="sectionTitle">Dashboard</h1></div><button id="refreshAll" class="ghost">Refresh</button></div>
+    <p id="appStatus" class="status"></p>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="own">DeshiGram Products</button>
-    <button class="tab" data-tab="seller">Seller Listings</button>
-  </div>
+    <section class="section-panel active" data-panel="dashboard">
+      <div class="stats" id="stats"></div>
+      <div class="dashboard-grid">
+        <article class="panel"><h2>Recent Orders</h2><div id="recentOrders"></div></article>
+        <article class="panel"><h2>Needs Attention</h2><div id="attention"></div></article>
+      </div>
+    </section>
 
-  <div class="toolbar">
-    <input id="searchInput" type="search" placeholder="Search listings…">
-    <select id="statusFilter"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select>
-    <button id="refreshBtn" class="ghost">Refresh</button>
-  </div>
+    <section class="section-panel" data-panel="orders">
+      <div class="toolbar"><input id="ordersSearch" type="search" placeholder="Search order / customer / phone"><select id="ordersStatus"><option value="">All order status</option><option>placed</option><option>confirmed</option><option>processing</option><option>shipped</option><option>delivered</option><option>cancelled</option></select></div>
+      <div id="ordersTable" class="table-wrap"></div>
+    </section>
 
-  <div id="ownPanel" class="listing-grid"></div>
-  <div id="sellerPanel" class="listing-grid" hidden></div>
-  <p id="appStatus" class="status"></p>
+    <section class="section-panel" data-panel="fulfillment">
+      <div class="toolbar"><input id="fulfillmentSearch" type="search" placeholder="Search order / product / tracking"><select id="fulfillmentStatus"><option value="">All fulfillment</option><option>pending</option><option>ready_for_pickup</option><option>picked_up</option><option>shipped</option><option>delivered</option><option>cancelled</option></select></div>
+      <div id="fulfillmentCards" class="card-grid"></div>
+    </section>
+
+    <section class="section-panel" data-panel="sellers">
+      <div class="toolbar"><input id="sellerSearch" type="search" placeholder="Search seller / business / phone"><select id="sellerStatus"><option value="">All seller status</option><option>pending</option><option>under_review</option><option>approved</option><option>rejected</option></select></div>
+      <div id="sellerCards" class="card-grid"></div>
+    </section>
+
+    <section class="section-panel" data-panel="sellerListings">
+      <div class="toolbar"><input id="sellerListingSearch" type="search" placeholder="Search seller listing"><select id="sellerListingStatus"><option value="">All listing status</option><option>under_review</option><option>live</option><option>coming_soon</option><option>changes_required</option><option>paused</option><option>rejected</option><option>out_of_stock</option><option>hidden</option></select></div>
+      <div id="sellerListingCards" class="card-grid"></div>
+    </section>
+
+    <section class="section-panel" data-panel="payouts">
+      <div class="toolbar"><input id="payoutSearch" type="search" placeholder="Search seller / reference"><select id="payoutStatus"><option value="">All payout status</option><option>pending</option><option>paid</option></select></div>
+      <div id="payoutCards" class="card-grid"></div>
+    </section>
+
+    <section class="section-panel" data-panel="products">
+      <div class="heading-row"><div><h2>DeshiGram Products</h2><p>Manage products without editing code.</p></div><button id="newProductBtn" class="primary">+ New Product</button></div>
+      <div class="toolbar"><input id="productSearch" type="search" placeholder="Search products"><select id="productStatus"><option value="">All product status</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>hidden</option></select></div>
+      <div id="productCards" class="card-grid"></div>
+    </section>
+
+    <section class="section-panel" data-panel="listings">
+      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div></div>
+      <div class="tabs"><button class="tab active" data-list-tab="own">DeshiGram</button><button class="tab" data-list-tab="seller">Seller Listings</button></div>
+      <div class="toolbar"><input id="listingSearch" type="search" placeholder="Search listings"><select id="listingStatus"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select></div>
+      <div id="listingOwn" class="card-grid"></div>
+      <div id="listingSeller" class="card-grid" hidden></div>
+    </section>
+  </section>
 </section>
 </main>
+
+<dialog id="sellerReviewDialog">
+<form method="dialog" class="modal-card" id="sellerReviewForm">
+  <div class="modal-head"><div><span class="eyebrow">SELLER VERIFICATION</span><h2 id="sellerReviewTitle">Review Seller</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <input type="hidden" name="seller_id">
+  <div class="form-grid">
+    <label>Status<select name="status"><option value="approved">Approved</option><option value="under_review">Under Review</option><option value="rejected">Rejected</option></select></label>
+    <label class="span2">Verification Note<textarea name="note" rows="4"></textarea></label>
+  </div>
+  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Save Seller Review</button></div>
+  <p id="sellerReviewStatus" class="status"></p>
+</form>
+</dialog>
+
+<dialog id="fulfillmentDialog">
+<form method="dialog" class="modal-card" id="fulfillmentForm">
+  <div class="modal-head"><div><span class="eyebrow">FULFILLMENT</span><h2 id="fulfillmentTitle">Update Shipment</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <input type="hidden" name="item_id">
+  <div class="form-grid">
+    <label>Status<select name="status"><option value="pending">Pending</option><option value="ready_for_pickup">Ready for Pickup</option><option value="picked_up">Picked Up</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label>
+    <label>Courier<input name="courier"></label>
+    <label class="span2">Tracking ID<input name="tracking_id"></label>
+  </div>
+  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Save Fulfillment</button></div>
+  <p id="fulfillmentFormStatus" class="status"></p>
+</form>
+</dialog>
+
+<dialog id="settlementDialog">
+<form method="dialog" class="modal-card" id="settlementForm">
+  <div class="modal-head"><div><span class="eyebrow">SETTLEMENT</span><h2 id="settlementTitle">Settle Seller</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <input type="hidden" name="seller_id">
+  <label>Payment Reference / UTR<input name="reference" required placeholder="Bank reference / UTR"></label>
+  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Mark Available Payout Paid</button></div>
+  <p id="settlementStatus" class="status"></p>
+</form>
+</dialog>
 
 <dialog id="productDialog">
 <form method="dialog" class="modal-card" id="productForm">
@@ -121,7 +199,6 @@
   <p id="sellerFormStatus" class="status"></p>
 </form>
 </dialog>
-
-<script type="module" src="js/admin-listings.js"></script>
+<script type="module" src="js/admin-portal.js"></script>
 </body>
 </html>
