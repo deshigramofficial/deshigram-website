@@ -1,0 +1,13 @@
+Fixes included:
+- Dialog X buttons close reliably.
+- Pickup & Fulfillment removed as a separate admin menu; fulfillment is inside each Order.
+- Orders are clickable and show full details + line-item fulfillment.
+- Dashboard shows order date, fulfillment and Cancel action.
+- Admin Cancel now persists order_status=cancelled and cascades open fulfillment items to cancelled.
+- Fulfillment status now supports the database's real 'new' state, preventing null-status errors.
+- Cancelled orders render as Cancelled after refresh.
+- Seller product submission is blocked until required business details + FSSAI/PAN/Bank documents are present and seller account is approved.
+- Seller business form now requires core details and bank details.
+- GST document is required when GSTIN is entered.
+
+No product pricing was changed.

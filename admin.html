@@ -44,7 +44,7 @@
     <section class="section-panel active" data-panel="dashboard">
       <div class="stats" id="stats"></div>
       <div class="dashboard-grid">
-        <article class="panel"><h2>Recent Orders</h2><div id="recentOrders"></div></article>
+        <article class="panel"><h2>Recent Orders</h2><p class="panel-sub">Date, status, fulfillment and cancellation controls.</p><div id="recentOrders"></div></article>
         <article class="panel"><h2>Needs Attention</h2><div id="attention"></div></article>
       </div>
     </section>
@@ -53,13 +53,7 @@
       <div class="toolbar"><input id="ordersSearch" type="search" placeholder="Search order / customer / phone"><select id="ordersStatus"><option value="">All order status</option><option>placed</option><option>confirmed</option><option>processing</option><option>shipped</option><option>delivered</option><option>cancelled</option></select></div>
       <div id="ordersTable" class="table-wrap"></div>
     </section>
-
-    <section class="section-panel" data-panel="fulfillment">
-      <div class="toolbar"><input id="fulfillmentSearch" type="search" placeholder="Search order / product / tracking"><select id="fulfillmentStatus"><option value="">All fulfillment</option><option>pending</option><option>ready_for_pickup</option><option>picked_up</option><option>shipped</option><option>delivered</option><option>cancelled</option></select></div>
-      <div id="fulfillmentCards" class="card-grid"></div>
-    </section>
-
-    <section class="section-panel" data-panel="sellers">
+<section class="section-panel" data-panel="sellers">
       <div class="toolbar"><input id="sellerSearch" type="search" placeholder="Search seller / business / phone"><select id="sellerStatus"><option value="">All seller status</option><option>pending</option><option>under_review</option><option>approved</option><option>rejected</option></select></div>
       <div id="sellerCards" class="card-grid"></div>
     </section>
@@ -91,9 +85,45 @@
 </section>
 </main>
 
+
+<dialog id="orderDetailDialog">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div><span class="eyebrow">ORDER DETAILS</span><h2 id="orderDetailTitle">Order</h2></div>
+      <button type="button" class="icon-btn" data-close-dialog="orderDetailDialog" aria-label="Close">×</button>
+    </div>
+    <div id="orderDetailSummary" class="order-summary-grid"></div>
+    <div class="order-actions-bar">
+      <label>Order Status
+        <select id="detailOrderStatus">
+          <option value="placed">Placed</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="packed">Packed</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </label>
+      <label>Payment Status
+        <select id="detailPaymentStatus">
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </label>
+      <button id="saveOrderStatus" type="button" class="primary">Save Order</button>
+      <button id="cancelOrderBtn" type="button" class="danger">Cancel Order</button>
+    </div>
+    <h3 class="subhead">Fulfillment / Pickup</h3>
+    <div id="orderFulfillmentItems"></div>
+    <p id="orderDetailStatus" class="status"></p>
+  </div>
+</dialog>
+
 <dialog id="sellerReviewDialog">
 <form method="dialog" class="modal-card" id="sellerReviewForm">
-  <div class="modal-head"><div><span class="eyebrow">SELLER VERIFICATION</span><h2 id="sellerReviewTitle">Review Seller</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <div class="modal-head"><div><span class="eyebrow">SELLER VERIFICATION</span><h2 id="sellerReviewTitle">Review Seller</h2></div><button type="button" class="icon-btn" data-close-dialog="sellerReviewDialog">×</button></div>
   <input type="hidden" name="seller_id">
   <div class="form-grid">
     <label>Status<select name="status"><option value="approved">Approved</option><option value="under_review">Under Review</option><option value="rejected">Rejected</option></select></label>
@@ -106,7 +136,7 @@
 
 <dialog id="fulfillmentDialog">
 <form method="dialog" class="modal-card" id="fulfillmentForm">
-  <div class="modal-head"><div><span class="eyebrow">FULFILLMENT</span><h2 id="fulfillmentTitle">Update Shipment</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <div class="modal-head"><div><span class="eyebrow">FULFILLMENT</span><h2 id="fulfillmentTitle">Update Shipment</h2></div><button type="button" class="icon-btn" data-close-dialog="fulfillmentDialog">×</button></div>
   <input type="hidden" name="item_id">
   <div class="form-grid">
     <label>Status<select name="status"><option value="pending">Pending</option><option value="ready_for_pickup">Ready for Pickup</option><option value="picked_up">Picked Up</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label>
@@ -120,7 +150,7 @@
 
 <dialog id="settlementDialog">
 <form method="dialog" class="modal-card" id="settlementForm">
-  <div class="modal-head"><div><span class="eyebrow">SETTLEMENT</span><h2 id="settlementTitle">Settle Seller</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <div class="modal-head"><div><span class="eyebrow">SETTLEMENT</span><h2 id="settlementTitle">Settle Seller</h2></div><button type="button" class="icon-btn" data-close-dialog="settlementDialog">×</button></div>
   <input type="hidden" name="seller_id">
   <label>Payment Reference / UTR<input name="reference" required placeholder="Bank reference / UTR"></label>
   <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Mark Available Payout Paid</button></div>
@@ -130,7 +160,7 @@
 
 <dialog id="productDialog">
 <form method="dialog" class="modal-card" id="productForm">
-  <div class="modal-head"><div><span class="eyebrow">DESHIGRAM PRODUCT</span><h2 id="productDialogTitle">Edit Product</h2></div><button value="cancel" class="icon-btn" aria-label="Close">×</button></div>
+  <div class="modal-head"><div><span class="eyebrow">DESHIGRAM PRODUCT</span><h2 id="productDialogTitle">Edit Product</h2></div><button type="button" class="icon-btn" data-close-dialog="productDialog" aria-label="Close">×</button></div>
   <input type="hidden" name="id">
   <div class="form-grid">
     <label class="span2">Product Name<input name="name" required></label>
@@ -175,7 +205,7 @@
 
 <dialog id="sellerDialog">
 <form method="dialog" class="modal-card" id="sellerForm">
-  <div class="modal-head"><div><span class="eyebrow">SELLER LISTING</span><h2 id="sellerTitle">Review Listing</h2></div><button value="cancel" class="icon-btn">×</button></div>
+  <div class="modal-head"><div><span class="eyebrow">SELLER LISTING</span><h2 id="sellerTitle">Review Listing</h2></div><button type="button" class="icon-btn" data-close-dialog="sellerDialog">×</button></div>
   <input type="hidden" name="id">
   <div class="form-grid">
     <label>Status<select name="status"><option value="under_review">Under Review</option><option value="live">Live</option><option value="coming_soon">Coming Soon</option><option value="paused">Paused</option><option value="out_of_stock">Out of Stock</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="hidden">Hidden</option></select></label>
