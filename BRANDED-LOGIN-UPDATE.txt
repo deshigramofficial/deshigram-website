@@ -1,0 +1,1 @@
+Premium DeshiGram green/cream admin login added. Existing authentication field names and login logic retained. Dashboard/sidebar remain hidden until authorization succeeds. No product, order, payment, pricing or database data changed.
