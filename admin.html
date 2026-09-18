@@ -20,8 +20,8 @@
       <div class="login-monogram">DG</div>
       <p class="login-kicker">DESHIGRAM • OPERATIONS & MARKETPLACE</p>
       <h1>Rooted in goodness.<br>Managed with clarity.</h1>
-      <p class="login-brand-text">One secure workspace for orders, fulfilment, listings, inventory, payments and marketplace operations.</p>
-      <div class="ingredient-orbit"><span>Makhana</span><span>Kaju</span><span>Badam</span><span>Seeds</span><span>Elaichi</span></div>
+      <p class="login-brand-text">One secure workspace for a growing FMCG business — catalogue, orders, fulfilment, inventory, payments and marketplace operations.</p>
+      <div class="ingredient-orbit fmcg-pill-row"><span>FMCG Operations</span><span>Quality</span><span>Distribution</span><span>Marketplace</span><span>Growth</span></div>
     </div>
     <div class="login-landscape"><i></i><i></i><i></i></div>
   </div>
@@ -34,6 +34,7 @@
       <form id="loginForm">
         <label>Email address<input type="email" name="email" required autocomplete="email" placeholder="admin@deshigram.in"></label>
         <label>Password<input type="password" name="password" required autocomplete="current-password" placeholder="Enter your password"></label>
+        <div class="login-password-row"><span></span><button id="forgotPasswordBtn" type="button" class="forgot-link">Forgot password?</button></div>
         <button type="submit" class="primary login-submit">Sign In <span>→</span></button>
         <p id="loginStatus" class="status"></p>
       </form>
@@ -41,6 +42,31 @@
     </div>
   </div>
 </section>
+
+<dialog id="forgotPasswordDialog" class="auth-dialog">
+  <div class="auth-dialog-card">
+    <button type="button" class="auth-close" data-close-auth="forgotPasswordDialog">×</button>
+    <p class="login-kicker">ACCOUNT RECOVERY</p><h2>Reset password</h2>
+    <p>Enter your authorised admin email. We will send a secure password-reset link.</p>
+    <form id="forgotPasswordForm">
+      <label>Email address<input id="forgotEmail" type="email" required autocomplete="email" placeholder="admin@deshigram.in"></label>
+      <button class="primary" type="submit">Send reset link</button>
+      <p id="forgotStatus" class="status"></p>
+    </form>
+  </div>
+</dialog>
+<dialog id="newPasswordDialog" class="auth-dialog">
+  <div class="auth-dialog-card">
+    <p class="login-kicker">SECURE RECOVERY</p><h2>Create new password</h2>
+    <p>Choose a new password for your DeshiGram Admin account.</p>
+    <form id="newPasswordForm">
+      <label>New password<input id="newPassword" type="password" minlength="8" required autocomplete="new-password"></label>
+      <label>Confirm password<input id="confirmNewPassword" type="password" minlength="8" required autocomplete="new-password"></label>
+      <button class="primary" type="submit">Update password</button>
+      <p id="newPasswordStatus" class="status"></p>
+    </form>
+  </div>
+</dialog>
 
 <section id="adminApp" class="portal" hidden>
   <aside class="sidebar">

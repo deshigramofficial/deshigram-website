@@ -12,6 +12,30 @@ async function boot(){
 }
 function showApp(){$("#loginPanel").hidden=true;$("#adminApp").hidden=false;$("#logoutBtn").hidden=false}
 $("#loginForm").addEventListener("submit",async e=>{e.preventDefault();status($("#loginStatus"),"Signing in…");const f=new FormData(e.currentTarget);const {error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(error)return status($("#loginStatus"),error.message,"error");if(!(await isAdmin())){await db.auth.signOut();return status($("#loginStatus"),"Not authorized for DeshiGram Admin.","error")}showApp();await load()});
+
+$("#forgotPasswordBtn")?.addEventListener("click",()=>{
+  $("#forgotEmail").value=document.querySelector('#loginForm [name="email"]')?.value||"";
+  status($("#forgotStatus"),"");$("#forgotPasswordDialog").showModal();
+});
+document.querySelectorAll("[data-close-auth]").forEach(b=>b.addEventListener("click",()=>document.getElementById(b.dataset.closeAuth)?.close()));
+$("#forgotPasswordForm")?.addEventListener("submit",async e=>{
+  e.preventDefault();const email=$("#forgotEmail").value.trim();status($("#forgotStatus"),"Sending reset link…");
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:"https://deshigram.in/admin.html?recovery=1"});
+  if(error)status($("#forgotStatus"),error.message,"error");else status($("#forgotStatus"),"Reset link sent. Please check your email.","ok");
+});
+db.auth.onAuthStateChange((event)=>{
+  if(event==="PASSWORD_RECOVERY"){ $("#loginPanel").hidden=false; $("#adminApp").hidden=true; setTimeout(()=>$("#newPasswordDialog")?.showModal(),0); }
+});
+$("#newPasswordForm")?.addEventListener("submit",async e=>{
+  e.preventDefault();const a=$("#newPassword").value,b=$("#confirmNewPassword").value;
+  if(a.length<8)return status($("#newPasswordStatus"),"Use at least 8 characters.","error");
+  if(a!==b)return status($("#newPasswordStatus"),"Passwords do not match.","error");
+  status($("#newPasswordStatus"),"Updating password…");const {error}=await db.auth.updateUser({password:a});
+  if(error)return status($("#newPasswordStatus"),error.message,"error");
+  status($("#newPasswordStatus"),"Password updated successfully. You can continue securely.","ok");
+  setTimeout(()=>{ $("#newPasswordDialog").close(); history.replaceState(null,"","/admin.html"); showApp(); load(); },900);
+});
+
 $("#logoutBtn").addEventListener("click",async()=>{await db.auth.signOut();location.reload()});
 async function load(){status($("#appStatus"),"Loading admin data…");const {data,error}=await db.rpc("admin_full_portal_data");if(error)return status($("#appStatus"),error.message,"error");state=data||state;renderAll();status($("#appStatus"),"");const target=location.hash.slice(1);if(document.querySelector(`.side-link[data-section="${target}"]`))goSection(target)}
 $("#refreshAll").addEventListener("click",load);
