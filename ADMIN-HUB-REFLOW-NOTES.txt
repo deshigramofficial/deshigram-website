@@ -1,0 +1,30 @@
+DeshiGram Admin Hub update
+
+1. Fixed pre-login dashboard/sidebar leak:
+   - [hidden] now always wins in CSS.
+   - admin app and logout are explicitly hidden while auth is checked.
+   - only DeshiGram login card/theme is visible before authorization.
+
+2. New primary flow:
+   Home / Orders / Pickup & Fulfilment / Listings / Inventory / Payments / Growth / Reports.
+
+3. Listings:
+   - DeshiGram Listings tab
+   - Seller Listings tab
+   - Sellers tab
+   Existing product edit, photo upload, clone, review and seller controls are retained.
+
+4. Home:
+   richer overview cards plus existing order/attention data.
+
+5. Inventory:
+   live aggregate of existing DeshiGram + seller listing stock.
+
+6. Payments:
+   uses existing order payment data and existing seller payout data.
+
+7. Growth / Reports:
+   derived from existing orders/listings; no old production data is deleted or rewritten.
+   Reports includes CSV export.
+
+No product MRP/selling prices were changed.

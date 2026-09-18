@@ -26,3 +26,32 @@ dialog{border:0;padding:0;border-radius:18px;max-width:min(980px,95vw);width:100
 @media(max-width:600px){.order-summary-grid,.order-actions-bar,.fulfill-row{grid-template-columns:1fr}.dashboard-order{grid-template-columns:1fr}.dashboard-order .actions{justify-content:flex-start}}
 
 .listing-card-top{display:flex;gap:10px;align-items:flex-start}.listing-thumb{width:92px;height:92px;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#f7f4e9;cursor:pointer}.listing-thumb-wrap{position:relative;flex:none}.photo-count{position:absolute;right:4px;bottom:4px;background:#064b37;color:white;border-radius:999px;padding:3px 6px;font-size:9px}.media-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:12px 0}.media-admin-item{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden}.media-admin-item img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.media-admin-item button{position:absolute;right:5px;top:5px;border:0;border-radius:999px;background:white;padding:4px 7px}.upload-zone{display:block;border:2px dashed #b8c8be;border-radius:12px;padding:14px;margin:12px 0}.upload-zone input{display:block;margin-top:8px}.pill.cancelled{background:#fee2e2!important;color:#b91c1c!important}.payment-single{font-weight:900}.clone-note{font-size:10px;color:var(--muted)}
+
+/* 2026 Admin Hub reflow */
+[hidden]{display:none!important}
+body{background:#f4f7f6}
+.admin-shell{max-width:none;padding:0}
+.login-card{margin:9vh auto}
+.portal{grid-template-columns:210px minmax(0,1fr);gap:0;min-height:calc(100vh - 68px)}
+.sidebar{border-radius:0;background:#fff;border-right:1px solid var(--line);padding:18px 12px;top:68px;height:calc(100vh - 68px)}
+.nav-brand-mark{display:flex;align-items:center;gap:9px;padding:4px 8px 18px;color:var(--green)}
+.nav-brand-mark span{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--green);color:#fff;font-weight:900}
+.side-link{color:#344d43;display:flex;align-items:center;gap:10px;padding:12px 10px}
+.side-link.active,.side-link:hover{background:#edf3ff;color:#234fc4}
+.nav-icon{width:22px;text-align:center;font-size:17px}
+.content{padding:22px 26px 40px;background:linear-gradient(180deg,#edf3ff 0 132px,#f4f7f6 132px)}
+.portal-toolbar{min-height:90px;align-items:flex-start}
+.portal-toolbar h1{font-size:34px}
+.legacy-panel{display:none!important}
+.home-overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.overview-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;display:grid;grid-template-columns:auto 1fr;gap:11px;position:relative}
+.overview-icon{width:38px;height:38px;border-radius:11px;background:#edf3ff;color:#2854bd;display:grid;place-items:center;font-size:20px}
+.overview-card small{color:var(--muted)}.overview-card strong{display:block;font-size:22px;color:var(--green);margin:3px 0}.overview-card p{font-size:11px;color:var(--muted);margin:0 0 8px}.overview-card button,.mini-nav{border:0;background:transparent;color:#2854bd;font-weight:800;cursor:pointer;padding:0;text-align:left}
+.panel-title-row{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.compact-stats{grid-template-columns:repeat(4,1fr)}
+.payment-settlements{margin-top:14px}
+.metric-list{display:grid;gap:8px}.metric-row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #edf1ee}.metric-row b{color:var(--green)}
+.report-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.report-summary>div{padding:12px;background:#f8faf9;border:1px solid var(--line);border-radius:12px}.report-summary small{display:block;color:var(--muted);margin-bottom:4px}
+.listing-tabs{margin-top:16px}
+@media(max-width:1100px){.home-overview-grid{grid-template-columns:repeat(2,1fr)}.compact-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.portal{display:block}.sidebar{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line);display:flex}.nav-brand-mark{display:none}.content{padding:14px;background:#f4f7f6}.home-overview-grid{grid-template-columns:1fr}.report-summary{grid-template-columns:1fr}}

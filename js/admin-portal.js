@@ -6,15 +6,26 @@ function imageUrl(kind,path){if(!path)return "";if(/^https?:\/\//i.test(path)||p
 function paymentLabel(o){const m=String(o.payment_method||"").toLowerCase();if(m.includes("cod")||m.includes("cash"))return "COD";return o.payment_status==="paid"?"PAID":String(o.payment_status||"ONLINE").toUpperCase()}
 const status=(el,msg,type="")=>{el.textContent=msg||"";el.className=`status ${type}`};
 async function isAdmin(){const {data:{session}}=await db.auth.getSession();if(!session)return false;const {data,error}=await db.rpc("is_deshigram_admin");return !error&&data===true}
-async function boot(){if(await isAdmin()){showApp();await load()}else $("#loginPanel").hidden=false}
+async function boot(){
+  $("#adminApp").hidden=true; $("#loginPanel").hidden=true; $("#logoutBtn").hidden=true;
+  if(await isAdmin()){showApp();await load()}else{$("#loginPanel").hidden=false}
+}
 function showApp(){$("#loginPanel").hidden=true;$("#adminApp").hidden=false;$("#logoutBtn").hidden=false}
 $("#loginForm").addEventListener("submit",async e=>{e.preventDefault();status($("#loginStatus"),"Signing in…");const f=new FormData(e.currentTarget);const {error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(error)return status($("#loginStatus"),error.message,"error");if(!(await isAdmin())){await db.auth.signOut();return status($("#loginStatus"),"Not authorized for DeshiGram Admin.","error")}showApp();await load()});
 $("#logoutBtn").addEventListener("click",async()=>{await db.auth.signOut();location.reload()});
-async function load(){status($("#appStatus"),"Loading admin data…");const {data,error}=await db.rpc("admin_full_portal_data");if(error)return status($("#appStatus"),error.message,"error");state=data||state;renderAll();status($("#appStatus"),"")}
+async function load(){status($("#appStatus"),"Loading admin data…");const {data,error}=await db.rpc("admin_full_portal_data");if(error)return status($("#appStatus"),error.message,"error");state=data||state;renderAll();status($("#appStatus"),"");const target=location.hash.slice(1);if(document.querySelector(`.side-link[data-section="${target}"]`))goSection(target)}
 $("#refreshAll").addEventListener("click",load);
-document.querySelectorAll(".side-link").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".side-link").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".section-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===b.dataset.section));$("#sectionTitle").textContent=b.textContent}));
+function goSection(name){
+ const b=document.querySelector(`.side-link[data-section="${name}"]`); if(!b)return;
+ document.querySelectorAll(".side-link").forEach(x=>x.classList.toggle("active",x===b));
+ document.querySelectorAll(".section-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name));
+ $("#sectionTitle").textContent=name==="dashboard"?"Home":b.textContent.trim();
+ history.replaceState(null,"",`#${name}`);
+}
+document.querySelectorAll(".side-link").forEach(b=>b.addEventListener("click",()=>goSection(b.dataset.section)));
+document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(j)goSection(j.dataset.jump)});
 const pill=v=>`<span class="pill ${v||""}">${String(v||"unknown").replaceAll("_"," ")}</span>`;
-function renderAll(){renderStats();renderDashboard();renderOrders();renderSellers();renderSellerListings();renderPayouts();renderProducts();renderListingManager()}
+function renderAll(){renderStats();renderDashboard();renderOrders();renderFulfillment();renderSellers();renderSellerListings();renderPayouts();renderProducts();renderListingManager();renderInventory();renderPayments();renderGrowth();renderReports()}
 function renderStats(){
   const orders=state.orders||[];
   const active=orders.filter(o=>o.order_status!=="cancelled");
@@ -41,23 +52,43 @@ function renderDashboard(){
   (state.sellers||[]).filter(x=>["pending","under_review"].includes(x.verification_status)).slice(0,4).forEach(x=>a.push(`Seller review: <b>${x.business_name||x.full_name}</b>`));
   (state.seller_products||[]).filter(x=>x.status==="under_review").slice(0,4).forEach(x=>a.push(`Listing review: <b>${x.name}</b>`));
   (state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup").slice(0,4).forEach(x=>a.push(`Pickup ready: <b>${x.order_number}</b> • ${x.product_name}`));
-  $("#attention").innerHTML=`<div class="mini-list">${a.map(x=>`<div class="mini-row"><span>${x}</span></div>`).join("")||"Nothing urgent."}</div>`
+  $("#attention").innerHTML=`<div class="mini-list">${a.map(x=>`<div class="mini-row"><span>${x}</span></div>`).join("")||"Nothing urgent."}</div>`;
+  const allListings=[...(state.deshigram_products||[]),...(state.seller_products||[])];
+  const activeOrders=(state.orders||[]).filter(o=>o.order_status!=="cancelled");
+  $("#homeLiveListings").textContent=allListings.filter(x=>x.status==="live"&&x.is_visible!==false).length;
+  $("#homeInventoryUnits").textContent=allListings.reduce((n,x)=>n+Number(x.stock_quantity||0),0);
+  $("#homePaidRevenue").textContent=money(activeOrders.filter(o=>o.payment_status==="paid"||paymentLabel(o)==="COD").reduce((n,o)=>n+Number(o.total_amount||0),0));
+  $("#homeCustomers").textContent=new Set((state.orders||[]).map(o=>o.phone).filter(Boolean)).size;
 }
 function renderOrders(){
   const q=($("#ordersSearch").value||"").toLowerCase(),st=$("#ordersStatus").value;
   const rows=(state.orders||[]).filter(o=>(!st||o.order_status===st)&&(!q||`${o.order_number} ${o.customer_name} ${o.phone} ${o.product_name}`.toLowerCase().includes(q)));
   $("#ordersTable").innerHTML=`<table class="data-table"><thead><tr><th>Order / Date</th><th>Customer</th><th>Products</th><th>Payment</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody>${rows.map(o=>`<tr class="click-row ${o.order_status==="cancelled"?"cancelled-row":""}" data-open-order="${o.id}"><td><b>${o.order_number}</b><br><small>${fmt(o.created_at)}</small></td><td>${o.customer_name}<br>${o.phone}</td><td>${o.product_name||""}</td><td><span class="payment-single">${paymentLabel(o)}</span></td><td>${money(o.total_amount)}</td><td>${pill(o.order_status)}</td><td><button class="ghost" data-open-order="${o.id}">Details</button>${o.order_status!=="cancelled"&&o.order_status!=="delivered"?` <button class="danger" data-cancel-order="${o.id}">Cancel</button>`:""}</td></tr>`).join("")}</tbody></table>`
 }
-function renderFulfillment(){ return; }
+function renderFulfillment(){
+ const q=($("#fulfillmentSearch")?.value||"").toLowerCase(),st=$("#fulfillmentStatus")?.value||"";
+ const rows=(state.fulfillment||[]).filter(x=>(!st||x.fulfillment_status===st)&&(!q||`${x.order_number} ${x.product_name} ${x.courier_name||""} ${x.tracking_id||""}`.toLowerCase().includes(q)));
+ $("#fulfillmentTable").innerHTML=`<table class="data-table"><thead><tr><th>Order</th><th>Product</th><th>Seller</th><th>Status</th><th>Courier</th><th>Tracking</th><th>Action</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${x.order_number||"—"}</b></td><td>${x.product_name||"—"} × ${x.quantity||1}</td><td>${x.seller_business_name||"DeshiGram"}</td><td>${pill(x.fulfillment_status)}</td><td>${x.courier_name||"—"}</td><td>${x.tracking_id||"—"}</td><td><button class="ghost" data-fulfill="${x.id}">Update</button></td></tr>`).join("")}</tbody></table>`;
+}
 function renderSellers(){const q=($("#sellerSearch").value||"").toLowerCase(),st=$("#sellerStatus").value;const rows=(state.sellers||[]).filter(x=>(!st||x.verification_status===st)&&(!q||`${x.full_name} ${x.business_name||""} ${x.phone}`.toLowerCase().includes(q)));$("#sellerCards").innerHTML=rows.map(x=>`<article class="card"><span>${pill(x.verification_status)}</span><h3>${x.business_name||x.full_name}</h3><p>${x.full_name} • ${x.phone}</p><p>${x.city||""}, ${x.state||""} • ${x.pincode||""}</p><p>FSSAI: ${x.fssai_number||"—"} • GST: ${x.gstin||"—"}</p><div class="actions"><button class="ghost" data-review-seller="${x.user_id}">Review Seller</button><button class="primary" data-settle="${x.user_id}" data-seller-name="${x.business_name||x.full_name}">Settle Available</button></div></article>`).join("")||"<p>No sellers.</p>"}
 function renderSellerListings(){const q=($("#sellerListingSearch").value||"").toLowerCase(),st=$("#sellerListingStatus").value;const rows=(state.seller_products||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.seller_business_name||""}`.toLowerCase().includes(q)));$("#sellerListingCards").innerHTML=rows.map(sellerCard).join("")||"<p>No seller listings.</p>"}
 function renderPayouts(){const q=($("#payoutSearch").value||"").toLowerCase(),st=$("#payoutStatus").value;const rows=(state.payouts||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.seller_business_name||""} ${x.reference||""}`.toLowerCase().includes(q)));$("#payoutCards").innerHTML=rows.map(x=>`<article class="card"><span>${pill(x.status)}</span><h3>${x.seller_business_name}</h3><p>${x.period_start||""} → ${x.period_end||""}</p><p>Gross ${money(x.gross_sales)} • Deductions ${money(x.deductions)}</p><p class="price">Net ${money(x.net_payout)}</p><p>Ref: ${x.reference||"—"} • ${fmt(x.paid_at)}</p></article>`).join("")||"<p>No payout records.</p>"}
 function ownCard(p){const low=Number(p.stock_quantity||0)<=Number(p.low_stock_threshold||5),imgs=p.image_paths||[],src=imageUrl("deshigram",imgs[0]);return `<article class="card"><span>${pill(p.status)}</span><div class="listing-card-top"><div class="listing-thumb-wrap">${src?`<img class="listing-thumb" src="${src}" alt="${p.name}" data-media-listing="deshigram:${p.id}">`:`<button class="listing-thumb" data-media-listing="deshigram:${p.id}">+ Photos</button>`}<span class="photo-count">${imgs.length} photo${imgs.length===1?"":"s"}</span></div><div><h3>${p.name}</h3><p>${p.net_quantity||""} • ${p.sku||"No SKU"}</p><p class="price">${money(p.selling_price)} <s>${money(p.mrp)}</s></p><p class="${low?"warn":""}">Stock ${p.stock_quantity}${low?" • Low stock":""}</p><p>${p.is_visible===false?"Hidden":"Visible"}</p></div></div><div class="actions"><button class="ghost" data-edit-product="${p.id}">Edit Product</button><button data-media-listing="deshigram:${p.id}">Photos</button><button data-clone-listing="${p.id}">Clone Listing</button><button data-merch-own="${p.id}" data-status="coming_soon">Coming Soon</button><button data-merch-own="${p.id}" data-status="live">Go Live</button></div></article>`}
 function sellerCard(p){const imgs=p.image_paths||[],src=imageUrl("seller",imgs[0]);return `<article class="card"><span>${pill(p.status)}</span><div class="listing-card-top"><div class="listing-thumb-wrap">${src?`<img class="listing-thumb" src="${src}" alt="${p.name}" data-media-listing="seller:${p.id}">`:`<button class="listing-thumb" data-media-listing="seller:${p.id}">+ Photos</button>`}<span class="photo-count">${imgs.length} photo${imgs.length===1?"":"s"}</span></div><div><h3>${p.name}</h3><p>${p.seller_business_name||"Seller"} • ${p.category||""}</p><p class="price">${money(p.selling_price)} <s>${money(p.mrp)}</s></p><p>Stock ${p.stock_quantity}</p></div></div><div class="actions"><button class="ghost" data-edit-seller-listing="${p.id}">Review / Options</button><button data-media-listing="seller:${p.id}">Photos</button><button data-review-listing="${p.id}" data-status="live">Approve Live</button><button data-review-listing="${p.id}" data-status="changes_required">Changes</button></div></article>`}
 function renderProducts(){const q=($("#productSearch").value||"").toLowerCase(),st=$("#productStatus").value;$("#productCards").innerHTML=(state.deshigram_products||[]).filter(x=>(!st||x.status===st)&&(!q||x.name.toLowerCase().includes(q))).map(ownCard).join("")||"<p>No products.</p>"}
-function renderListingManager(){const q=($("#listingSearch").value||"").toLowerCase(),st=$("#listingStatus").value;$("#listingOwn").innerHTML=(state.deshigram_products||[]).filter(x=>(!st||x.status===st)&&(!q||x.name.toLowerCase().includes(q))).map(ownCard).join("")||"<p>No products.</p>";$("#listingSeller").innerHTML=(state.seller_products||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.seller_business_name||""}`.toLowerCase().includes(q))).map(sellerCard).join("")||"<p>No seller listings.</p>"}
+function renderListingManager(){
+ const q=($("#listingSearch").value||"").toLowerCase(),st=$("#listingStatus").value;
+ $("#listingOwn").innerHTML=(state.deshigram_products||[]).filter(x=>(!st||x.status===st)&&(!q||x.name.toLowerCase().includes(q))).map(ownCard).join("")||"<p>No DeshiGram listings.</p>";
+ $("#listingSeller").innerHTML=(state.seller_products||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.seller_business_name||""}`.toLowerCase().includes(q))).map(sellerCard).join("")||"<p>No seller listings.</p>";
+ $("#listingSellers").innerHTML=(state.sellers||[]).filter(x=>!q||`${x.full_name} ${x.business_name||""} ${x.phone||""}`.toLowerCase().includes(q)).map(x=>`<article class="card"><span>${pill(x.verification_status)}</span><h3>${x.business_name||x.full_name}</h3><p>${x.full_name} • ${x.phone}</p><p>${x.city||""}, ${x.state||""} • ${x.pincode||""}</p><p>FSSAI: ${x.fssai_number||"—"} • GST: ${x.gstin||"—"}</p><div class="actions"><button class="ghost" data-review-seller="${x.user_id}">Review Seller</button><button class="primary" data-settle="${x.user_id}" data-seller-name="${x.business_name||x.full_name}">Settlement</button></div></article>`).join("")||"<p>No sellers.</p>";
+}
 ["ordersSearch","ordersStatus"].forEach(id=>$("#"+id).addEventListener("input",renderOrders));["sellerSearch","sellerStatus"].forEach(id=>$("#"+id).addEventListener("input",renderSellers));["sellerListingSearch","sellerListingStatus"].forEach(id=>$("#"+id).addEventListener("input",renderSellerListings));["payoutSearch","payoutStatus"].forEach(id=>$("#"+id).addEventListener("input",renderPayouts));["productSearch","productStatus"].forEach(id=>$("#"+id).addEventListener("input",renderProducts));["listingSearch","listingStatus"].forEach(id=>$("#"+id).addEventListener("input",renderListingManager));
-document.querySelectorAll("[data-list-tab]").forEach(b=>b.addEventListener("click",()=>{listTab=b.dataset.listTab;document.querySelectorAll("[data-list-tab]").forEach(x=>x.classList.toggle("active",x===b));$("#listingOwn").hidden=listTab!=="own";$("#listingSeller").hidden=listTab!=="seller"}));
+document.querySelectorAll("[data-list-tab]").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll("[data-list-tab]").forEach(x=>x.classList.toggle("active",x===b));
+ $("#listingOwn").hidden=b.dataset.listTab!=="own";
+ $("#listingSeller").hidden=b.dataset.listTab!=="seller";
+ $("#listingSellers").hidden=b.dataset.listTab!=="sellers";
+}));
 function fill(form,p){[...form.elements].forEach(el=>{if(!el.name)return;const v=p?.[el.name];if(el.type==="checkbox")el.checked=v!==false;else if(el.type==="datetime-local")el.value=dt(v);else if(Array.isArray(v))el.value=v.join("\n");else el.value=v??""})}
 $("#newProductBtn").addEventListener("click",()=>{const f=$("#productForm");f.reset();f.id.value="";f.category.value="DeshiGram";f.status.value="draft";f.max_order_quantity.value=10;f.low_stock_threshold.value=5;f.is_visible.checked=true;f.cod_enabled.checked=true;f.online_payment_enabled.checked=true;$("#deleteProductBtn").hidden=true;$("#productDialogTitle").textContent="New Product";$("#productDialog").showModal()});
 async function uploadImages(files){const paths=[];for(const file of files){const safe=file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,"-"),path=`admin/${Date.now()}-${crypto.randomUUID().slice(0,8)}-${safe}`;const {error}=await db.storage.from("deshigram-products").upload(path,file,{contentType:file.type||"image/jpeg"});if(error)throw error;paths.push(path)}return paths}
@@ -66,6 +97,43 @@ $("#deleteProductBtn").addEventListener("click",async()=>{const id=$("#productFo
 async function merch(kind,id,payload){const {error}=await db.rpc("admin_update_listing_merchandising",{p_kind:kind,p_id:id,p_payload:payload});if(error)throw error;await load()}
 async function reviewListing(id,statusValue,note="",payout=null){const {error}=await db.rpc("admin_review_seller_product",{p_product_id:id,p_status:statusValue,p_note:note||null,p_seller_payout:payout});if(error)throw error;await load()}
 
+
+
+function renderInventory(){
+ const rows=[...(state.deshigram_products||[]).map(x=>({...x,source:"DeshiGram"})),...(state.seller_products||[]).map(x=>({...x,source:x.seller_business_name||"Seller"}))];
+ const total=rows.reduce((n,x)=>n+Number(x.stock_quantity||0),0),low=rows.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length,out=rows.filter(x=>Number(x.stock_quantity||0)===0).length;
+ $("#inventoryStats").innerHTML=[["Total Units",total],["Listings",rows.length],["Low Stock",low],["Out of Stock",out]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ $("#inventoryTable").innerHTML=`<table class="data-table"><thead><tr><th>Listing</th><th>Source</th><th>SKU</th><th>Stock</th><th>Low-stock level</th><th>Status</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${x.name}</b></td><td>${x.source}</td><td>${x.sku||"—"}</td><td>${x.stock_quantity??0}</td><td>${x.low_stock_threshold??5}</td><td>${pill(x.status)}</td></tr>`).join("")}</tbody></table>`;
+}
+function renderPayments(){
+ const orders=state.orders||[],paid=orders.filter(o=>o.payment_status==="paid"),cod=orders.filter(o=>paymentLabel(o)==="COD"),online=orders.filter(o=>paymentLabel(o)!=="COD");
+ const revenue=orders.filter(o=>o.order_status!=="cancelled"&&(o.payment_status==="paid"||paymentLabel(o)==="COD")).reduce((n,o)=>n+Number(o.total_amount||0),0);
+ $("#paymentStats").innerHTML=[["Revenue",money(revenue)],["Paid",paid.length],["COD Orders",cod.length],["Online Orders",online.length]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ $("#paymentsTable").innerHTML=`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Payment</th><th>Amount</th><th>Order Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td><b>${paymentLabel(o)}</b></td><td>${money(o.total_amount)}</td><td>${pill(o.order_status)}</td></tr>`).join("")}</tbody></table>`;
+ $("#paymentsPayouts").innerHTML=(state.payouts||[]).map(x=>`<article class="card"><span>${pill(x.status)}</span><h3>${x.seller_business_name||"Seller"}</h3><p>Net ${money(x.net_payout)} • ${x.reference||"No reference"}</p></article>`).join("")||"<p>No settlement records.</p>";
+}
+function renderGrowth(){
+ const orders=state.orders||[],active=orders.filter(o=>o.order_status!=="cancelled"),revenue=active.filter(o=>o.payment_status==="paid"||paymentLabel(o)==="COD").reduce((n,o)=>n+Number(o.total_amount||0),0),aov=active.length?revenue/active.length:0,customers=new Set(orders.map(o=>o.phone).filter(Boolean)).size;
+ $("#growthStats").innerHTML=[["Orders",orders.length],["Customers",customers],["Revenue",money(revenue)],["Avg Order",money(aov)]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ const statuses=["placed","confirmed","packed","shipped","delivered","cancelled"];
+ $("#growthOrderMix").innerHTML=statuses.map(st=>`<div class="metric-row"><span>${st.replaceAll("_"," ")}</span><b>${orders.filter(o=>o.order_status===st).length}</b></div>`).join("");
+ const all=[...(state.deshigram_products||[]),...(state.seller_products||[])];
+ $("#growthCatalogue").innerHTML=[["Live",all.filter(x=>x.status==="live").length],["Coming soon",all.filter(x=>x.status==="coming_soon").length],["Low stock",all.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length],["Seller reviews",(state.sellers||[]).filter(x=>["pending","under_review"].includes(x.verification_status)).length]].map(([a,b])=>`<div class="metric-row"><span>${a}</span><b>${b}</b></div>`).join("");
+}
+function renderReports(){
+ const orders=state.orders||[],cancelled=orders.filter(o=>o.order_status==="cancelled"),delivered=orders.filter(o=>o.order_status==="delivered"),ready=(state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup");
+ const revenue=orders.filter(o=>o.order_status!=="cancelled"&&(o.payment_status==="paid"||paymentLabel(o)==="COD")).reduce((n,o)=>n+Number(o.total_amount||0),0);
+ $("#reportStats").innerHTML=[["Orders",orders.length],["Revenue",money(revenue)],["Delivered",delivered.length],["Cancelled",cancelled.length]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ $("#reportSummary").innerHTML=`<div><small>Ready for pickup</small><b>${ready.length}</b></div><div><small>Seller accounts</small><b>${(state.sellers||[]).length}</b></div><div><small>DeshiGram listings</small><b>${(state.deshigram_products||[]).length}</b></div><div><small>Seller listings</small><b>${(state.seller_products||[]).length}</b></div>`;
+}
+function exportOrdersCsv(){
+ const cols=["order_number","created_at","customer_name","phone","product_name","payment_method","payment_status","total_amount","order_status"];
+ const esc=v=>`"${String(v??"").replaceAll('"','""')}"`;
+ const csv=[cols.join(","),...(state.orders||[]).map(o=>cols.map(k=>esc(o[k])).join(","))].join("\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=`deshigram-orders-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+$("#exportOrdersCsv")?.addEventListener("click",exportOrdersCsv);
+["fulfillmentSearch","fulfillmentStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderFulfillment));
 
 let currentMedia=null;
 function openMedia(kind,id){const arr=kind==="deshigram"?state.deshigram_products:state.seller_products,x=(arr||[]).find(v=>v.id===id);if(!x)return;currentMedia={kind,id};$("#listingMediaTitle").textContent=x.name;$("#listingMediaGallery").innerHTML=(x.image_paths||[]).map((p,i)=>`<div class="media-admin-item"><img src="${imageUrl(kind,p)}"><button type="button" data-remove-media="${kind}:${id}:${i}">×</button></div>`).join("")||"<p>No photos yet.</p>";$("#listingMediaFiles").value="";status($("#listingMediaStatus"),"");$("#listingMediaDialog").showModal()}
