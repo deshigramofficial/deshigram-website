@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const profileForm=document.getElementById('profileForm');
   const ordersEl=document.getElementById('myOrders');
   const logoutBtn=document.getElementById('logoutBtn');
-  const accountCart=document.getElementById('accountCartItems');
   const switchBtns=document.querySelectorAll('[data-auth-tab]');
   const params=new URLSearchParams(location.search); const next=params.get('next') || ''; let recoveryMode=params.get('recovery')==='1' || location.hash.includes('type=recovery');
   const forgotForm=document.getElementById('forgotPasswordForm');
@@ -42,14 +41,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     </article>`;
   }
 
-
-  function renderAccountCart(){if(!accountCart||!window.DESHIGRAM_CART)return;const items=window.DESHIGRAM_CART.getCart();accountCart.innerHTML=items.length?items.map(i=>`<article class="account-cart-row"><img src="${i.image||'images/favicon.png'}" alt="${i.name}"><div><strong>${i.name}</strong><small>${i.weight||''}</small><div class="account-cart-controls"><button type="button" data-ac-minus="${i.id}">−</button><span>${i.quantity}</span><button type="button" data-ac-plus="${i.id}">+</button><button type="button" class="account-cart-delete" data-ac-delete="${i.id}">Delete</button></div></div><b>${money(i.price*i.quantity)}</b></article>`).join(''):'<div class="account-empty compact"><p>Your cart is empty.</p><a href="products.html">Browse products</a></div>';accountCart.querySelectorAll('[data-ac-minus]').forEach(b=>b.addEventListener('click',()=>{const i=window.DESHIGRAM_CART.getCart().find(x=>x.id===b.dataset.acMinus);if(i)window.DESHIGRAM_CART.updateQuantity(i.id,i.quantity-1)}));accountCart.querySelectorAll('[data-ac-plus]').forEach(b=>b.addEventListener('click',()=>{const i=window.DESHIGRAM_CART.getCart().find(x=>x.id===b.dataset.acPlus);if(i)window.DESHIGRAM_CART.updateQuantity(i.id,i.quantity+1)}));accountCart.querySelectorAll('[data-ac-delete]').forEach(b=>b.addEventListener('click',()=>window.DESHIGRAM_CART.removeProduct(b.dataset.acDelete)))}
-  window.addEventListener('deshigram:cart-updated',renderAccountCart);
-
   async function loadDashboard(){
     const session=await api.getSession();
     if(!session){authPanel.hidden=false;dashboard.hidden=true;return;}
-    authPanel.hidden=true;dashboard.hidden=false;renderAccountCart();
+    authPanel.hidden=true;dashboard.hidden=false;
     const [profile,orders,reviews]=await Promise.all([api.getProfile(),api.getMyOrders(),api.getApprovedReviews()]);
     document.getElementById('accountName').textContent=profile?.full_name||'Customer';
     profileForm.full_name.value=profile?.full_name||'';

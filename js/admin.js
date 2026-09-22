@@ -8,7 +8,7 @@
   const refresh=document.getElementById('refreshBtn');
   const storeKey='dg_admin_session';
   const PAGE_SIZE=25;
-  let page=0, totalOrders=0, currentOrders=[], marketplace={sellers:[],products:[]}, fulfillment={items:[],settlements:[]}, ownedProducts=[];
+  let page=0, totalOrders=0, currentOrders=[], marketplace={sellers:[],products:[]}, fulfillment={items:[],settlements:[]};
 
   function saveSession(s){localStorage.setItem(storeKey,JSON.stringify(s));}
   function getSession(){try{return JSON.parse(localStorage.getItem(storeKey)||'null')}catch{return null}}
@@ -37,10 +37,6 @@
   async function fulfillmentOverview(){return request('/rest/v1/rpc/admin_fulfillment_overview',{method:'POST',body:'{}'});}
   async function updateFulfillment(payload){return request('/rest/v1/rpc/admin_update_fulfillment_item',{method:'POST',body:JSON.stringify(payload)});}
   async function settleSeller(payload){return request('/rest/v1/rpc/admin_settle_seller_available',{method:'POST',body:JSON.stringify(payload)});}
-  async function ownedProductsOverview(){return request('/rest/v1/rpc/admin_deshigram_products',{method:'POST',body:'{}'});}
-  async function saveOwnedProduct(payload){return request('/rest/v1/rpc/admin_save_deshigram_product',{method:'POST',body:JSON.stringify(payload)});}
-  async function deleteOwnedProduct(id){return request('/rest/v1/rpc/admin_delete_deshigram_product',{method:'POST',body:JSON.stringify({p_id:id})});}
-  async function uploadOwnedImage(file){const sess=getSession();if(!sess?.access_token)throw new Error('Please login again');const safe=file.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');const path=`${Date.now()}-${Math.random().toString(36).slice(2,7)}-${safe}`;const r=await fetch(`${URL}/storage/v1/object/deshigram-products/${path}`,{method:'POST',headers:{apikey:KEY,Authorization:`Bearer ${sess.access_token}`,'Content-Type':file.type||'application/octet-stream','x-upsert':'false'},body:file});if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.message||'Image upload failed')}return path;}
   const rupees=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n||0));
   const date=v=>v?new Date(v).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'—';
   function put(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
@@ -113,15 +109,6 @@
   function closeFulfillment(){document.getElementById('fulfillmentModal')?.classList.add('hidden')}
   async function settleAvailable(i){const x=fulfillment.settlements[i];if(!x)return;const ref=prompt(`Enter bank/UPI reference after paying ${rupees(x.available_amount)} to ${x.business_name||x.full_name}:`);if(!ref)return;try{await settleSeller({p_seller_id:x.seller_id,p_reference:ref.trim()});await loadFulfillment();alert('Seller settlement marked paid.')}catch(e){alert(e.message)}}
 
-
-  function ownedImage(path){if(!path)return 'images/favicon.png';if(/^https?:\/\//.test(path)||path.startsWith('images/'))return path;return `${URL}/storage/v1/object/public/deshigram-products/${path}`}
-  function renderOwnedProducts(){const q=(document.getElementById('ownedProductSearch')?.value||'').toLowerCase();const rows=ownedProducts.filter(p=>`${p.name} ${p.category} ${p.net_quantity}`.toLowerCase().includes(q));put('ownedProductCount',`${rows.length} product${rows.length===1?'':'s'}`);const grid=document.getElementById('ownedProductsGrid');if(!grid)return;grid.innerHTML=rows.length?rows.map((p,i)=>`<article class="owned-product-card"><img src="${esc(ownedImage(p.image_paths?.[0]))}" alt="${esc(p.name)}"><div><span class="status-badge order ${esc(p.status)}">${esc(p.status.replace(/_/g,' '))}</span><h3>${esc(p.name)}</h3><p>${esc(p.net_quantity)} • Stock ${esc(p.stock_quantity)}</p><strong>${rupees(p.selling_price)}</strong><small>MRP ${rupees(p.mrp)}</small></div><div class="owned-product-actions"><button class="admin-btn tiny" data-owned-edit="${i}" type="button">Edit</button><button class="admin-btn tiny danger" data-owned-delete="${i}" type="button">Delete</button></div></article>`).join(''):'<p class="admin-note">No matching products.</p>';grid.querySelectorAll('[data-owned-edit]').forEach(b=>b.addEventListener('click',()=>openOwnedProduct(Number(b.dataset.ownedEdit))));grid.querySelectorAll('[data-owned-delete]').forEach(b=>b.addEventListener('click',()=>removeOwnedProduct(Number(b.dataset.ownedDelete))))}
-  async function loadOwnedProducts(){try{ownedProducts=await ownedProductsOverview()||[];renderOwnedProducts()}catch(e){const g=document.getElementById('ownedProductsGrid');if(g)g.innerHTML=`<p class="admin-note">${esc(e.message)}</p>`}}
-  function splitLines(v){return String(v||'').split(/\n+/).map(x=>x.trim()).filter(Boolean)}
-  function openOwnedProduct(index=null){const p=index===null?null:ownedProducts[index];document.getElementById('ownedProductId').value=p?.id||'';document.getElementById('ownedProductExistingImages').value=JSON.stringify(p?.image_paths||[]);put('ownedProductModalTitle',p?'Edit Product':'Add Product');document.getElementById('opName').value=p?.name||'';document.getElementById('opCategory').value=p?.category||'';document.getElementById('opQuantity').value=p?.net_quantity||'';document.getElementById('opWeight').value=p?.packed_weight_grams||'';document.getElementById('opMrp').value=p?.mrp||'';document.getElementById('opPrice').value=p?.selling_price||'';document.getElementById('opStock').value=p?.stock_quantity??0;document.getElementById('opStatus').value=p?.status||'draft';document.getElementById('opShort').value=p?.short_description||'';document.getElementById('opDescription').value=p?.description||'';document.getElementById('opIngredients').value=(p?.ingredients||[]).join('\n');document.getElementById('opFeatures').value=(p?.features||[]).join('\n');document.getElementById('opUsage').value=(p?.usage_steps||[]).join('\n');document.getElementById('opStorage').value=p?.storage_instructions||'';document.getElementById('opImages').value='';document.getElementById('ownedProductImagePreview').innerHTML=(p?.image_paths||[]).map(x=>`<img src="${ownedImage(x)}" alt="">`).join('');document.getElementById('ownedProductMessage').textContent='';document.getElementById('ownedProductModal').classList.remove('hidden')}
-  function closeOwnedProduct(){document.getElementById('ownedProductModal')?.classList.add('hidden')}
-  async function removeOwnedProduct(index){const p=ownedProducts[index];if(!p||!confirm(`Delete ${p.name}? This removes it from the website.`))return;try{await deleteOwnedProduct(p.id);await loadOwnedProducts()}catch(e){alert(e.message)}}
-
   function openOrder(index){
     const o=currentOrders[index]; if(!o)return;
     document.getElementById('modalOrderId').value=o.id;
@@ -142,7 +129,7 @@
   function closeOrder(){document.getElementById('orderModal').classList.add('hidden');document.body.classList.remove('modal-open');}
 
   async function load(){
-    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await Promise.all([loadHistory(),loadMarketplace(),loadFulfillment(),loadOwnedProducts()]);}
+    try{const d=await stats();loginBox.classList.add('hidden');dashboard.style.display='block';logout.classList.remove('hidden');refresh.classList.remove('hidden');renderStats(d);await Promise.all([loadHistory(),loadMarketplace(),loadFulfillment()]);}
     catch(e){clearSession();loginBox.classList.remove('hidden');dashboard.style.display='none';logout.classList.add('hidden');refresh.classList.add('hidden');msg.textContent=e.message.includes('Not authorized')?'This account is not authorized for the DeshiGram dashboard.':'';}
   }
   document.getElementById('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Signing in...';try{const s=await login(document.getElementById('adminEmail').value.trim(),document.getElementById('adminPassword').value);saveSession(s);msg.textContent='';await load();}catch(err){msg.textContent=err.message;}});
@@ -157,12 +144,6 @@
     e.preventDefault();const m=document.getElementById('orderUpdateMessage');m.textContent='Saving…';
     try{await updateOrder({p_order_id:document.getElementById('modalOrderId').value,p_order_status:document.getElementById('modalOrderStatus').value,p_payment_status:document.getElementById('modalPaymentStatus').value,p_courier_name:document.getElementById('modalCourier').value,p_awb_code:document.getElementById('modalAwb').value,p_tracking_url:document.getElementById('modalTracking').value});m.textContent='Order updated successfully.';await Promise.all([loadHistory(),stats().then(renderStats)]);setTimeout(closeOrder,700);}catch(err){m.textContent=err.message;}
   });
-
-  document.getElementById('addOwnedProductBtn')?.addEventListener('click',()=>openOwnedProduct());
-  document.getElementById('ownedProductSearch')?.addEventListener('input',renderOwnedProducts);
-  document.querySelectorAll('[data-close-owned-product]').forEach(x=>x.addEventListener('click',closeOwnedProduct));
-  document.getElementById('ownedProductForm')?.addEventListener('submit',async e=>{e.preventDefault();const m=document.getElementById('ownedProductMessage');m.textContent='Saving…';try{const files=[...document.getElementById('opImages').files].slice(0,5);let images=JSON.parse(document.getElementById('ownedProductExistingImages').value||'[]');if(files.length){m.textContent='Uploading images…';images=[];for(const f of files)images.push(await uploadOwnedImage(f))}const payload={name:document.getElementById('opName').value.trim(),category:document.getElementById('opCategory').value.trim(),net_quantity:document.getElementById('opQuantity').value.trim(),packed_weight_grams:Number(document.getElementById('opWeight').value||0),mrp:Number(document.getElementById('opMrp').value||0),selling_price:Number(document.getElementById('opPrice').value||0),stock_quantity:Number(document.getElementById('opStock').value||0),status:document.getElementById('opStatus').value,short_description:document.getElementById('opShort').value.trim(),description:document.getElementById('opDescription').value.trim(),ingredients:splitLines(document.getElementById('opIngredients').value),features:splitLines(document.getElementById('opFeatures').value),usage_steps:splitLines(document.getElementById('opUsage').value),storage_instructions:document.getElementById('opStorage').value.trim(),image_paths:images};const id=document.getElementById('ownedProductId').value||null;await saveOwnedProduct({p_id:id,p_payload:payload});m.textContent='Product saved.';await loadOwnedProducts();setTimeout(closeOwnedProduct,500)}catch(err){m.textContent=err.message}});
-
   document.getElementById('marketplaceRefresh')?.addEventListener('click',loadMarketplace);
   document.querySelectorAll('[data-close-seller-review]').forEach(x=>x.addEventListener('click',closeSellerReview));
   document.querySelectorAll('[data-close-product-review]').forEach(x=>x.addEventListener('click',closeProductReview));

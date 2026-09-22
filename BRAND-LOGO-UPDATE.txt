@@ -1,0 +1,1 @@
+Original DeshiGram logo used on admin login. Browser favicon uses /favicon.png?v=4 on admin and homepage. Homepage and admin social preview tags added. WhatsApp/social apps may cache old previews. Existing storefront assets and data preserved. Latest admin files merged from New Listing Restored build.

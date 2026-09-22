@@ -1,0 +1,12 @@
+DeshiGram Google Search visibility setup
+
+Files updated: SEO title/description, canonical URL, Open Graph logo previews, structured data, robots.txt, sitemap.xml and noindex on admin/login/account/checkout pages. Existing product, orders and database data unchanged.
+
+AFTER DEPLOYMENT (manual, requires your Google account):
+1. Open https://search.google.com/search-console/ and add https://deshigram.in/ as a URL-prefix property (or domain property with DNS verification).
+2. Verify ownership using the method Google provides.
+3. Under Sitemaps, submit https://deshigram.in/sitemap.xml.
+4. Use URL Inspection to request indexing for https://deshigram.in/ and important public pages.
+5. If Google Business Profile is relevant to a genuine customer-facing business location, claim and verify it separately; it is not created by this ZIP.
+6. Search appearance and logo selection are decided by Google; ranking, immediate indexing, all sitelinks, knowledge panel or logo display cannot be guaranteed.
+7. Future dynamic seller/product pages need individual crawlable URLs and unique server-rendered metadata to appear separately in Google; JavaScript-only products may not be individually indexed.

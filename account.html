@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="DeshiGram customer account and orders."><title>My Account | DeshiGram</title><link rel="icon" type="image/png" href="images/favicon.png?v=3"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/account.css">
+<html lang="en"><head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="DeshiGram customer account and orders."><title>My Account | DeshiGram</title><link rel="icon" type="image/png" href="images/favicon.png?v=3"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/account.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8DCB4RP5XZ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','G-8DCB4RP5XZ');</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 html,body,button,input,select,textarea{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif!important}
@@ -8,9 +10,9 @@ h1,h2,h3,h4,h5,h6{font-family:"Inter", "Segoe UI", Roboto, Helvetica, Arial, san
 h1,h2{font-weight:700}h3,h4{font-weight:600}
 button,.button,nav a,.sidebar a{font-weight:600}
 </style>
-<link rel="stylesheet" href="css/footer.css"></head>
+</head>
 <body>
-<header class="header"><div class="container navbar"><a class="brand dg-main-brand" href="index.html" aria-label="DeshiGram home"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><div class="site-search" id="siteSearch"><button class="search-toggle" id="searchToggle" type="button" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path></svg></button><div class="search-panel" id="searchPanel"><label class="sr-only" for="productSearchInput">Search products</label><input id="productSearchInput" type="search" placeholder="Search for products..." autocomplete="off"><div class="search-results" id="searchResults"></div></div></div><button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button><nav class="navigation" id="navigation"><a class="" href="index.html">Home</a><a class="" href="products.html">Products</a><a class="" href="about.html">About Us</a><a class="" href="contact.html">Contact</a><a class="dg-seller-header-link" href="seller.html">Become a Seller</a><a class="dg-login-header-link active-link" href="account.html">Login</a></nav></div></header>
+<header class="header"><div class="container navbar"><a class="brand" href="index.html"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button><nav class="navigation" id="navigation"><a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About Us</a><a href="contact.html">Contact</a><a class="active-link" href="account.html">Login</a></nav></div></header>
 <main class="account-page">
 <section class="account-login-wrap"><div class="container">
 <div class="customer-auth-shell" id="authPanel" hidden>
@@ -19,78 +21,12 @@ button,.button,nav a,.sidebar a{font-weight:600}
     <form class="auth-form" data-form="login" id="loginForm"><label>Email or Mobile Number<input name="identifier" autocomplete="username" placeholder="Email or 10-digit mobile number" required></label><label>Password<input type="password" name="password" minlength="6" autocomplete="current-password" required></label><button class="button button-primary" type="submit">Login</button><button class="account-help-button" id="showForgotPassword" type="button">Forgot password?</button></form><form class="auth-form auth-recovery" id="forgotPasswordForm" hidden><label>Registered Email<input type="email" name="email" autocomplete="email" required></label><button class="button button-primary" type="submit">Send Reset Link</button><button class="button button-secondary" id="backFromForgot" type="button">Back to Login</button></form><form class="auth-form auth-recovery" id="newPasswordForm" hidden><label>New Password<input type="password" name="password" minlength="6" required></label><label>Confirm New Password<input type="password" name="confirm_password" minlength="6" required></label><button class="button button-primary" type="submit">Update Password</button></form>
     <form class="auth-form" data-form="signup" id="signupForm" hidden><label>Full Name<input name="name" autocomplete="name" maxlength="120" required></label><label>Email Address<input type="email" name="email" autocomplete="email" required></label><label>Mobile Number<input name="phone" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="10-digit mobile number" required></label><label>Create Password<input type="password" name="password" minlength="6" autocomplete="new-password" required></label><label>Confirm Password<input type="password" name="confirm_password" minlength="6" autocomplete="new-password" required></label><button class="button button-primary" type="submit">Create Account</button></form>
     <p class="auth-status" id="authStatus" aria-live="polite"></p>
-  <div class="dg-official-mails"><a href="mailto:info@deshigram.in">info@deshigram.in</a><a href="mailto:support@deshigram.in">support@deshigram.in</a></div></div>
+  </div>
 </div>
 <div class="account-dashboard" id="accountDashboard" hidden>
   <div class="account-topbar"><div><h2 id="accountName">Customer</h2></div><button class="button button-secondary" type="button" id="logoutBtn">Logout</button></div>
-  <section class="account-panel account-cart-panel"><div class="account-panel-head"><h3>My Cart</h3><a href="products.html">Add products →</a></div><div id="accountCartItems" class="account-cart-items"></div></section><div class="account-grid"><section class="account-panel"><h3>My Profile</h3><form id="profileForm" class="profile-form"><label>Full Name<input name="full_name" required></label><label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" required></label><button class="button button-secondary" type="submit">Save Profile</button><p id="profileStatus" class="account-status" aria-live="polite"></p></form></section><section class="account-panel orders-panel"><div class="account-panel-head"><h3>My Orders</h3><a href="products.html">Shop more →</a></div><div id="myOrders" class="account-orders"></div></section></div>
+  <div class="account-grid"><section class="account-panel"><h3>My Profile</h3><form id="profileForm" class="profile-form"><label>Full Name<input name="full_name" required></label><label>Mobile Number<input name="phone" inputmode="numeric" maxlength="10" required></label><button class="button button-secondary" type="submit">Save Profile</button><p id="profileStatus" class="account-status" aria-live="polite"></p></form></section><section class="account-panel orders-panel"><div class="account-panel-head"><h3>My Orders</h3><a href="products.html">Shop more →</a></div><div id="myOrders" class="account-orders"></div></section></div>
 </div></div></section></main>
 <div class="account-review-modal" id="reviewModal" hidden><div class="account-review-backdrop" data-close-review></div><div class="account-review-dialog"><button class="account-modal-close" type="button" data-close-review>×</button><span class="dg-eyebrow">VERIFIED REVIEW</span><h2>Rate your purchase</h2><p>Order <strong id="reviewOrderNumber"></strong></p><form id="accountReviewForm"><input type="hidden" name="order_id"><fieldset><legend>Your rating</legend><div class="account-stars"><label><input type="radio" name="rating" value="5" required><span>★</span><small>5</small></label><label><input type="radio" name="rating" value="4"><span>★</span><small>4</small></label><label><input type="radio" name="rating" value="3"><span>★</span><small>3</small></label><label><input type="radio" name="rating" value="2"><span>★</span><small>2</small></label><label><input type="radio" name="rating" value="1"><span>★</span><small>1</small></label></div></fieldset><label>Review<textarea name="review" rows="4" maxlength="1200" placeholder="Tell us about taste, quality, packaging or your experience." required></textarea></label><button class="button button-primary" type="submit">Submit Verified Review</button><p id="accountReviewStatus" class="account-status" aria-live="polite"></p></form></div></div>
-<footer class="footer dg-market-footer">
-  <div class="container dg-market-footer-grid">
-    <div class="dg-footer-brand">
-      <img src="images/logo.webp" alt="DeshiGram">
-      <p>Desh Ki Parampara, Har Ghar Tak.</p>
-      <div class="dg-socials" aria-label="DeshiGram social media">
-        <a href="https://www.instagram.com/deshigram.in/" target="_blank" rel="noopener" aria-label="Instagram" class="dg-social dg-instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm11.2 1.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
-        </a>
-        <a href="https://www.facebook.com/deshigram.in" target="_blank" rel="noopener" aria-label="Facebook" class="dg-social dg-facebook">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4.2c-.5-.1-2.2-.2-4.1-.2C9 4 6.4 6.4 6.4 10.8V14H3v4h3.4v6h4.2v-6H14l.6-4h-4v-2.8C10.6 9.9 11 8 14 8Z"/></svg>
-        </a>
-        <a href="https://wa.me/919457831399" target="_blank" rel="noopener" aria-label="WhatsApp" class="dg-social dg-whatsapp">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.5 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.6 4.8Zm5.4-7.4c-.3-.1-1.8-.9-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-2-.9-3.3-1.7-4.6-3.9-.3-.5.3-.5.9-1.7.1-.2.1-.4 0-.6 0-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.8 5.2 2.2 1 3.1 1.1 4.2.9.7-.1 1.8-.7 2.1-1.5.3-.7.3-1.3.2-1.5-.2-.1-.4-.2-.7-.3Z"/></svg>
-        </a>
-      <a href="https://www.youtube.com/@DeshiGram" target="_blank" rel="noopener" aria-label="YouTube" class="dg-social dg-youtube">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></a></div>
-      
-    </div>
-
-    <div class="dg-footer-column">
-      <h3>Quick Links</h3>
-      <a href="index.html">Home</a>
-      <a href="products.html">Products</a>
-      <a href="about.html">About Us</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="seller.html">Become a Seller</a>
-      <a href="distributors.html">Distributorship</a>
-    </div>
-
-    <div class="dg-footer-column">
-      <h3>Customer Service</h3>
-      <a href="shipping-delivery.html">Shipping &amp; Delivery</a>
-      <a href="returns-refunds.html">Returns &amp; Refunds</a>
-      <a href="faq.html">FAQs</a>
-      <a href="terms.html">Terms &amp; Conditions</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="policies.html">All Policies</a>
-    </div>
-
-    <div class="dg-footer-column">
-      <h3>Company</h3>
-      <a href="about.html">About DeshiGram</a>
-      <a href="about.html#our-values">Our Values</a>
-      <a href="policies.html#quality">Quality Promise</a>
-      <a href="mailto:support@deshigram.in">Customer Support</a>
-<a href="mailto:info@deshigram.in">General Enquiries</a>
-    </div>
-  
-<div class="dg-footer-meta">
-  <div class="dg-fssai-compact">
-    <strong>FSSAI Registered</strong>
-    <span>22726302000355</span><span class="dg-gst-certified">GST Certified</span>
-  </div>
-  <div class="dg-payments-compact">
-    <strong>We Accept</strong>
-    <div class="dg-payment-badges">
-      <span class="upi">UPI</span><span class="rupay">RuPay</span><span class="visa">VISA</span><span class="mastercard">Mastercard</span>
-    </div>
-  </div>
-</div></div>
-
-  <div class="container dg-footer-bottom">
-  <span>© <span id="currentYear"></span> DeshiGram. All rights reserved.</span>
-  <span class="dg-made-india">🇮🇳 Made in India</span>
-  <span>Powered by <strong>RK &amp; Sons Retail Group</strong></span>
-</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/integrations.js"></script><script src="js/cart.js"></script><script src="js/account.js"></script><script src="js/script.js"></script><script src="js/login-choice.js"></script></body></html>
+<footer class="footer premium-footer"><div class="container footer-bottom"><span>© <span id="currentYear"></span> DeshiGram. All rights reserved.</span><span>RK &amp; Sons Group</span></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/integrations.js"></script><script src="js/account.js"></script><script src="js/script.js"></script><script src="js/login-choice.js"></script></body></html>
