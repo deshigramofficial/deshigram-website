@@ -131,7 +131,7 @@
     </section>
 
     <section class="section-panel" data-panel="listings">
-      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div></div>
+      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
       <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button><button class="tab" data-list-tab="seller">Seller Listings</button><button class="tab" data-list-tab="sellers">Sellers</button></div>
       <div class="toolbar"><input id="listingSearch" type="search" placeholder="Search listings"><select id="listingStatus"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select></div>
       <div id="listingOwn" class="card-grid"></div>
@@ -317,6 +317,6 @@
   <p id="sellerFormStatus" class="status"></p>
 </form>
 </dialog>
-<script type="module" src="js/admin-portal.js"></script>
+<script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
 </body>
 </html>
