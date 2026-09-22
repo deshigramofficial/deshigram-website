@@ -40,12 +40,9 @@ const searchToggle = document.getElementById("searchToggle");
 const productSearchInput = document.getElementById("productSearchInput");
 const searchResults = document.getElementById("searchResults");
 
-const searchableProducts = [
-  { name: "Dry Fruits Energy Powder", description: "100g nutrition pouch", href: "index.html#products" },
-  { name: "Pack of 1", description: "30% off MRP • ₹139.30", href: "index.html#products" },
-  { name: "Pack of 2", description: "30% off MRP • ₹265.30", href: "index.html#products" },
-  { name: "Pack of 3", description: "30% off MRP • ₹384.30", href: "index.html#products" }
-];
+let searchableProducts = [];
+function syncSearchProducts(){const list=window.DESHIGRAM_CATALOG?.products||window.PRODUCTS||[];searchableProducts=list.map(p=>({name:p.name,description:`${p.weight||p.net_quantity||''} • ${new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(p.price||p.selling_price||0))}`,href:`product/index.html?id=${encodeURIComponent(p.id||p.slug)}`}));}
+document.addEventListener('deshigram:catalog',syncSearchProducts);syncSearchProducts();
 
 function renderSearchResults(query = "") {
   if (!searchResults) return;
@@ -65,6 +62,7 @@ if (siteSearch && searchToggle && productSearchInput) {
     }
   });
 
+  productSearchInput.addEventListener("focus",()=>renderSearchResults(productSearchInput.value));
   productSearchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
 
   document.addEventListener("click", (event) => {

@@ -1,21 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="robots" content="noindex,nofollow,noarchive">
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DeshiGram Admin Portal</title>
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=4">
-<link rel="apple-touch-icon" href="/images/apple-touch-icon.png?v=4">
-<meta name="theme-color" content="#0d4d35">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="DeshiGram">
-<meta property="og:title" content="DeshiGram Admin Hub">
-<meta property="og:description" content="Secure DeshiGram FMCG operations and marketplace portal.">
-<meta property="og:url" content="https://deshigram.in/admin.html">
-<meta property="og:image" content="https://deshigram.in/images/logo.png">
-<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.png">
 <link rel="stylesheet" href="css/admin-portal.css">
 </head>
 <body>
@@ -28,7 +17,7 @@
 <section id="loginPanel" class="login-experience">
   <div class="login-brand-side" aria-hidden="true">
     <div class="login-brand-copy">
-      <img class="login-brand-image" src="images/logo.webp" alt="" width="185" height="143">
+      <div class="login-monogram">DG</div>
       <p class="login-kicker">DESHIGRAM • OPERATIONS & MARKETPLACE</p>
       <h1>Rooted in goodness.<br>Managed with clarity.</h1>
       <p class="login-brand-text">One secure workspace for a growing FMCG business — catalogue, orders, fulfilment, inventory, payments and marketplace operations.</p>
@@ -38,7 +27,7 @@
   </div>
   <div class="login-form-side">
     <div class="login-card">
-      <div class="login-logo"><img src="images/logo.webp" alt="DeshiGram" width="174" height="135"></div>
+      <div class="login-logo"><span>Deshi</span><b>Gram</b></div>
       <p class="login-kicker">ADMIN HUB</p>
       <h2>Welcome back</h2>
       <p class="login-intro">Sign in to continue to your DeshiGram control centre.</p>
@@ -142,7 +131,7 @@
     </section>
 
     <section class="section-panel" data-panel="listings">
-      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
+      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div></div>
       <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button><button class="tab" data-list-tab="seller">Seller Listings</button><button class="tab" data-list-tab="sellers">Sellers</button></div>
       <div class="toolbar"><input id="listingSearch" type="search" placeholder="Search listings"><select id="listingStatus"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select></div>
       <div id="listingOwn" class="card-grid"></div>

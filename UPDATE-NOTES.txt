@@ -1,6 +1,16 @@
-DESHIGRAM FINAL UI / ACCOUNT FIXES
+DESHIGRAM COMPLETE UPDATE
 
-1. Create Account form no longer appears automatically. Login remains the default view; Create Account opens only after the customer clicks its tab.
-2. After customer login, the top navigation changes from My Account to a green logged-in indicator such as “Hi, Abhinendra”.
-3. All three home showcase banners now keep their full artwork visible on mobile instead of being cropped.
-4. The third Coming Soon slide has been restored to the earlier premium banner artwork. Embedded screenshot-style slider arrows/dots were cropped away, and the Stay Updated + Sattu + Annaprashan + Banana Chips areas are real clickable hotspots.
+Payment options:
+1. Razorpay (automatic verification)
+2. One-click BharatPe UPI (exact amount prefilled; UTR required)
+3. Cash on Delivery
+
+Product updates:
+- Pack 1: MRP Rs 249, 30% offer = Rs 174.30
+- Pack 2: MRP Rs 449, 30% offer = Rs 314.30
+- Pack 3: MRP Rs 649, 30% offer = Rs 454.30
+- All three product records already have 3 images. Listing cards now show all 3 thumbnails.
+- Product details and How to Use are visible on listing/detail page.
+- Buy Now added on product detail page.
+
+Razorpay secure backend was already deployed. Add your regenerated TEST Key ID and Secret to Supabase Edge Function secrets before Razorpay testing. Never upload the secret to GitHub.
