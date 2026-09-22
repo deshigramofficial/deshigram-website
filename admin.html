@@ -6,6 +6,7 @@
 <title>DeshiGram Admin Portal</title>
 <link rel="icon" href="favicon.png">
 <link rel="stylesheet" href="css/admin-portal.css">
+<link rel="stylesheet" href="css/website-customization-admin.css?v=1">
 </head>
 <body>
 <header class="admin-topbar">
@@ -74,6 +75,7 @@
     <button class="side-link active" data-section="dashboard"><span class="nav-icon">⌂</span>Home</button>
     <button class="side-link" data-section="orders"><span class="nav-icon">☷</span>Orders</button>
     <button class="side-link" data-section="fulfillment"><span class="nav-icon">⌁</span>Pickup & Fulfilment</button>
+    <button class="side-link" data-section="customization"><span class="nav-icon">▧</span>Website Customization</button>
     <button class="side-link" data-section="listings"><span class="nav-icon">▤</span>Listings</button>
     <button class="side-link" data-section="inventory"><span class="nav-icon">◇</span>Inventory</button>
     <button class="side-link" data-section="payments"><span class="nav-icon">▣</span>Payments</button>
@@ -130,7 +132,13 @@
       <div id="productCards" class="card-grid"></div>
     </section>
 
-    <section class="section-panel" data-panel="listings">
+    <section class="section-panel" data-panel="customization" id="websiteCustomization">
+ <div class="heading-row"><div><h2>Website Customization</h2><p>Manage clickable showcase banners, hero image and homepage text. Changes publish to the live site through Supabase.</p></div></div>
+ <div class="dg-custom-grid" id="dgCustomCards"></div>
+ <div class="dg-custom-actions"><button class="primary" type="button" id="dgPublishCustom">Publish Changes</button><button class="ghost" type="button" id="dgReloadCustom">Reload Published</button><span class="status" id="dgCustomStatus" role="status"></span></div>
+ <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended banner dimensions: 1672 × 941 px. Each picture can have its own destination link.</p>
+</section>
+<section class="section-panel" data-panel="listings">
       <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
       <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button><button class="tab" data-list-tab="seller">Seller Listings</button><button class="tab" data-list-tab="sellers">Sellers</button></div>
       <div class="toolbar"><input id="listingSearch" type="search" placeholder="Search listings"><select id="listingStatus"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select></div>
@@ -318,5 +326,6 @@
 </form>
 </dialog>
 <script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
+<script type="module" src="js/website-customization-admin.js?v=1"></script>
 </body>
 </html>

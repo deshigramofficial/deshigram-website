@@ -1,0 +1,4 @@
+/* Keep the original announcement strip in document flow; only navigation sticks. */
+.header { position: sticky !important; top: 0 !important; z-index: 1500 !important; background: #fff; isolation: isolate; }
+html { scroll-padding-top: 100px; }
+@media(max-width:900px){.header .navigation{max-height:calc(100dvh - 90px)!important}.header .search-toggle{position:absolute!important;top:50%!important;transform:translateY(-50%);right:58px!important;z-index:1501!important}}

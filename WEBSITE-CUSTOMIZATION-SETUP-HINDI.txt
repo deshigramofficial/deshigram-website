@@ -1,0 +1,9 @@
+DeshiGram Website Customization + Sticky Header
+
+1. ZIP extract karke repository ke ROOT me files/folders upload karein. Existing files ko replace karein, baaki website delete na karein.
+2. Supabase Dashboard > apna project > SQL Editor > website-customization-setup.sql ki contents paste karke Run karein. Is step ke bina admin customization save nahi hogi; existing site normal chalegi.
+3. admin.html me login karein > Website Customization > images, clickable link, heading, visibility set karein > Publish Changes.
+4. Photos Supabase Storage website-images bucket me save hongi. New uploads unique filenames use karti hain, so browser caching won't show old pictures.
+5. Homepage hero aur showcase aur featured title customize honge; product catalogue/listings existing system se manage honge.
+6. Sticky header all storefront pages on which original .header exists. Announcement bar scroll away hogi; header screen top par rahega.
+7. IMPORTANT: Live website aur Supabase par deploy/test karna abhi baaki hai.
