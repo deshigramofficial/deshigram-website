@@ -129,30 +129,24 @@ setupCarousel('[data-pack-carousel]', { auto: false, trackSelector: '.pack-carou
 setupCarousel('[data-home-carousel]', { auto: true, delay: 4200, trackSelector: '.home-banner-track', prevSelector: '.home-banner-arrow.prev', nextSelector: '.home-banner-arrow.next', dotSelector: '.home-banner-dots button' });
 setupCarousel('[data-about-full-carousel]', { auto: true, delay: 4200, trackSelector: '.about-full-track', prevSelector: '.about-full-arrow.prev', nextSelector: '.about-full-arrow.next', dotSelector: '.about-full-dots button' });
 
-// Full-width DeshiGram showcase slider: auto-rotate + arrows + swipe.
+// Dynamic showcase: works with banners added, hidden or removed by Admin.
 (() => {
-  const root = document.getElementById('dgShowcaseSlider');
-  if (!root) return;
-  const slides = [...root.querySelectorAll('.dg-showcase-slide')];
-  const dots = [...root.querySelectorAll('.dg-showcase-dots button')];
-  const prev = root.querySelector('.dg-showcase-arrow.prev');
-  const next = root.querySelector('.dg-showcase-arrow.next');
-  if (!slides.length) return;
-  let index = 0, timer, touchStartX = null;
-  const show = (i) => {
-    index = (i + slides.length) % slides.length;
-    slides.forEach((s,n)=>s.classList.toggle('is-active',n===index));
-    dots.forEach((d,n)=>d.classList.toggle('is-active',n===index));
-  };
-  const stop = () => timer && clearInterval(timer);
-  const start = () => { stop(); timer = setInterval(()=>show(index+1), 4800); };
-  prev?.addEventListener('click',()=>{show(index-1);start();});
-  next?.addEventListener('click',()=>{show(index+1);start();});
-  dots.forEach((d,n)=>d.addEventListener('click',()=>{show(n);start();}));
-  root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
-  root.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].clientX;stop();},{passive:true});
-  root.addEventListener('touchend',e=>{if(touchStartX!==null){const dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>45)show(index+(dx<0?1:-1));touchStartX=null;}start();},{passive:true});
-  show(0); start();
+ const root=document.getElementById('dgShowcaseSlider');if(!root)return;
+ const dotsBox=root.querySelector('.dg-showcase-dots');let active=0,timer,touchX=null;
+ const slides=()=>[...root.querySelectorAll('.dg-showcase-slide')].filter(s=>!s.hidden&&s.style.display!=='none');
+ function show(n){const list=slides();if(!list.length)return;active=((n%list.length)+list.length)%list.length;
+  root.querySelectorAll('.dg-showcase-slide').forEach(s=>s.classList.toggle('is-active',s===list[active]));
+  dotsBox.replaceChildren(...list.map((s,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Banner '+(i+1));b.classList.toggle('is-active',i===active);b.addEventListener('click',()=>{show(i);start()});return b}));
+  list.forEach((s,i)=>{if(i===active){const img=s.querySelector('img');if(img)img.loading='eager'}});
+ }
+ const stop=()=>clearInterval(timer);const start=()=>{stop();if(slides().length>1)timer=setInterval(()=>show(active+1),5200)};
+ root.querySelector('.dg-showcase-arrow.prev')?.addEventListener('click',()=>{show(active-1);start()});
+ root.querySelector('.dg-showcase-arrow.next')?.addEventListener('click',()=>{show(active+1);start()});
+ root.addEventListener('mouseenter',stop);root.addEventListener('mouseleave',start);
+ root.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX;stop()},{passive:true});
+ root.addEventListener('touchend',e=>{if(touchX!==null){const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>45)show(active+(dx<0?1:-1));touchX=null}start()},{passive:true});
+ root.addEventListener('dg:banners-updated',()=>{active=0;show(0);start()});
+ document.addEventListener('visibilitychange',()=>document.hidden?stop():start());show(0);start();
 })();
 
 // Contact shortcut pills: scroll to form and preselect the right enquiry type.

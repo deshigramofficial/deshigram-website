@@ -134,9 +134,9 @@
 
     <section class="section-panel" data-panel="customization" id="websiteCustomization">
  <div class="heading-row"><div><h2>Website Customization</h2><p>Manage clickable showcase banners, hero image and homepage text. Changes publish to the live site through Supabase.</p></div></div>
- <div class="dg-custom-grid" id="dgCustomCards"></div>
+ <div class="dg-custom-actions"><button class="primary" type="button" id="dgAddBanner">+ Add Banner</button></div><div class="dg-custom-grid" id="dgCustomCards"></div>
  <div class="dg-custom-actions"><button class="primary" type="button" id="dgPublishCustom">Publish Changes</button><button class="ghost" type="button" id="dgReloadCustom">Reload Published</button><span class="status" id="dgCustomStatus" role="status"></span></div>
- <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended banner dimensions: 1672 × 941 px. Each picture can have its own destination link.</p>
+ <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended desktop banner: 2048 × 768 px. Mobile: upload a separate image if needed. Add, hide or delete banners and toggle Diwali edge lights; Publish saves changes.</p>
 </section>
 <section class="section-panel" data-panel="listings">
       <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
@@ -326,6 +326,6 @@
 </form>
 </dialog>
 <script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
-<script type="module" src="js/website-customization-admin.js?v=1"></script>
+<script type="module" src="js/website-customization-admin.js?v=diwali-2026"></script>
 </body>
 </html>

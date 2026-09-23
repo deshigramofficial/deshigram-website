@@ -1,8 +1,4 @@
-/* DeshiGram 23 Sep: compact, uncropped banners and sticky navigation */
-html,body{overflow-x:clip!important}
-.header{position:sticky!important;top:0!important;z-index:9999!important;background:#fff!important}
-html{scroll-padding-top:95px}
-.dg-showcase{overflow:hidden}
-.dg-showcase .dg-showcase-slider{width:min(100%,980px)!important;height:auto!important;min-height:0!important;aspect-ratio:1672/941!important;margin-inline:auto!important}
-.dg-showcase .dg-showcase-slide img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important}
-@media(max-width:760px){.dg-showcase .dg-showcase-slider{width:100%!important;min-height:0!important;aspect-ratio:1672/941!important}}
+/* Sticky header only; announcement bar scrolls normally. */
+.header{position:sticky!important;top:0!important;z-index:1500!important;background:#fff!important}
+html{scroll-padding-top:100px}
+@media(max-width:900px){.header .navigation{max-height:calc(100dvh - 90px)!important}.header .search-toggle{position:absolute!important;top:50%!important;transform:translateY(-50%);right:58px!important;z-index:1501!important}}

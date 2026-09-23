@@ -1,0 +1,29 @@
+DeshiGram — SINGLE UPDATE ZIP (only changed files, not the whole website)
+
+1) BACKUP your current GitHub repository first.
+2) Extract this ZIP. Upload index.html, admin.html, contact.html to GitHub repo root;
+   upload css/* into css/, js/* into js/, and images/* into images/.
+   Do NOT upload the SQL or this TXT to GitHub. Commit all changed files together.
+3) Supabase SQL Editor: if the old website-customization-setup.sql has NOT succeeded,
+   run that older SQL first. Then run website-customization-UPGRADE.sql from this ZIP once.
+4) Admin Portal -> Website Customization -> Reload Published. Each banner supports
+   Desktop image, optional Mobile image, visibility, link, festive edge lights and
+   optional effect end date. + Add Banner adds more; Remove marks for deletion;
+   Publish Changes commits the changes to Supabase.
+5) If old customization rows already exist, they are deliberately PRESERVED.
+   To show the three NEW bundled Diwali banners immediately, open Admin customization
+   and set the three Desktop image URLs to:
+      images/showcase-1-diwali.webp
+      images/showcase-2-diwali.webp
+      images/showcase-3-diwali.webp
+   Then Publish Changes. If no rows existed, upgrade SQL seeds these defaults.
+6) Verify desktop/mobile, Contact email link, sticky header and banners after deploy.
+7) Desktop artwork: 2048 x 768 px. Mobile can use a separate uploaded banner;
+   otherwise full desktop image stays visible but text will be small on phones.
+8) The edge sparkle animation is optional, not an animated firework. Disable in
+   Admin after Diwali or set an effect end date. Reduced-motion preference honored.
+
+IMPORTANT: This patch is based on the latest WEBSITE ZIP supplied in THIS chat
+(deshiGram-website-main (3).zip). If you have changed index.html/admin.html/contact.html
+or js/script.js since then, merge those newer edits instead of blindly replacing.
+SQL runs against the production database: confirm backup before running.
