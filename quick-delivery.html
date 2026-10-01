@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b5d3b"><title>DeshiGram NOW — Quick Delivery</title>
-<link rel="icon" href="images/favicon.png">
+<meta name="theme-color" content="#0b5d3b"><title>DeshiGram Quick Delivery</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f7f5;color:#17231d}button,input{font:inherit}
@@ -16,13 +16,13 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 .section{margin-top:24px}.sectionHead{display:flex;justify-content:space-between;align-items:center}.section h2{font-size:21px;margin:0 0 14px}
 .cats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.cat{background:#fff;border:1px solid #ecece7;border-radius:16px;padding:16px;text-align:center;cursor:pointer;min-height:110px}.cat.sel{border:2px solid #0b7a45;background:#f2fbf6}.catIcon{font-size:34px;margin-bottom:8px}
 .products{display:grid;grid-template-columns:repeat(6,1fr);gap:13px}.prod{background:#fff;border:1px solid #ecece7;border-radius:16px;padding:10px;min-width:0}.pic{height:130px;border-radius:12px;background:#f4f5f1;display:grid;place-items:center;font-size:52px;overflow:hidden}.pic img{width:100%;height:100%;object-fit:cover}.prodName{font-weight:700;margin-top:10px;min-height:38px}.small{font-size:12px;color:#707a74}.priceRow{display:flex;align-items:end;justify-content:space-between;margin-top:10px}.price{font-weight:800}.mrp{text-decoration:line-through;color:#999;font-size:11px}.add,.qty button,.primary{border:0;background:#0b7a45;color:#fff;border-radius:9px;padding:8px 12px;font-weight:700;cursor:pointer}.qty{display:flex;align-items:center;gap:7px;background:#0b7a45;color:#fff;border-radius:9px}.qty button{padding:7px 9px}
-.drawer,.modal{display:none;position:fixed;inset:0;z-index:50;background:#0006}.panel{background:#fff;position:absolute;right:0;top:0;height:100%;width:min(430px,100%);padding:20px;overflow:auto}.modalBox{background:#fff;width:min(520px,92%);margin:9vh auto;border-radius:20px;padding:22px}.open{display:block}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid #eee}.field{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}.primary{width:100%;padding:13px;margin-top:10px}.stickyCart{display:none}.badge{background:#eaf7ef;color:#087342;padding:5px 8px;border-radius:8px;font-size:12px}.empty{text-align:center;padding:35px;color:#777}.notice{background:#fff7d7;padding:10px;border-radius:10px;font-size:12px}.hidden{display:none}.walletBox{background:#f1f8f4;padding:16px;border-radius:14px}.navlinks{display:flex;gap:20px;max-width:1280px;margin:auto;padding:0 18px 10px;font-size:14px}.navlinks a{color:inherit;text-decoration:none}.navlinks b{color:#0b7a45}
+.drawer,.modal{display:none;position:fixed;inset:0;z-index:50;background:#0006}.panel{background:#fff;position:absolute;right:0;top:0;height:100%;width:min(430px,100%);padding:20px;overflow:auto}.modalBox{background:#fff;width:min(520px,92%);margin:9vh auto;border-radius:20px;padding:22px}.open{display:block}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid #eee}.field{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}.primary{width:100%;padding:13px;margin-top:10px}.stickyCart{display:none}.badge{background:#eaf7ef;color:#087342;padding:5px 8px;border-radius:8px;font-size:12px}.empty{text-align:center;padding:35px;color:#777}.notice{background:#fff7d7;padding:10px;border-radius:10px;font-size:12px}.hidden{display:none}.walletBox{background:#f1f8f4;padding:16px;border-radius:14px}.navlinks{display:flex;gap:20px;max-width:1280px;margin:auto;padding:0 18px 10px;font-size:14px}.navlinks b{color:#0b7a45}
 @media(max-width:900px){.top{grid-template-columns:1fr auto auto;padding:10px 12px}.logo{width:145px}.desktopLoc,.top .search,.desktopOnly,.navlinks{display:none}.mobileActions{display:block}.wrap{padding:12px}.mobileLoc{display:block;margin:6px 2px 12px;font-weight:800}.mobileLoc small{display:block;font-weight:400;color:#66716b}.mobileSearch{display:flex;background:#fff;border:1px solid #e5e8e5;border-radius:12px;padding:0 10px;margin-bottom:14px}.mobileSearch input{width:100%;border:0;outline:0;padding:13px 7px}.hero{min-height:120px;padding:18px}.hero h1{font-size:23px}.cats{display:flex;overflow:auto;gap:9px}.cat{min-width:112px;padding:12px}.products{grid-template-columns:repeat(2,1fr);gap:10px}.pic{height:120px}.stickyCart{position:fixed;bottom:12px;left:12px;right:12px;z-index:35;background:#0b7a45;color:#fff;border-radius:14px;padding:13px 16px;justify-content:space-between;align-items:center;box-shadow:0 8px 28px #0003;cursor:pointer}.stickyCart.show{display:flex}.wrap{padding-bottom:85px}}
 </style></head>
 <body>
 <header>
 <div class="top">
-<a href="index.html" aria-label="Back to DeshiGram home"><img class="logo" src="images/deshigram-now-delivery.png" alt="DeshiGram NOW Quick Delivery"></a>
+<img class="logo" src="assets/deshigram-delivery-logo.png" alt="DeshiGram">
 <div class="location desktopLoc" onclick="openLocation()">⚡ DeshiGram NOW<small id="locDesk">Select delivery location</small></div>
 <div class="search"><span>🔎</span><input id="searchDesk" placeholder="Search atta, milk, fruits..." oninput="syncSearch(this.value)"></div>
 <button class="hbtn desktopOnly" onclick="openAccount()">👤 <span id="loginLabel">Login</span></button>
@@ -30,14 +30,14 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 <button class="hbtn mobileActions" onclick="openWallet()">👛<br><small>Wallet</small></button>
 <button class="hbtn mobileActions" onclick="openAccount()">👤<br><small>Profile</small></button>
 </div>
-<div class="navlinks"><a href="index.html"><b>DeshiGram</b></a><span>⚡ DeshiGram NOW</span><a href="products.html">Marketplace</a><a href="seller.html">Become a Seller</a></div>
+<div class="navlinks"><b>DeshiGram</b><span>⚡ DeshiGram NOW</span><span>Marketplace</span><span>Become a Seller</span></div>
 </header>
 
 <main class="wrap">
 <div class="mobileLoc" onclick="openLocation()">📍 <span id="locMob">Select delivery location</span><small>Delivery target: <span id="target">30–60</span> min</small></div>
 <div class="mobileSearch"><span style="padding-top:13px">🔎</span><input id="searchMob" placeholder="Search for grocery, milk, fruits..." oninput="syncSearch(this.value)"></div>
 
-<section class="hero"><div><span class="badge">DESHIGRAM NOW • QUICK DELIVERY</span><h1>Groceries aur daily essentials, ab NOW 🛵</h1><p id="offerText">Live offers load ho rahe hain...</p></div><div style="font-size:64px">🛍️</div></section>
+<section class="hero"><div><span class="badge">DESHIGRAM NOW • QUICK DELIVERY</span><h1>Bharthana ki roz ki zaroorat, ghar tak 🛵</h1><p id="offerText">Live offers load ho rahe hain...</p></div><div style="font-size:64px">🛍️</div></section>
 
 <section class="section"><div class="sectionHead"><h2>Shop by Category</h2></div><div id="cats" class="cats"></div></section>
 <section class="section"><div class="sectionHead"><h2>Products near you</h2><span class="small" id="productCount"></span></div><div id="products" class="products"><div class="empty">Live products load ho rahe hain...</div></div></section>
@@ -50,7 +50,7 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 <div id="accountDrawer" class="drawer" onclick="closeIfBg(event,'accountDrawer')"><div class="panel"><button class="hbtn" onclick="closeLayer('accountDrawer')">← Back</button><h2>Profile</h2><div id="accountBody"></div></div></div>
 <div id="walletDrawer" class="drawer" onclick="closeIfBg(event,'walletDrawer')"><div class="panel"><button class="hbtn" onclick="closeLayer('walletDrawer')">← Back</button><h2>Wallet</h2><div class="walletBox"><b>Wallet feature</b><p class="small">Wallet UI ready hai. Fake balance nahi dikhaya jayega. Wallet backend activate hone ke baad yahin real balance/credits dikhenge.</p></div></div></div>
 
-<div id="locationModal" class="modal open"><div class="modalBox"><h2>📍 Delivery location select karein</h2><p class="small">Bharthana pilot area me delivery availability check hogi.</p><button class="primary" onclick="detectLocation()">📍 Detect My Location</button><div style="text-align:center;margin:12px">OR</div><input class="field" id="manualLoc" placeholder="Area / address likhein"><button class="primary" onclick="useManualLocation()">Use this location</button><p id="locMsg" class="small"></p><button class="hbtn" onclick="closeLayer('locationModal')">Abhi skip karein</button></div></div>
+<div id="locationModal" class="modal open" onclick="closeIfBg(event,'locationModal')"><div class="modalBox"><h2>📍 Delivery location select karein</h2><p class="small">Bharthana pilot area me delivery availability check hogi.</p><button class="primary" onclick="detectLocation()">📍 Detect My Location</button><div style="text-align:center;margin:12px">OR</div><input class="field" id="manualLoc" placeholder="Area / address likhein"><button class="primary" onclick="useManualLocation()">Use this location</button><p id="locMsg" class="small"></p></div></div>
 
 <div id="checkoutModal" class="modal"><div class="modalBox" style="max-height:84vh;overflow:auto"><button class="hbtn" onclick="closeLayer('checkoutModal')">← Back</button><h2>Checkout</h2>
 <div id="loginCard"><b>📱 Mobile Login</b><input class="field" id="phone" placeholder="10-digit mobile number" inputmode="numeric"><button class="primary" onclick="sendOtp()">Send OTP</button><div id="otpArea" class="hidden"><input class="field" id="otp" placeholder="6-digit OTP"><button class="primary" onclick="verifyOtp()">Verify OTP</button></div><p id="authMsg" class="small"></p></div>
