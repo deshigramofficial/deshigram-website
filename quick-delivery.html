@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b5d3b"><title>DeshiGram Quick Delivery</title>
+<meta name="theme-color" content="#0b5d3b"><title>DeshiGram NOW — Quick Delivery</title>
 <link rel="icon" href="images/favicon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -22,22 +22,22 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 <body>
 <header>
 <div class="top">
-<a href="index.html" aria-label="Back to DeshiGram home"><img class="logo" src="images/logo.webp" alt="DeshiGram"></a>
-<div class="location desktopLoc" onclick="openLocation()">⚡ Quick Delivery<small id="locDesk">Select delivery location</small></div>
+<a href="index.html" aria-label="Back to DeshiGram home"><img class="logo" src="images/deshigram-now-delivery.png" alt="DeshiGram NOW Quick Delivery"></a>
+<div class="location desktopLoc" onclick="openLocation()">⚡ DeshiGram NOW<small id="locDesk">Select delivery location</small></div>
 <div class="search"><span>🔎</span><input id="searchDesk" placeholder="Search atta, milk, fruits..." oninput="syncSearch(this.value)"></div>
 <button class="hbtn desktopOnly" onclick="openAccount()">👤 <span id="loginLabel">Login</span></button>
 <button class="hbtn cartTop desktopOnly" onclick="openCart()">🛒 My Cart <span id="cartBadge"></span></button>
 <button class="hbtn mobileActions" onclick="openWallet()">👛<br><small>Wallet</small></button>
 <button class="hbtn mobileActions" onclick="openAccount()">👤<br><small>Profile</small></button>
 </div>
-<div class="navlinks"><a href="index.html"><b>DeshiGram</b></a><span>⚡ Quick Delivery</span><a href="products.html">Marketplace</a><a href="seller.html">Become a Seller</a></div>
+<div class="navlinks"><a href="index.html"><b>DeshiGram</b></a><span>⚡ DeshiGram NOW</span><a href="products.html">Marketplace</a><a href="seller.html">Become a Seller</a></div>
 </header>
 
 <main class="wrap">
 <div class="mobileLoc" onclick="openLocation()">📍 <span id="locMob">Select delivery location</span><small>Delivery target: <span id="target">30–60</span> min</small></div>
 <div class="mobileSearch"><span style="padding-top:13px">🔎</span><input id="searchMob" placeholder="Search for grocery, milk, fruits..." oninput="syncSearch(this.value)"></div>
 
-<section class="hero"><div><span class="badge">DESHIGRAM QUICK DELIVERY</span><h1>Roz ki zaroorat, ghar tak 🛵</h1><p id="offerText">Live offers load ho rahe hain...</p></div><div style="font-size:64px">🛍️</div></section>
+<section class="hero"><div><span class="badge">DESHIGRAM NOW • QUICK DELIVERY</span><h1>Groceries aur daily essentials, ab NOW 🛵</h1><p id="offerText">Live offers load ho rahe hain...</p></div><div style="font-size:64px">🛍️</div></section>
 
 <section class="section"><div class="sectionHead"><h2>Shop by Category</h2></div><div id="cats" class="cats"></div></section>
 <section class="section"><div class="sectionHead"><h2>Products near you</h2><span class="small" id="productCount"></span></div><div id="products" class="products"><div class="empty">Live products load ho rahe hain...</div></div></section>

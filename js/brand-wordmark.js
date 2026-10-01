@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('header img[src*="logo"], .header img[src*="logo"]').forEach(img=>{img.src='images/deshigram-wordmark.png';img.alt='DeshiGram';img.style.objectFit='contain';img.style.maxHeight='54px';img.style.width='190px';});});
