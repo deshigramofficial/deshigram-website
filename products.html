@@ -12,7 +12,47 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/product.css?v=final-slider-fees-1">
 <link rel="stylesheet" href="css/catalog-admin-options.css?v=1">
 <link rel="stylesheet" href="css/sticky-header.css?v=1">
-<link rel="stylesheet" href="css/product-commerce-v3.css?v=3"></head>
+<link rel="stylesheet" href="css/product-commerce-v3.css?v=3">
+<style id="dg-oct05-final">
+.dg-head{grid-template-columns:245px minmax(320px,1fr) 145px 255px!important}
+.dg-simple-actions{display:flex!important;justify-content:center!important;align-items:center!important;gap:28px!important}
+.dg-simple-action{display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;text-decoration:none!important;color:#111!important;font-size:13px!important;font-weight:500!important;line-height:1!important}
+.dg-simple-action svg{width:27px!important;height:27px!important;fill:none!important;stroke:#111!important;stroke-width:1.7!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.dg-now-tab{grid-template-columns:68px 1fr 16px!important;min-height:72px!important;padding:7px 11px!important}
+.dg-now-tab img{width:68px!important;height:56px!important;object-fit:contain!important}
+.dg-now-tab b{font-size:17px!important;line-height:.95!important}.dg-now-tab small{font-size:9px!important;margin-top:5px!important}
+.dg-hero-grid{height:420px!important;align-items:stretch!important}
+.dg-carousel{height:420px!important;aspect-ratio:auto!important}.dg-side{height:420px!important;grid-template-rows:1fr 1fr!important}
+.dg-side a{min-height:0!important;height:100%!important}.dg-side img{height:100%!important;object-fit:cover!important}
+
+/* Compact, balanced quick-commerce product cards */
+[data-dg-catalog]{grid-template-columns:repeat(6,minmax(150px,1fr))!important;gap:10px!important;align-items:start!important}
+.dg-shop-card,.dg-home-product-card{height:auto!important;min-height:0!important;padding:7px!important;border-radius:10px!important}
+.dg-product-slider-frame{height:145px!important}.dg-product-slide{height:145px!important}
+.dg-shop-body,.dg-home-product-copy{padding:4px 1px 2px!important}
+.dg-shop-body h2,.dg-home-product-copy h3{font-size:13px!important;font-weight:550!important;line-height:1.25!important;min-height:33px!important;margin:4px 0!important;-webkit-line-clamp:2!important}
+.dg-shop-body>small,.dg-home-product-copy>small{font-size:10px!important;margin:1px 0!important}
+.dg-price{margin:4px 0!important;gap:5px!important}.dg-price strong{font-size:14px!important;padding:4px 6px!important}.dg-price s{font-size:10px!important}
+.dg-card-actions{margin-top:4px!important}.dg-card-actions .button-primary{height:31px!important;min-height:31px!important;font-size:11px!important;min-width:55px!important;padding:0 9px!important}
+.dg-card-actions .button-secondary{display:none!important}
+.dg-slider-arrow{width:28px!important;height:28px!important;font-size:18px!important}.dg-slider-dots{margin:2px 0 0!important;height:7px!important}
+
+/* Full homepage footer restored and always visible */
+.footer.dg-market-footer{display:block!important;background:#075238!important;color:#fff!important;margin-top:26px!important;padding:28px 0 0!important}
+.dg-market-footer-grid{display:grid!important;grid-template-columns:1.45fr repeat(3,1fr) 1.1fr!important;gap:30px!important;align-items:start!important}
+.dg-footer-brand img{width:145px!important;height:60px!important;object-fit:contain!important}
+.dg-footer-column{display:flex!important;flex-direction:column!important;gap:7px!important}.dg-footer-column h3{font-size:14px!important;margin:0 0 5px!important}
+.dg-footer-column a,.dg-footer-brand p,.dg-footer-meta,.dg-footer-bottom{font-size:12px!important}
+.dg-footer-meta{display:flex!important;flex-direction:column!important;gap:10px!important;border:0!important;margin:0!important;padding:0!important}
+.dg-fssai-compact,.dg-payments-compact{display:flex!important;flex-direction:column!important;gap:5px!important}
+.dg-payment-badges{display:flex!important;gap:4px!important;flex-wrap:wrap!important}.dg-payment-badges span{background:#fff!important;color:#174335!important;padding:2px 5px!important;border-radius:3px!important;font-size:9px!important}
+.dg-official-mails{display:flex!important;flex-direction:column!important;gap:4px!important}.dg-official-mails a{color:#fff!important}
+.dg-socials{display:flex!important;gap:8px!important}.dg-social{width:30px!important;height:30px!important;border-radius:50%!important;display:grid!important;place-items:center!important}.dg-social svg{width:18px!important;height:18px!important;fill:#fff!important}
+.dg-footer-bottom{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:22px!important;border-top:1px solid #ffffff2e!important;padding:13px 20px!important}
+@media(max-width:1000px){.dg-head{grid-template-columns:190px 1fr 130px!important}.dg-now-tab{grid-column:1/-1!important}.dg-hero-grid{height:auto!important}.dg-carousel{height:auto!important;aspect-ratio:1.87/1!important}.dg-side{height:auto!important}.dg-market-footer-grid{grid-template-columns:repeat(2,1fr)!important}[data-dg-catalog]{grid-template-columns:repeat(4,1fr)!important}}
+@media(max-width:620px){.dg-head{grid-template-columns:1fr auto!important}.dg-simple-actions{gap:16px!important}.dg-simple-action svg{width:24px!important;height:24px!important}.dg-now-tab img{width:62px!important;height:50px!important}.dg-side{grid-template-columns:1fr!important}.dg-market-footer-grid{grid-template-columns:1fr!important}.dg-footer-bottom{flex-direction:column!important;gap:7px!important}[data-dg-catalog]{display:flex!important;overflow-x:auto!important}.dg-shop-card,.dg-home-product-card{min-width:155px!important}.dg-product-slider-frame,.dg-product-slide{height:135px!important}}
+</style>
+</head>
 <body>
 <div class="announcement-bar">Available Now • Dry Fruits Energy Powder • 40% Off MRP</div>
 <header class="header"><div class="container navbar"><a class="brand dg-main-brand" href="index.html" aria-label="DeshiGram home"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><div class="site-search" id="siteSearch"><button class="search-toggle" id="searchToggle" type="button" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path></svg></button><div class="search-panel" id="searchPanel"><label class="sr-only" for="productSearchInput">Search products</label><input id="productSearchInput" type="search" placeholder="Search for products..." autocomplete="off"><div class="search-results" id="searchResults"></div></div></div><button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button><nav class="navigation" id="navigation"><a class="" href="index.html">Home</a><a class=" active-link" href="products.html">Products</a><a class="" href="about.html">About Us</a><a class="" href="contact.html">Contact</a><a class="dg-seller-header-link" href="seller.html">Become a Seller</a><a class="dg-login-header-link" href="account.html">Login</a></nav></div></header>
