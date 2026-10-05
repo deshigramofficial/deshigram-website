@@ -1,36 +1,18 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const id = new URLSearchParams(window.location.search).get("id") || "pack-1";
-  const product = window.PRODUCTS.find(item => item.id === id);
-  const error = document.getElementById("productError");
-  if (!product) { error.hidden = false; return; }
-  document.getElementById("productDetailPage").hidden = false;
-  document.getElementById("productInformation").hidden = false;
-  document.title = `${product.name} | DeshiGram`;
-  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
-  const money = v => `₹${Number(v).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; set("breadcrumbName", product.name); set("productCategory", product.category); set("productName", product.name); set("productShortDescription", product.shortDescription); set("productPrice", money(product.price)); set("productOldPrice", `MRP ${money(product.oldPrice)}`); set("productWeight", product.weight); set("descriptionHeading", product.name); set("productDescription", product.description); set("productStorage", product.storage);
-  document.getElementById("productFeatures").innerHTML = product.features.map(x => `<div class="dynamic-feature-item"><span>✓</span><p>${x}</p></div>`).join("");
-  document.getElementById("productIngredients").innerHTML = product.ingredients.map(x => `<li>${x}</li>`).join("");
-  document.getElementById("productUsage").innerHTML = product.usage.map((x,i) => `<article><span>${String(i+1).padStart(2,"0")}</span><p>${x}</p></article>`).join("");
-  const main = document.getElementById("mainProductImage"); const thumbs = document.getElementById("productThumbnails"); main.src = product.images[0]; main.alt = product.name;
-  product.images.forEach((src,i) => { const b=document.createElement("button"); b.type="button"; b.className=`dynamic-thumbnail${i===0?" active":""}`; b.innerHTML=`<img src="${src}" alt="${product.name} image ${i+1}">`; b.addEventListener("click",()=>{main.src=src; thumbs.querySelectorAll("button").forEach(x=>x.classList.remove("active")); b.classList.add("active")}); thumbs.appendChild(b); });
-  const add=document.getElementById("addProductToCart");
-  const buy=document.getElementById("buyProductNow");
-  const unavailable=product.status==="coming_soon"||product.status==="out_of_stock"||product.stock_quantity<=0;
-  if(add){
-    add.dataset.addToCart=product.id;
-    add.disabled=unavailable;
-    add.textContent=product.status==="coming_soon"?"Coming Soon":unavailable?"Out of Stock":"Add to Cart";
-  }
-  if(buy){
-    buy.disabled=unavailable;
-    buy.textContent=product.status==="coming_soon"?"Coming Soon":unavailable?"Out of Stock":"Buy Now";
-    if(!unavailable) buy.addEventListener("click",()=>{ window.DESHIGRAM_CART?.addToCart(product.id,1); window.location.href="../checkout.html"; });
-  }
-  const hero=document.querySelector(".dynamic-product-info")||document.getElementById("productDetailPage");
-  if(hero&&(product.badge||product.status==="coming_soon")){
-    const note=document.createElement("div"); note.className="dg-product-status-note";
-    note.textContent=product.status==="coming_soon"?(product.coming_soon_date?`Coming Soon • Expected ${new Date(product.coming_soon_date+"T00:00:00").toLocaleDateString("en-IN")}`:"Coming Soon"):(product.badge||"");
-    hero.prepend(note);
-  }
-  document.querySelectorAll(".dynamic-tab").forEach(tab => tab.addEventListener("click",()=>{ document.querySelectorAll(".dynamic-tab,.dynamic-panel").forEach(el=>el.classList.remove("active")); tab.classList.add("active"); document.getElementById(tab.dataset.tabTarget).classList.add("active"); }));
+document.addEventListener("DOMContentLoaded",async()=>{
+ const id=new URLSearchParams(location.search).get("id")||"pack-1", err=document.getElementById("productError");
+ const products=await window.DESHIGRAM_CATALOG.load(); const p=products.find(x=>x.id===id);
+ if(!p){err.hidden=false;return} document.getElementById("productDetailPage").hidden=false; document.title=p.name+" | DeshiGram";
+ let details={}; try{const U='https://kqkpbqpfnupjpthtpvdn.supabase.co',K='sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0';const r=await fetch(`${U}/rest/v1/product_details?product_key=eq.${encodeURIComponent(p.slug||p.id)}&select=*`,{headers:{apikey:K,Authorization:`Bearer ${K}`}});if(r.ok)details=(await r.json())[0]||{}}catch(_){}
+ const $=s=>document.querySelector(s), set=(s,v)=>{const e=$(s);if(e)e.textContent=v||""}, money=v=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(v||0));
+ set("#breadcrumbName",p.name);set("#productName",p.name);set("#productWeight",p.weight);set("#productBrand",details.brand||"DeshiGram");
+ if(Number(p.price)>0){set("#productPrice",money(p.price));set("#productOldPrice",p.oldPrice>p.price?`MRP ${money(p.oldPrice)}`:"");if(p.oldPrice>p.price)set("#productDiscount",`${Math.round((p.oldPrice-p.price)/p.oldPrice*100)}% OFF`)}else set("#productPrice","Price updating");
+ set("#productStock",p.stock_quantity>0?`In stock: ${p.stock_quantity}`:"Stock status will be updated");
+ const main=$("#mainProductImage"),thumbs=$("#productThumbnails"),imgs=(p.images||[]).filter(Boolean);main.src=imgs[0]||"images/favicon.png";main.alt=p.name;
+ imgs.forEach((src,i)=>{const b=document.createElement("button");b.className="dg-v3-thumb"+(i?"":" active");b.innerHTML=`<img src="${src}" alt="${p.name} ${i+1}">`;b.onclick=()=>{main.src=src;thumbs.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active")};thumbs.appendChild(b)});
+ const add=$("#addProductToCart"),unavailable=p.status!=="live"||p.stock_quantity<=0||Number(p.price)<=0;add.disabled=unavailable;add.textContent=Number(p.price)<=0?"Price updating":unavailable?"Out of Stock":"Add to Cart";if(!unavailable){add.dataset.addToCart=p.id;add.onclick=()=>window.DESHIGRAM_CART?.addToCart(p.id,1)}
+ const highlights={"Brand":details.brand||"DeshiGram","Product Type":details.product_type,"Dietary Preference":details.dietary_preference,"Spice Level":details.spice_level,"Flavour":details.flavour,"Weight":details.weight||p.weight,"Key Features":details.key_features||(p.features||[]).join(", "),"Unit":details.unit,"Ingredients":details.ingredients||(p.ingredients||[]).join(", "),"Allergen Information":details.allergen_information,"FSSAI License":details.fssai_license,"Nutrition Information":details.nutrition_information,"Cuisine Type":details.cuisine_type,"Packaging Type":details.packaging_type,"Storage Instruction":details.storage_instruction||p.storage,"Processing Type":details.processing_type,"Specialty":details.specialty};
+ const info={"Disclaimer":details.disclaimer,"Customer Care":details.customer_care,"Seller":details.seller_details,"Manufacturer / Marketer":details.manufacturer_marketer,"Country of Origin":details.country_of_origin,"Shelf Life":details.shelf_life};
+ function fill(el,obj){Object.entries(obj).filter(([,v])=>String(v||"").trim()).forEach(([k,v])=>el.insertAdjacentHTML("beforeend",`<dt>${k}</dt><dd>${String(v).replace(/\n/g,"<br>")}</dd>`))}
+ fill($("#productHighlights"),highlights);fill($("#productInfo"),info);if(!$("#productInfo").children.length)$("#productInfo").innerHTML="<dt>Information</dt><dd>Verified product information can be updated from DeshiGram Admin.</dd>";
+ const more=$("#moreProducts");products.filter(x=>x.id!==p.id).slice(0,10).forEach(x=>more.insertAdjacentHTML("beforeend",`<a class="dg-v3-more-card" href="product/index.html?id=${encodeURIComponent(x.id)}"><img src="${x.images?.[0]||'images/favicon.png'}"><b>${x.name}</b><small>${x.weight||""}</small></a>`));
 });
