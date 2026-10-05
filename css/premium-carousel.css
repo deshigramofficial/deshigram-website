@@ -1,0 +1,31 @@
+
+/* DeshiGram premium homepage carousel */
+.premium-brand img{width:250px!important;height:auto!important;max-height:78px!important;object-fit:contain}
+.premium-hero-grid{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(330px,.98fr);gap:12px;padding:12px 18px 0}
+.premium-carousel{position:relative;overflow:hidden;border-radius:14px;background:#f5f1e7;box-shadow:0 3px 18px rgba(16,60,40,.08)}
+.premium-slides{position:relative;width:100%;aspect-ratio:1500/650}
+.premium-slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s ease}
+.premium-slide.is-active{opacity:1;visibility:visible}
+.premium-slide img{width:100%;height:100%;display:block;object-fit:cover}
+.premium-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:#064c31;font-size:34px;line-height:1;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.16)}
+.premium-arrow.prev{left:14px}.premium-arrow.next{right:14px}
+.premium-dots{position:absolute;z-index:5;left:50%;bottom:15px;transform:translateX(-50%);display:flex;gap:8px}
+.premium-dots button{width:11px;height:11px;padding:0;border:2px solid #fff;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.premium-dots button.is-active{background:#0a6845}
+.premium-side{display:grid!important;grid-template-rows:1fr 1fr;gap:12px;min-width:0}
+.premium-side a{overflow:hidden;border-radius:14px;background:#fff;box-shadow:0 3px 18px rgba(16,60,40,.07)}
+.premium-side img{width:100%;height:100%;object-fit:cover;display:block}
+.dg-footer-brand img{width:190px!important;height:auto!important;object-fit:contain}
+@media(max-width:900px){
+ .premium-hero-grid{grid-template-columns:1fr;padding:8px}
+ .premium-side{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+ .premium-side img{aspect-ratio:2.5/1;height:auto}
+ .premium-arrow{width:36px;height:36px;font-size:29px}
+}
+@media(max-width:560px){
+ .premium-brand img{width:165px!important;max-height:55px!important}
+ .premium-side{grid-template-columns:1fr}
+ .premium-slides{aspect-ratio:1.45/1}
+ .premium-slide img{object-fit:cover}
+ .premium-side img{aspect-ratio:2.45/1}
+}
