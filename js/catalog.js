@@ -91,5 +91,5 @@
 
 
   document.addEventListener('click',e=>{const card=e.target.closest('[data-product-card]');if(!card||e.target.closest('button,a'))return;location.href=`product/index.html?id=${encodeURIComponent(card.dataset.productCard)}`});
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>load().then(render));else load().then(render);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
 })();
