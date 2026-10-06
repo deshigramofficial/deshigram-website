@@ -1,5 +1,8 @@
 (() => {
   const legacy=[];
+  const CACHE_KEY='deshigram_verified_reviews_v1', CACHE_TTL=10*60*1000;
+  const readCache=()=>{try{const x=JSON.parse(sessionStorage.getItem(CACHE_KEY)||'null');return x&&Date.now()-x.time<CACHE_TTL&&Array.isArray(x.items)?x.items:null}catch(_){return null}};
+  const writeCache=items=>{try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({time:Date.now(),items}))}catch(_){}};
   const esc=v=>String(v||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const initials=n=>String(n||'Customer').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
   const stars=r=>'★'.repeat(Math.max(1,Math.min(5,Math.round(Number(r)||0))));
@@ -10,12 +13,17 @@
     const track=document.querySelector('[data-live-reviews]');
     const summaryEl=document.querySelector('[data-review-summary]');
     if(!track) return;
-    let live=[];try{live=await window.DESHIGRAM_INTEGRATIONS.getApprovedReviews()||[];}catch(_){}
-    const names=new Set(legacy.map(x=>x.name.toLowerCase()));
-    const extra=live.filter(x=>x.verified && !names.has(String(x.name||'').toLowerCase()));
-    const all=[...legacy,...extra];
-    track.innerHTML=all.length?all.map(card).join(''):'<p class="dg-no-verified-reviews">Verified customer ratings will appear here after approval.</p>';
-    const s=summary(all); if(summaryEl)summaryEl.innerHTML=`<strong>${s.avg.toFixed(1)}/5</strong> average from ${s.count} verified customer rating${s.count===1?'':'s'}.`;
+    let live=readCache()||[];
+    if(live.length){paint(live)}
+    try{live=await window.DESHIGRAM_INTEGRATIONS.getApprovedReviews()||[];writeCache(live)}catch(_){}
+    function paint(items){
+      const names=new Set(legacy.map(x=>x.name.toLowerCase()));
+      const extra=items.filter(x=>x.verified && !names.has(String(x.name||'').toLowerCase()));
+      const all=[...legacy,...extra];
+      track.innerHTML=all.length?all.map(card).join(''):'<p class="dg-no-verified-reviews">Verified customer ratings will appear here after approval.</p>';
+      const s=summary(all); if(summaryEl)summaryEl.innerHTML=`<strong>${s.avg.toFixed(1)}/5</strong> average from ${s.count} verified customer rating${s.count===1?'':'s'}.`;
+    }
+    paint(live);
     const prev=document.querySelector('[data-review-prev]'),next=document.querySelector('[data-review-next]');
     const step=()=>Math.min(viewport?.clientWidth||320,380);
     prev?.addEventListener('click',()=>viewport.scrollBy({left:-step(),behavior:'smooth'}));
