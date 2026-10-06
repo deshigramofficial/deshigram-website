@@ -68,3 +68,14 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 .footer.dg-market-footer .dg-footer-bottom{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:14px!important;border-top:1px solid #ffffff2e!important;padding:10px 20px!important;min-height:40px!important}
 @media(max-width:1000px){.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer.dg-market-footer .dg-footer-meta{grid-column:1/-1!important;grid-row:auto!important}}
 @media(max-width:620px){.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:1fr!important}.footer.dg-market-footer .dg-footer-bottom{flex-direction:column!important;gap:7px!important}}
+
+
+/* Global header order: Account, Cart, then fully visible DeshiGram NOW. */
+@media(min-width:1001px){
+ .dg-head[data-common-header]{grid-template-columns:210px minmax(260px,1fr) 145px 255px!important}
+ .dg-head[data-common-header] .dg-search{max-width:620px!important}
+ .dg-head[data-common-header] .dg-simple-actions{grid-column:3!important}
+ .dg-head[data-common-header] .dg-now-tab{grid-column:4!important;width:255px!important;min-width:255px!important;overflow:visible!important}
+}
+.dg-header-cart-icon{position:relative;display:inline-grid;place-items:center}.dg-header-cart-icon>[data-cart-count]{position:absolute;right:-10px;top:-8px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#0d5a3b;color:#fff;font:800 10px/18px Inter,Arial,sans-serif;text-align:center}
+.dg-whatsapp-float{background:#25D366!important;color:#fff!important;text-decoration:none!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:auto!important;min-width:52px!important;padding:0 12px!important}.dg-whatsapp-float b{font-size:11px!important}
