@@ -316,6 +316,28 @@ body>.dg-head[data-common-header] .dg-now-tab small{display:block!important;font
 @media(max-width:1100px) and (min-width:901px){body>.dg-head[data-common-header]{grid-template-columns:155px minmax(180px,1fr) 210px max-content!important}body>.dg-head[data-common-header] .dg-now-tab{width:210px!important;min-width:210px!important}}
 @media(max-width:900px){body>.dg-head[data-common-header] .dg-now-tab{width:100%!important;min-width:0!important}.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer.dg-market-footer .dg-footer-meta{grid-column:1/-1!important}}
 
+/* 2026-10-07 screenshot corrections: compact header/footer and keep ratings visible. */
+.dg-products-head{justify-content:flex-end!important;min-height:48px!important;margin-bottom:10px!important}
+.dg-reviews-master{display:block!important;visibility:visible!important;opacity:1!important;min-height:190px!important}
+.dg-reviews-master .dg-review-viewport{display:block!important;visibility:visible!important;min-height:150px!important}
+.dg-reviews-master .dg-review-track{display:flex!important;visibility:visible!important}
+@media(min-width:901px){
+ body>.dg-head[data-common-header]{grid-template-columns:175px minmax(220px,520px) 225px max-content!important;justify-content:center!important;column-gap:14px!important}
+ body>.dg-head[data-common-header] .dg-search{width:100%!important;max-width:520px!important;justify-self:center!important}
+ body>.dg-head[data-common-header] .dg-now-tab{width:225px!important;min-width:225px!important;grid-template-columns:58px minmax(0,1fr)!important;height:54px!important;min-height:54px!important;padding:4px 10px!important;overflow:visible!important}
+ body>.dg-head[data-common-header] .dg-now-tab img{width:58px!important;height:46px!important;max-width:58px!important;max-height:46px!important}
+ body>.dg-head[data-common-header] .dg-now-tab b{font-size:14px!important}
+ body>.dg-head[data-common-header] .dg-now-tab small{font-size:8.5px!important}
+}
+.footer.dg-market-footer{padding:18px 0 0!important}
+.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:minmax(220px,1.25fr) minmax(145px,.8fr) minmax(190px,1fr) minmax(280px,1.25fr)!important;gap:28px!important;align-items:start!important}
+.footer.dg-market-footer .dg-footer-brand,.footer.dg-market-footer .dg-footer-column,.footer.dg-market-footer .dg-footer-meta{align-self:start!important;margin:0!important;padding-top:0!important}
+.footer.dg-market-footer .dg-footer-meta{grid-column:4!important;grid-row:1!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:9px!important;border-top:0!important;padding:0!important;margin:0!important}
+.footer.dg-market-footer .dg-payments-compact,.footer.dg-market-footer .dg-official-mails{margin:0!important}
+.footer.dg-market-footer .dg-official-mails{display:flex!important;flex-direction:column!important;gap:4px!important}
+.footer.dg-market-footer .dg-footer-bottom{margin-top:14px!important;padding:10px 20px!important;min-height:40px!important}
+@media(max-width:900px){.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer.dg-market-footer .dg-footer-meta{grid-column:1/-1!important;grid-row:auto!important}}
+
 /* === 2026-10-07 final screenshot-spec homepage corrections === */
 .dg-hero-grid{display:block!important;width:100%!important;height:auto!important}
 .dg-carousel{width:100%!important;height:auto!important;aspect-ratio:1536/819!important;background:transparent!important}
@@ -363,7 +385,7 @@ body>.dg-head[data-common-header] .dg-now-tab small{display:block!important;font
 </div>
 </section>
 <section class="dg-trust"><div>🌿<span><b>Natural Ingredients</b><small>Pure and high quality</small></span></div><div>🛡<span><b>Premium Quality</b><small>Hygienically packed</small></span></div><div>♥<span><b>Trusted by Families</b><small>From kids to adults</small></span></div><div>🚚<span><b>Pan India Delivery</b><small>Safe & secure shopping</small></span></div></section>
-<section><div class="dg-section-head"><div><h2>Our Best Sellers</h2><p>Pure, healthy and traditional foods for your family</p></div><a href="products.html">View All Products →</a></div><div data-dg-catalog data-view="home"><div class="dg-catalog-skeleton" aria-label="Loading products"><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div></div></div></section>
+<section class="dg-home-products"><div class="dg-section-head dg-products-head"><a href="products.html">View All Products →</a></div><div data-dg-catalog data-view="home"><div class="dg-catalog-skeleton" aria-label="Loading products"><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div></div></div></section>
 
 <section class="dg-story" aria-labelledby="dgAboutTitle">
   <div>
