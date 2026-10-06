@@ -53,7 +53,7 @@
     return `<article class="${home?'dg-home-product-card':'dg-shop-card'}" data-product-card="${p.id}">
       ${p.badge?`<span class="dg-admin-badge">${p.badge}</span>`:''}${coming?`<span class="dg-coming-badge">COMING SOON</span>`:''}${slider}
       <div class="${home?'dg-home-product-copy':'dg-shop-body'}"><small>${p.weight||''}</small><h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>${price}
-      <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button><a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a></div></div></article>`}
+      <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button>${home?'':`<a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a>`}</div></div></article>`}
   function state(el,type,message){
     el.innerHTML=`<div class="dg-catalog-state dg-catalog-${type}" role="status"><p>${message}</p>${type==='error'?'<button type="button" data-catalog-retry>Retry</button>':''}</div>`;
   }
