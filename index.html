@@ -383,6 +383,19 @@ body>.dg-head[data-common-header] .dg-now-tab small{display:block!important;font
 .dg-home-founder .founder-photo{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center 20%!important;margin:0!important;padding:0!important}
 @media(max-width:700px){.dg-home-founder .founder-photo-wrap{width:min(100%,430px)!important;margin-inline:auto!important;aspect-ratio:4/5!important}.dg-home-founder .founder-photo{object-position:center 18%!important}}
 
+
+/* 2026-10-07 ONLY requested hero sizing lock. */
+@media(min-width:769px){
+ main.dg-main>.dg-hero-grid{display:block!important;width:100%!important;height:420px!important;min-height:420px!important;max-height:420px!important}
+ main.dg-main>.dg-hero-grid>.dg-carousel{width:100%!important;height:420px!important;min-height:420px!important;max-height:420px!important;aspect-ratio:auto!important}
+ main.dg-main>.dg-hero-grid>.dg-carousel .dg-slide img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+}
+@media(max-width:768px){
+ main.dg-main>.dg-hero-grid{width:100%!important;height:clamp(220px,58vw,340px)!important;min-height:0!important;max-height:none!important}
+ main.dg-main>.dg-hero-grid>.dg-carousel{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
+ main.dg-main>.dg-hero-grid>.dg-carousel .dg-slide img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+}
+
 </style></head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
