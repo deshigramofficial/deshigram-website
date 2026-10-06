@@ -396,6 +396,37 @@ body>.dg-head[data-common-header] .dg-now-tab small{display:block!important;font
  main.dg-main>.dg-hero-grid>.dg-carousel .dg-slide img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
 }
 
+
+/* 2026-10-07 ONLY homepage header parity: force the shared shell header to use shared CSS values. */
+body>.dg-head[data-common-header]{background:#fff!important;display:grid!important;grid-template-columns:210px minmax(260px,1fr) 145px 255px!important;align-items:center!important;gap:16px!important;padding:7px 24px!important;min-height:72px!important;border-bottom:1px solid var(--dg-line)!important;position:sticky!important;top:0!important;z-index:80!important;box-shadow:0 4px 18px #0d4d350d!important}
+body>.dg-head[data-common-header] .dg-brand img{display:block!important;width:185px!important;height:58px!important;max-height:none!important;object-fit:contain!important}
+body>.dg-head[data-common-header] .dg-search{height:44px!important;width:100%!important;max-width:620px!important;justify-self:stretch!important;border:1px solid #d8ddd9!important;border-radius:10px!important;background:#fafcfb!important}
+body>.dg-head[data-common-header] .dg-search button{width:48px!important;background:transparent!important;color:inherit!important}
+body>.dg-head[data-common-header] .dg-simple-actions{grid-column:3!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:28px!important}
+body>.dg-head[data-common-header] .dg-simple-action{min-width:48px!important;gap:3px!important;font-size:13px!important;font-weight:500!important}
+body>.dg-head[data-common-header] .dg-simple-action svg{width:27px!important;height:27px!important}
+body>.dg-head[data-common-header] .dg-now-tab{grid-column:4!important;grid-row:auto!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:68px minmax(0,1fr)!important;align-items:center!important;width:255px!important;min-width:255px!important;height:72px!important;min-height:72px!important;padding:7px 11px!important;gap:8px!important;overflow:visible!important}
+body>.dg-head[data-common-header] .dg-now-tab img{width:68px!important;height:56px!important;max-width:68px!important;max-height:56px!important;object-fit:contain!important}
+body>.dg-head[data-common-header] .dg-now-tab b{font-size:17px!important;line-height:.95!important;white-space:nowrap!important}
+body>.dg-head[data-common-header] .dg-now-tab small{font-size:9px!important;line-height:1.15!important;margin-top:5px!important;white-space:nowrap!important}
+@media(max-width:900px){
+ body>.dg-head[data-common-header]{grid-template-columns:150px 1fr auto!important;padding:8px 12px!important;gap:16px!important;min-height:0!important}
+ body>.dg-head[data-common-header] .dg-brand img{width:145px!important;height:48px!important}
+ body>.dg-head[data-common-header] .dg-search{grid-column:1/-1!important;grid-row:2!important;height:44px!important;max-width:none!important}
+ body>.dg-head[data-common-header] .dg-simple-actions{grid-column:3!important;grid-row:1!important;gap:18px!important}
+ body>.dg-head[data-common-header] .dg-now-tab{grid-column:1/-1!important;grid-row:3!important;width:100%!important;min-width:0!important;height:52px!important;min-height:52px!important;grid-template-columns:64px minmax(0,1fr)!important;padding:3px 10px!important}
+ body>.dg-head[data-common-header] .dg-now-tab img{width:64px!important;height:46px!important}
+ body>.dg-head[data-common-header] .dg-now-tab b{font-size:14px!important}body>.dg-head[data-common-header] .dg-now-tab small{font-size:9px!important;margin-top:4px!important}
+}
+@media(max-width:520px){
+ body>.dg-head[data-common-header]{grid-template-columns:1fr auto!important;gap:7px!important}
+ body>.dg-head[data-common-header] .dg-brand img{width:138px!important;height:48px!important}
+ body>.dg-head[data-common-header] .dg-simple-actions{grid-column:2!important;gap:9px!important}
+ body>.dg-head[data-common-header] .dg-simple-action{min-width:36px!important}body>.dg-head[data-common-header] .dg-simple-action span{font-size:9px!important}
+ body>.dg-head[data-common-header] .dg-search{grid-column:1/-1!important;grid-row:2!important;height:40px!important}
+ body>.dg-head[data-common-header] .dg-now-tab{grid-column:1/-1!important;grid-row:3!important;height:48px!important;min-height:48px!important}
+}
+
 </style></head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
