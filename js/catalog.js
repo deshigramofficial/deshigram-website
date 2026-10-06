@@ -58,7 +58,7 @@
     el.innerHTML=`<div class="dg-catalog-state dg-catalog-${type}" role="status"><p>${message}</p>${type==='error'?'<button type="button" data-catalog-retry>Retry</button>':''}</div>`;
   }
   function paint(list){
-    document.querySelectorAll('[data-dg-catalog]').forEach(el=>{const limit=Number(el.dataset.limit||0);const rows=limit?list.slice(0,limit):list;el.innerHTML=rows.length?rows.map(p=>card(p,el.dataset.view==='home')).join(''):'<div class="dg-catalog-state"><p>No products available right now.</p></div>'});
+    document.querySelectorAll('[data-dg-catalog]').forEach(el=>{let rows=list;const home=el.dataset.view==='home';if(home){const dry=list.filter(p=>/dry\s*fruits/i.test(String(p.name||'')));const panch=list.filter(p=>/panch\s*poshan/i.test(String(p.name||'')));rows=[...dry.slice(0,2),...panch.slice(0,2)];if(rows.length<4){const used=new Set(rows.map(p=>p.id));rows=rows.concat(list.filter(p=>!used.has(p.id)).slice(0,4-rows.length))}rows=rows.slice(0,4)}else{const limit=Number(el.dataset.limit||0);rows=limit?list.slice(0,limit):list}el.innerHTML=rows.length?rows.map(p=>card(p,home)).join(''):'<div class="dg-catalog-state"><p>No products available right now.</p></div>'});
   }
   async function render(){
     const local=fallback().map(normalize);
