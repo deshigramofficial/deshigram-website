@@ -1,10 +1,5 @@
 (() => {
-  const legacy=[
-    {name:'Zym Boy',rating:5,review:'Taste aur quality dono bahut achhe lage. Product ka texture bhi sahi hai aur packaging clean, neat aur premium feel deti hai. Overall product use karne ka experience kaafi achha raha.',verified:true},
-    {name:'Deeksha Dixit',rating:4,review:'Product ka taste balanced laga aur overall quality achhi hai. Packaging bhi decent aur convenient hai. Daily use ke liye product easy laga aur overall experience positive raha.',verified:true},
-    {name:'Rashmi Yadav',rating:4,review:'Packaging achhi hai aur product fresh laga. Taste bhi pleasant hai aur quality par dhyan diya gaya hai. Overall experience kaafi achha raha aur product presentation bhi impressive hai.',verified:true},
-    {name:'Harsh Chaturvedi',rating:4,review:'Quality aur presentation dono impressive lage. Product ki packaging premium feel deti hai aur overall taste bhi achha hai. Workout ya gym routine follow karne walon ke liye bhi ye ek convenient option lagta hai. Overall experience kaafi satisfactory raha.',verified:true}
-  ];
+  const legacy=[];
   const esc=v=>String(v||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const initials=n=>String(n||'Customer').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
   const stars=r=>'★'.repeat(Math.max(1,Math.min(5,Math.round(Number(r)||0))));
@@ -19,7 +14,7 @@
     const names=new Set(legacy.map(x=>x.name.toLowerCase()));
     const extra=live.filter(x=>x.verified && !names.has(String(x.name||'').toLowerCase()));
     const all=[...legacy,...extra];
-    track.innerHTML=all.map(card).join('');
+    track.innerHTML=all.length?all.map(card).join(''):'<p class="dg-no-verified-reviews">Verified customer ratings will appear here after approval.</p>';
     const s=summary(all); if(summaryEl)summaryEl.innerHTML=`<strong>${s.avg.toFixed(1)}/5</strong> average from ${s.count} verified customer rating${s.count===1?'':'s'}.`;
     const prev=document.querySelector('[data-review-prev]'),next=document.querySelector('[data-review-next]');
     const step=()=>Math.min(viewport?.clientWidth||320,380);
