@@ -29,3 +29,42 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
   .dg-now-tab small{font-size:8px!important;line-height:1.15!important;margin-top:3px!important;white-space:nowrap!important}
   .dg-simple-actions{gap:13px!important}
 }
+
+
+/* 2026-10-07 GLOBAL CUSTOMER UI MASTER
+   Products-page header + homepage footer + aligned catalogue pricing. */
+@media(min-width:1001px){
+  body>.dg-head[data-common-header],.dg-head[data-common-header]{grid-template-columns:245px minmax(320px,1fr) 145px 255px!important;gap:16px!important;padding:7px 24px!important;min-height:72px!important}
+  .dg-head[data-common-header] .dg-brand img{width:185px!important;height:58px!important;max-height:58px!important}
+  .dg-head[data-common-header] .dg-search{height:44px!important;width:100%!important;max-width:none!important}
+  .dg-head[data-common-header] .dg-now-tab{box-sizing:border-box!important;display:grid!important;grid-template-columns:68px minmax(0,1fr)!important;align-items:center!important;width:auto!important;min-width:0!important;height:72px!important;min-height:72px!important;padding:7px 11px!important;gap:8px!important;overflow:visible!important}
+  .dg-head[data-common-header] .dg-now-tab img{width:68px!important;height:56px!important;max-width:68px!important;max-height:56px!important;object-fit:contain!important}
+  .dg-head[data-common-header] .dg-now-tab b{font-size:17px!important;line-height:.95!important;white-space:nowrap!important}
+  .dg-head[data-common-header] .dg-now-tab small{font-size:9px!important;line-height:1.15!important;margin-top:5px!important;white-space:nowrap!important}
+  .dg-head[data-common-header] .dg-simple-actions{display:flex!important;justify-content:center!important;align-items:center!important;gap:28px!important}
+  .dg-head[data-common-header] .dg-simple-action{font-size:13px!important;font-weight:500!important}
+  .dg-head[data-common-header] .dg-simple-action svg{width:27px!important;height:27px!important}
+}
+/* Product prices/actions use the same lower-row alignment everywhere. */
+.dg-shop-card{display:flex!important;flex-direction:column!important;height:100%!important}
+.dg-shop-card .dg-shop-body{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto 1fr auto!important;column-gap:10px!important;align-items:end!important;flex:1 1 auto!important}
+.dg-shop-card .dg-shop-body>small,.dg-shop-card .dg-shop-body>h2{grid-column:1/-1!important}
+.dg-shop-card .dg-shop-body>h2{grid-row:2!important}
+.dg-shop-card .dg-price,.dg-shop-card .dg-price-pending{grid-column:1!important;grid-row:4!important;align-self:center!important;justify-self:start!important;margin:0!important;min-height:38px!important}
+.dg-shop-card .dg-price{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:1px!important}
+.dg-shop-card .dg-price strong{order:0!important;line-height:1.05!important}.dg-shop-card .dg-price s{order:1!important;line-height:1.05!important}
+.dg-shop-card .dg-card-actions{grid-column:2!important;grid-row:4!important;align-self:center!important;margin:0!important}
+.dg-shop-card .dg-card-actions .button-secondary{display:none!important}
+/* Shared footer master: homepage footer on every customer-facing page. */
+.footer.dg-market-footer{display:block!important;background:#073b2a!important;color:#fff!important;margin-top:26px!important;padding:18px 0 0!important;height:auto!important;min-height:0!important}
+.footer.dg-market-footer .dg-market-footer-grid{display:grid!important;grid-template-columns:minmax(190px,1.15fr) minmax(120px,.72fr) minmax(170px,.95fr) minmax(145px,.8fr) minmax(245px,1.15fr)!important;gap:clamp(16px,2vw,26px)!important;align-items:start!important}
+.footer.dg-market-footer .dg-footer-brand,.footer.dg-market-footer .dg-footer-column,.footer.dg-market-footer .dg-footer-meta{align-self:start!important;margin:0!important;padding-top:0!important}
+.footer.dg-market-footer .dg-footer-brand img{width:145px!important;height:54px!important;object-fit:contain!important}
+.footer.dg-market-footer .dg-footer-column{display:flex!important;flex-direction:column!important;gap:4px!important}
+.footer.dg-market-footer .dg-footer-column h3{font-size:14px!important;margin:0 0 7px!important}
+.footer.dg-market-footer .dg-footer-column a,.footer.dg-market-footer .dg-footer-brand p,.footer.dg-market-footer .dg-footer-meta,.footer.dg-market-footer .dg-footer-bottom{font-size:12px!important}
+.footer.dg-market-footer .dg-footer-meta{grid-column:5!important;grid-row:1!important;display:flex!important;flex-direction:column!important;gap:9px!important;border:0!important;padding:0!important}
+.footer.dg-market-footer .dg-official-mails{display:flex!important;flex-direction:column!important;gap:4px!important}
+.footer.dg-market-footer .dg-footer-bottom{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:14px!important;border-top:1px solid #ffffff2e!important;padding:10px 20px!important;min-height:40px!important}
+@media(max-width:1000px){.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer.dg-market-footer .dg-footer-meta{grid-column:1/-1!important;grid-row:auto!important}}
+@media(max-width:620px){.footer.dg-market-footer .dg-market-footer-grid{grid-template-columns:1fr!important}.footer.dg-market-footer .dg-footer-bottom{flex-direction:column!important;gap:7px!important}}
