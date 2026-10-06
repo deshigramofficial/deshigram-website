@@ -259,6 +259,21 @@
 }
 .dg-home-product-card .dg-slider-dot.is-active{width:9px!important;min-width:9px!important;max-width:9px!important;height:9px!important;min-height:9px!important;max-height:9px!important;background:#fff!important;border:2px solid #5b8272!important}
 
+/* 2026-10-07 homepage header/hero spacing correction. Shared header wins over legacy inline header rules. */
+body>.dg-offer-ticker+main.dg-main{padding-top:6px!important}
+main.dg-main{padding-top:6px!important}
+main.dg-main>.dg-hero-grid{margin-top:0!important;padding-top:0!important}
+@media(min-width:901px){
+ body>.dg-head{grid-template-columns:185px minmax(260px,1fr) 190px auto!important;gap:12px!important;padding:7px 18px!important;min-height:68px!important}
+ body>.dg-head .dg-brand img{width:170px!important;height:52px!important;max-height:52px!important}
+ body>.dg-head .dg-search{height:42px!important}
+ body>.dg-head .dg-now-tab{width:190px!important;min-width:190px!important;height:48px!important;min-height:48px!important;display:grid!important;grid-template-columns:50px minmax(0,1fr)!important;gap:7px!important;padding:3px 9px!important;overflow:hidden!important}
+ body>.dg-head .dg-now-tab img{width:50px!important;height:40px!important;max-width:50px!important;max-height:40px!important}
+ body>.dg-head .dg-now-tab span{min-width:0!important;overflow:hidden!important}
+ body>.dg-head .dg-now-tab b{font-size:13px!important;line-height:1!important;white-space:nowrap!important}
+ body>.dg-head .dg-now-tab small{font-size:8px!important;line-height:1.15!important;margin-top:3px!important;white-space:nowrap!important}
+}
+
 /* === 2026-10-07 final screenshot-spec homepage corrections === */
 .dg-hero-grid{display:block!important;width:100%!important;height:auto!important}
 .dg-carousel{width:100%!important;height:auto!important;aspect-ratio:1536/819!important;background:transparent!important}
