@@ -53,17 +53,17 @@ window.PRODUCTS = [
   }
 ,
   {
-    id:"panch-poshan-100g",name:"Panch Poshan Seed Powder",category:"DeshiGram",price:0,oldPrice:0,weight:"100 g",status:"live",
+    id:"panch-poshan-100g",sku:"DG-PPSP-100G-P1",name:"Panch Poshan Seed Powder — Pack of 1",category:"DeshiGram",price:159.40,oldPrice:259,weight:"100 g × 1",status:"live",
     images:["images/panch-poshan-100g.png","images/panch-poshan-pack-2.png","images/panch-poshan-pack-3.png"],
     shortDescription:"Panch Poshan Seed Powder — blend of five seeds.",description:"",ingredients:["Flax","Pumpkin","Watermelon","Chia","Sesame"],
     features:["100% Veg","Blend of Five Seeds"],usage:[],storage:""
   },
   {
-    id:"panch-poshan-pack-2",name:"Panch Poshan Seed Powder — Pack of 2",category:"DeshiGram",price:0,oldPrice:0,weight:"2 × 100 g",status:"live",
+    id:"panch-poshan-pack-2",sku:"DG-PPSP-100G-P2",name:"Panch Poshan Seed Powder — Pack of 2",category:"DeshiGram",price:308.80,oldPrice:508,weight:"100 g × 2",status:"live",
     images:["images/panch-poshan-pack-2.png","images/panch-poshan-100g.png"],shortDescription:"Pack of 2.",description:"",ingredients:["Flax","Pumpkin","Watermelon","Chia","Sesame"],features:["100% Veg","Pack of 2"],usage:[],storage:""
   },
   {
-    id:"panch-poshan-pack-3",name:"Panch Poshan Seed Powder — Pack of 3",category:"DeshiGram",price:0,oldPrice:0,weight:"3 × 100 g",status:"live",
+    id:"panch-poshan-pack-3",sku:"DG-PPSP-100G-P3",name:"Panch Poshan Seed Powder — Pack of 3",category:"DeshiGram",price:458.20,oldPrice:757,weight:"100 g × 3",status:"live",
     images:["images/panch-poshan-pack-3.png","images/panch-poshan-100g.png"],shortDescription:"Pack of 3.",description:"",ingredients:["Flax","Pumpkin","Watermelon","Chia","Sesame"],features:["100% Veg","Pack of 3"],usage:[],storage:""
   }
 ];
