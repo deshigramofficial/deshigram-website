@@ -46,7 +46,7 @@
     const imgs=[...(p.images||[])].filter((src,i,a)=>src&&a.indexOf(src)===i).slice(0,3);
     const pictures=imgs.length?imgs:['images/favicon.png'];
     const slider=`<div class="dg-product-slider" data-product-slider data-current="0"><div class="dg-product-slider-frame">
-      ${pictures.map((src,i)=>`<img class="dg-product-slide${i===0?' is-active':''}" src="${src}" alt="${p.name} image ${i+1}" loading="${i===0?'eager':'lazy'}">`).join('')}
+      ${pictures.map((src,i)=>`<img class="dg-product-slide${i===0?' is-active':''}" src="${src}" alt="${p.name} image ${i+1}" loading="${home?'lazy':(i===0?'eager':'lazy')}" decoding="async">`).join('')}
       ${pictures.length>1?`<button type="button" class="dg-slider-arrow dg-slider-prev" data-slider-prev aria-label="Previous image">‹</button><button type="button" class="dg-slider-arrow dg-slider-next" data-slider-next aria-label="Next image">›</button>`:''}
       </div>${pictures.length>1?`<div class="dg-slider-dots">${pictures.map((_,i)=>`<button type="button" class="dg-slider-dot${i===0?' is-active':''}" data-slider-dot="${i}"></button>`).join('')}</div>`:''}</div>`;
     const price=noPrice?`<div class="dg-price-pending">Price updating</div>`:`<div class="dg-price"><s>${p.oldPrice>p.price?`MRP ${money(p.oldPrice)}`:''}</s><strong>${money(p.price)}</strong></div>`;
@@ -62,8 +62,8 @@
   }
   async function render(){
     const local=fallback().map(normalize);
-    if(products.length) paint(products); else if(local.length){products=local.slice();paint(products)} else document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'loading','Loading products…'));
-    try{const list=await load(true);paint(list)}catch(e){document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'error','Products could not be loaded.'))}
+    if(products.length) paint(products); else if(local.length){products=local.slice();paint(products)} else document.querySelectorAll('[data-dg-catalog]').forEach(el=>{el.innerHTML='<div class="dg-catalog-skeleton" aria-label="Loading products">'+Array.from({length:6},()=>'<div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div>').join('')+'</div>'});
+    try{const list=await load(true);paint(list)}catch(e){document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'error','Unable to load products. Retry'))}
   }
   window.DESHIGRAM_CATALOG={load,render,get products(){return products},imageUrl,money};
 
