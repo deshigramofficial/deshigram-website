@@ -1,1 +1,0 @@
-/* Retired legacy compatibility file. */
