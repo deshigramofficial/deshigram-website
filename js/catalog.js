@@ -19,14 +19,22 @@
     const autoBadge=offerActive(p)?(p.offer_label||`${p.offer_value}${p.offer_type==='percent'?'%':'₹'} OFF`):'';
     return {id:p.slug||p.id,db_id:p.id,slug:p.slug||p.id,name:p.name,category:p.category||'DeshiGram',description:p.description||'',shortDescription:p.short_description||p.shortDescription||'',weight:p.net_quantity||p.weight||'',price:Number(effective.toFixed(2)),basePrice:base,oldPrice:mrp,mrp,packed_weight_grams:Number(p.packed_weight_grams||0),stock_quantity:Number(p.stock_quantity??100),images:(p.image_paths||p.images||[]).map(imageUrl),ingredients:p.ingredients||[],features:p.features||[],usage:p.usage_steps||p.usage||[],storage:p.storage_instructions||p.storage||'',status:p.status||'live',is_visible:p.is_visible!==false,featured:!!p.featured,badge:p.badge_text||autoBadge,coming_soon_date:p.coming_soon_date||'',offer_type:p.offer_type||'none',offer_value:Number(p.offer_value||0),offer_label:p.offer_label||'',max_order_quantity:Number(p.max_order_quantity||10),low_stock_threshold:Number(p.low_stock_threshold||5),cod_enabled:p.cod_enabled!==false,online_payment_enabled:p.online_payment_enabled!==false,seo_title:p.seo_title||'',seo_description:p.seo_description||''};
   };
-  async function load(){
+  async function load(force=false){
+    const local=fallback().map(normalize);
+    if(!force && !products.length && local.length){products=local.slice(); window.PRODUCTS=products;}
     try{
       const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),4500);
-      const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal});clearTimeout(timer);if(!r.ok)throw new Error('catalog');products=(await r.json()).map(normalize);
-      const local=fallback().map(normalize); if(!products.length) products=local.slice();
-      local.filter(x=>String(x.id).startsWith('panch-poshan-')).forEach(x=>{if(!products.some(p=>p.id===x.id))products.push(x)})}catch(_){products=fallback().map(normalize)}
+      const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal});
+      clearTimeout(timer); if(!r.ok) throw new Error('catalog');
+      const remote=(await r.json()).map(normalize);
+      if(remote.length) products=remote;
+      local.filter(x=>String(x.id).startsWith('panch-poshan-')).forEach(x=>{if(!products.some(p=>p.id===x.id))products.push(x)});
+    }catch(err){
+      if(!products.length) products=local.slice();
+      if(!products.length) throw err;
+    }
     window.PRODUCTS=products;
-    products.filter(p=>p.status==='live'&&p.stock_quantity>0).forEach(p=>window.DESHIGRAM_CART?.registerProduct({id:p.id,name:p.name,price:p.price,mrp:p.oldPrice,weight:p.weight,packed_weight_grams:p.packed_weight_grams,image:p.images[0]||'images/favicon.png',max_order_quantity:p.max_order_quantity,cod_enabled:p.cod_enabled,online_payment_enabled:p.online_payment_enabled}));
+    products.filter(p=>(p.status==='live'||p.status==='available')&&p.stock_quantity>0).forEach(p=>window.DESHIGRAM_CART?.registerProduct({id:p.id,name:p.name,price:p.price,mrp:p.oldPrice,weight:p.weight,packed_weight_grams:p.packed_weight_grams,image:p.images[0]||'images/favicon.png',max_order_quantity:p.max_order_quantity,cod_enabled:p.cod_enabled,online_payment_enabled:p.online_payment_enabled}));
     document.dispatchEvent(new CustomEvent('deshigram:catalog',{detail:products}));
     return products;
   }
@@ -46,10 +54,21 @@
       ${p.badge?`<span class="dg-admin-badge">${p.badge}</span>`:''}${coming?`<span class="dg-coming-badge">COMING SOON</span>`:''}${slider}
       <div class="${home?'dg-home-product-copy':'dg-shop-body'}"><small>${p.weight||''}</small><h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>${price}
       <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button><a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a></div></div></article>`}
-  async function render(){const list=products.length?products:await load();document.querySelectorAll('[data-dg-catalog]').forEach(el=>{const limit=Number(el.dataset.limit||0);const rows=limit?list.slice(0,limit):list;el.innerHTML=rows.length?rows.map(p=>card(p,el.dataset.view==='home')).join(''):'<div class="account-empty"><h3>No products live yet</h3><p>Please check again soon.</p></div>'})}
+  function state(el,type,message){
+    el.innerHTML=`<div class="dg-catalog-state dg-catalog-${type}" role="status"><p>${message}</p>${type==='error'?'<button type="button" data-catalog-retry>Retry</button>':''}</div>`;
+  }
+  function paint(list){
+    document.querySelectorAll('[data-dg-catalog]').forEach(el=>{const limit=Number(el.dataset.limit||0);const rows=limit?list.slice(0,limit):list;el.innerHTML=rows.length?rows.map(p=>card(p,el.dataset.view==='home')).join(''):'<div class="dg-catalog-state"><p>No products available right now.</p></div>'});
+  }
+  async function render(){
+    const local=fallback().map(normalize);
+    if(products.length) paint(products); else if(local.length){products=local.slice();paint(products)} else document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'loading','Loading products…'));
+    try{const list=await load(true);paint(list)}catch(e){document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'error','Products could not be loaded.'))}
+  }
   window.DESHIGRAM_CATALOG={load,render,get products(){return products},imageUrl,money};
 
   
+  document.addEventListener('click',e=>{if(e.target.closest('[data-catalog-retry]')){render();return;}});
   document.addEventListener('click',e=>{
     const slider=e.target.closest('[data-product-slider]');
     if(!slider)return;
