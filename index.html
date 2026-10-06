@@ -427,6 +427,41 @@ body>.dg-head[data-common-header] .dg-now-tab small{font-size:9px!important;line
  body>.dg-head[data-common-header] .dg-now-tab{grid-column:1/-1!important;grid-row:3!important;height:48px!important;min-height:48px!important}
 }
 
+
+/* 2026-10-07 ONLY homepage hero: full viewport width + full uncropped artwork. */
+main.dg-main>.dg-hero-grid{
+ width:100vw!important;
+ max-width:none!important;
+ height:auto!important;
+ min-height:0!important;
+ max-height:none!important;
+ margin-left:calc(50% - 50vw)!important;
+ margin-right:calc(50% - 50vw)!important;
+ padding:0!important;
+}
+main.dg-main>.dg-hero-grid>.dg-carousel{
+ width:100%!important;
+ max-width:none!important;
+ height:auto!important;
+ min-height:0!important;
+ max-height:none!important;
+ aspect-ratio:1536/819!important;
+ margin:0!important;
+ background:transparent!important;
+}
+main.dg-main>.dg-hero-grid>.dg-carousel .dg-slide img{
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+ object-fit:contain!important;
+ object-position:center!important;
+ background:transparent!important;
+}
+@media(max-width:768px){
+ main.dg-main>.dg-hero-grid{width:100vw!important;height:auto!important;min-height:0!important;max-height:none!important}
+ main.dg-main>.dg-hero-grid>.dg-carousel{height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1536/819!important}
+}
+
 </style></head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
