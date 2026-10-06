@@ -1,1 +1,1 @@
-/* Seller marketplace retired. */
+/* Retired legacy compatibility file. */

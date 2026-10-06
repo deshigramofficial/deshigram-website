@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="css/product-commerce-v3.css?v=3"></head>
 <body>
 <header class="admin-topbar">
-  <div class="brand"><strong>DeshiGram Admin</strong><span>Operations & Marketplace</span></div>
+  <div class="brand"><strong>DeshiGram Admin</strong><span>Operations</span></div>
   <nav><a href="index.html" target="_blank">View Website</a><button id="logoutBtn" class="ghost" hidden>Logout</button></nav>
 </header>
 
@@ -19,10 +19,10 @@
   <div class="login-brand-side" aria-hidden="true">
     <div class="login-brand-copy">
       <div class="login-monogram">DG</div>
-      <p class="login-kicker">DESHIGRAM • OPERATIONS & MARKETPLACE</p>
+      <p class="login-kicker">DESHIGRAM • OPERATIONS</p>
       <h1>Rooted in goodness.<br>Managed with clarity.</h1>
-      <p class="login-brand-text">One secure workspace for a growing FMCG business — catalogue, orders, fulfilment, inventory, payments and marketplace operations.</p>
-      <div class="ingredient-orbit fmcg-pill-row"><span>FMCG Operations</span><span>Quality</span><span>Distribution</span><span>Marketplace</span><span>Growth</span></div>
+      <p class="login-brand-text">One secure workspace for a growing FMCG business — catalogue, orders, fulfilment, inventory, payments and store operations.</p>
+      <div class="ingredient-orbit fmcg-pill-row"><span>FMCG Operations</span><span>Quality</span><span>Distribution</span><span>Growth</span><span>Growth</span></div>
     </div>
     <div class="login-landscape"><i></i><i></i><i></i></div>
   </div>
@@ -116,7 +116,7 @@
     
 
     <section class="section-panel legacy-panel" data-panel="payouts">
-      <div class="toolbar"><input id="payoutSearch" type="search" placeholder="Search seller / reference"><select id="payoutStatus"><option value="">All payout status</option><option>pending</option><option>paid</option></select></div>
+      
       <div id="payoutCards" class="card-grid"></div>
     </section>
 
@@ -141,7 +141,7 @@
       
     </section>
     <section class="section-panel" data-panel="inventory">
-      <div class="heading-row"><div><h2>Inventory</h2><p>Stock overview across DeshiGram and marketplace listings.</p></div></div>
+      <div class="heading-row"><div><h2>Inventory</h2><p>Stock overview across DeshiGram product listings.</p></div></div>
       <div id="inventoryStats" class="stats compact-stats"></div>
       <div id="inventoryTable" class="table-wrap"></div>
     </section>
@@ -150,7 +150,7 @@
       <div class="heading-row"><div><h2>Payments</h2><p>Payment mode, payment status and order payments.</p></div></div>
       <div id="paymentStats" class="stats compact-stats"></div>
       <div id="paymentsTable" class="table-wrap"></div>
-      <article class="panel payment-settlements"><h2>Seller Settlements</h2><div id="paymentsPayouts" class="card-grid"></div></article>
+      
     </section>
 
     <section class="section-panel" data-panel="growth">
@@ -218,7 +218,7 @@
   <div class="modal-head"><div><span class="eyebrow">FULFILLMENT</span><h2 id="fulfillmentTitle">Update Shipment</h2></div><button type="button" class="icon-btn" data-close-dialog="fulfillmentDialog">×</button></div>
   <input type="hidden" name="item_id">
   <div class="form-grid">
-    <label>Status<select name="status"><option value="pending">Pending</option><option value="ready_for_pickup">Ready for Pickup</option><option value="picked_up">Picked Up</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label>
+    <label>Status<select name="status"><option value="pending">Pending</option><option value="picked_up">Picked Up</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label>
     <label>Courier<input name="courier"></label>
     <label class="span2">Tracking ID<input name="tracking_id"></label>
   </div>
@@ -227,15 +227,7 @@
 </form>
 </dialog>
 
-<dialog id="settlementDialog">
-<form method="dialog" class="modal-card" id="settlementForm">
-  <div class="modal-head"><div><span class="eyebrow">SETTLEMENT</span><h2 id="settlementTitle">Settle Seller</h2></div><button type="button" class="icon-btn" data-close-dialog="settlementDialog">×</button></div>
-  <input type="hidden" name="seller_id">
-  <label>Payment Reference / UTR<input name="reference" required placeholder="Bank reference / UTR"></label>
-  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Mark Available Payout Paid</button></div>
-  <p id="settlementStatus" class="status"></p>
-</form>
-</dialog>
+
 
 <dialog id="productDialog">
 <form method="dialog" class="modal-card" id="productForm">
@@ -297,7 +289,7 @@
     <label class="span2">Storage Instruction<textarea name="detail_storage_instruction" rows="2"></textarea></label>
     <label class="span2">Disclaimer<textarea name="detail_disclaimer" rows="2"></textarea></label>
     <label class="span2">Customer Care<textarea name="detail_customer_care" rows="2"></textarea></label>
-    <label class="span2">Sold By / Business Details<textarea name="detail_seller_details" rows="2"></textarea></label>
+    
     <label class="span2">Manufacturer / Marketer<textarea name="detail_manufacturer_marketer" rows="3"></textarea></label>
     <label class="span2">SEO Title<input name="seo_title"></label>
     <label class="span2">SEO Description<textarea name="seo_description" rows="2"></textarea></label>

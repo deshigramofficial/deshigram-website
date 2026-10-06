@@ -57,10 +57,10 @@
 <div class="announcement-bar">Available Now • Dry Fruits Energy Powder • 40% Off MRP</div>
 <header class="header"><div class="container navbar"><a class="brand dg-main-brand" href="index.html" aria-label="DeshiGram home"><img src="images/logo.webp" alt="DeshiGram Logo"><div><span class="brand-name">DeshiGram</span><span class="brand-tagline">Desh Ki Parampara, Har Ghar Tak</span></div></a><div class="site-search" id="siteSearch"><button class="search-toggle" id="searchToggle" type="button" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path></svg></button><div class="search-panel" id="searchPanel"><label class="sr-only" for="productSearchInput">Search products</label><input id="productSearchInput" type="search" placeholder="Search for products..." autocomplete="off"><div class="search-results" id="searchResults"></div></div></div><button class="menu-button" id="menuButton" aria-label="Open navigation menu">☰</button><nav class="navigation" id="navigation"><a class="" href="index.html">Home</a><a class=" active-link" href="products.html">Products</a><a class="" href="about.html">About Us</a><a class="" href="contact.html">Contact</a><a class="dg-login-header-link" href="account.html">Login</a></nav></div></header>
 <main class="dg-products-page">
-<section class="dg-products-hero"><div class="container"><span class="dg-eyebrow">OUR COLLECTION</span><h1>DeshiGram Products</h1><p>Explore products available directly from DeshiGram and selected seller partners.</p></div></section>
-<section class="section"><div class="container"><div class="dg-products-grid" data-dg-catalog><div class="seller-market-loading">Loading DeshiGram products…</div></div></div></section>
+<section class="dg-products-hero"><div class="container"><span class="dg-eyebrow">OUR COLLECTION</span><h1>All DeshiGram Products</h1><p>Explore the complete range of products available directly from DeshiGram.</p></div></section>
+<section class="section"><div class="container"><div class="dg-products-grid" data-dg-catalog><div class="dg-catalog-loading">Loading DeshiGram products…</div></div></div></section>
 
-<section class="section" id="sellerMarketplaceSection"><div class="container"><div class="dg-section-head"><span class="dg-eyebrow">DESHIGRAM PARTNERS</span><h2>Partner Products</h2></div><div class="dg-products-grid" id="sellerMarketplaceGrid"><div class="seller-market-loading">Loading partner products…</div></div></div></section>
+
 <section class="section dg-product-info"><div class="container dg-product-info-grid"><div><span class="dg-eyebrow">SIMPLE INGREDIENTS</span><h2>Six familiar ingredients.</h2></div><div class="dg-ingredient-list"><span>Makhana</span><span>Cashew</span><span>Almond</span><span>Peanuts</span><span>White Sesame</span><span>Cardamom</span></div></div></section>
 <section class="section customer-reviews-section" id="reviews">
   <div class="container">
@@ -143,6 +143,18 @@
   <span class="dg-made-india">🇮🇳 Made in India</span>
   <span>Powered by <strong>RK &amp; Sons Retail Group</strong></span>
 </div></footer>
-<script src="js/integrations.js"></script><script src="js/reviews.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/catalog.js"></script><script src="js/marketplace.js"></script><script src="js/script.js"></script>
-<script src="js/login-choice.js"></script></body>
+<script src="js/integrations.js"></script><script src="js/reviews.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/catalog.js"></script><script src="js/script.js"></script>
+<script src="js/login-choice.js"></script>
+<script>
+(function(){
+  var grid=document.querySelector('[data-dg-catalog]');
+  if(!grid) return;
+  window.setTimeout(function(){
+    if(grid.textContent && /Loading/i.test(grid.textContent)){
+      grid.innerHTML='<div class="dg-catalog-state"><strong>Products could not be loaded.</strong><p>Please check your connection and try again.</p><button type="button" onclick="location.reload()">Retry</button></div>';
+    }
+  },8000);
+})();
+</script>
+</body>
 </html>

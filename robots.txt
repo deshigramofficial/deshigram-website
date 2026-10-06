@@ -1,7 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Disallow: /seller.html
-Disallow: /account.html
-Disallow: /checkout.html
+Disallow: /quick-delivery-admin.html
 Sitemap: https://deshigram.in/sitemap.xml
