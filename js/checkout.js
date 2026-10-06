@@ -97,11 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }catch(_){}
 
   const customerData=()=>Object.fromEntries(new FormData(form).entries());
-  const marketplaceItems=()=>cart.getCart().map(i=>({
-    seller_product_id:i.seller_product_id||null,
-    name:i.name,quantity:i.quantity,price:i.price,mrp:i.mrp,
-    weight_grams:Number(i.packed_weight_grams||0)
-  }));
+  const orderItems=()=>cart.getCart().map(i=>({product_id:i.id,quantity:i.quantity}));
   const productSummary=()=>cart.getCart().map(i=>`${i.name} (${i.weight||''}) × ${i.quantity}`).join(' | ');
   const orderLines=()=>cart.getCart().map(i=>`• ${i.name} (${i.weight||''}) × ${i.quantity} = ${money(i.price*i.quantity)}`);
   const openWhatsapp=message=>window.open(`https://wa.me/919457831399?text=${encodeURIComponent(message)}`,'_blank','noopener');
@@ -114,29 +110,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function saveOrder(c, method, transactionId='', gatewayOrderId=''){
     const t=totals();
-    const result=await integrations.placeMarketplaceOrder({
-      p_customer_name:c.name,
-      p_phone:c.phone,
-      p_shipping_address:c.address,
-      p_city:c.city,
-      p_state:c.state,
-      p_pincode:c.pincode,
-      p_transaction_id:transactionId,
-      p_items:marketplaceItems(),
-      p_payment_method:method
-    });
+    const result=await integrations.placeOrder({p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_items:orderItems(),p_payment_method:method,p_gateway_order_id:gatewayOrderId||null,p_gateway_payment_id:transactionId||null});
     const row=Array.isArray(result)?result[0]:result;
     const orderNumber=row?.order_number||'Not generated';
-
-    if(method==='RAZORPAY' && gatewayOrderId && transactionId){
-      const client=integrations.getClient();
-      const {error}=await client.rpc('record_order_gateway_refs',{
-        p_order_number:orderNumber,
-        p_gateway_order_id:gatewayOrderId,
-        p_gateway_payment_id:transactionId
-      });
-      if(error) console.warn('Gateway refs were not saved',error);
-    }
 
     integrations.track('purchase',{
       transaction_id:transactionId||orderNumber,currency:'INR',value:Number(t.total.toFixed(2)),
@@ -165,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setStatus('Opening secure payment…');
     const receipt=`DG-${Date.now()}`;
     const {data,error}=await client.functions.invoke('razorpay-payment',{
-      body:{action:'create_order',amount_paise:Math.round(t.total*100),receipt}
+      body:{action:'create_order',items:orderItems(),receipt}
     });
     if(error) throw new Error(error.message||'Could not start Razorpay payment');
     if(data?.error) throw new Error(data.error);
@@ -221,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){ if(!c.transactionId) throw new Error('Please enter the UPI transaction ID / UTR after payment.'); setStatus('Saving your UPI order…'); await saveOrder(c,'UPI',c.transactionId,''); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){ throw new Error('Manual UPI is temporarily unavailable. Please use Razorpay or Cash on Delivery.'); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
