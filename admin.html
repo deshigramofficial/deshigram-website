@@ -94,7 +94,7 @@
         <article class="panel"><h2>Needs Attention</h2><div id="attention"></div></article>
       </div>
       <div class="home-overview-grid">
-        <article class="overview-card"><span class="overview-icon">▤</span><div><small>Live Listings</small><strong id="homeLiveListings">0</strong><p>DeshiGram + seller catalogue</p></div><button data-jump="listings">Manage</button></article>
+        <article class="overview-card"><span class="overview-icon">▤</span><div><small>Live Listings</small><strong id="homeLiveListings">0</strong><p>DeshiGram catalogue</p></div><button data-jump="listings">Manage</button></article>
         <article class="overview-card"><span class="overview-icon">◇</span><div><small>Inventory Units</small><strong id="homeInventoryUnits">0</strong><p>Current sellable stock</p></div><button data-jump="inventory">Inventory</button></article>
         <article class="overview-card"><span class="overview-icon">▣</span><div><small>Paid Revenue</small><strong id="homePaidRevenue">₹0</strong><p>Online/COD recorded revenue</p></div><button data-jump="payments">Payments</button></article>
         <article class="overview-card"><span class="overview-icon">↗</span><div><small>Customers</small><strong id="homeCustomers">0</strong><p>Unique ordering customers</p></div><button data-jump="growth">Growth</button></article>
@@ -111,15 +111,9 @@
       <div id="fulfillmentTable" class="table-wrap"></div>
     </section>
 
-<section class="section-panel legacy-panel" data-panel="sellers">
-      <div class="toolbar"><input id="sellerSearch" type="search" placeholder="Search seller / business / phone"><select id="sellerStatus"><option value="">All seller status</option><option>pending</option><option>under_review</option><option>approved</option><option>rejected</option></select></div>
-      <div id="sellerCards" class="card-grid"></div>
-    </section>
 
-    <section class="section-panel legacy-panel" data-panel="sellerListings">
-      <div class="toolbar"><input id="sellerListingSearch" type="search" placeholder="Search seller listing"><select id="sellerListingStatus"><option value="">All listing status</option><option>under_review</option><option>live</option><option>coming_soon</option><option>changes_required</option><option>paused</option><option>rejected</option><option>out_of_stock</option><option>hidden</option></select></div>
-      <div id="sellerListingCards" class="card-grid"></div>
-    </section>
+
+    
 
     <section class="section-panel legacy-panel" data-panel="payouts">
       <div class="toolbar"><input id="payoutSearch" type="search" placeholder="Search seller / reference"><select id="payoutStatus"><option value="">All payout status</option><option>pending</option><option>paid</option></select></div>
@@ -139,12 +133,12 @@
  <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended desktop banner: 2048 × 768 px. Mobile: upload a separate image if needed. Add, hide or delete banners and toggle Diwali edge lights; Publish saves changes.</p>
 </section>
 <section class="section-panel" data-panel="listings">
-      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram and seller listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
-      <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button><button class="tab" data-list-tab="seller">Seller Listings</button><button class="tab" data-list-tab="sellers">Sellers</button></div>
+      <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
+      <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button></div>
       <div class="toolbar"><input id="listingSearch" type="search" placeholder="Search listings"><select id="listingStatus"><option value="">All statuses</option><option>live</option><option>coming_soon</option><option>draft</option><option>paused</option><option>out_of_stock</option><option>under_review</option><option>changes_required</option><option>rejected</option><option>hidden</option></select></div>
       <div id="listingOwn" class="card-grid"></div>
-      <div id="listingSeller" class="card-grid" hidden></div>
-      <div id="listingSellers" class="card-grid" hidden></div>
+      
+      
     </section>
     <section class="section-panel" data-panel="inventory">
       <div class="heading-row"><div><h2>Inventory</h2><p>Stock overview across DeshiGram and marketplace listings.</p></div></div>
@@ -153,7 +147,7 @@
     </section>
 
     <section class="section-panel" data-panel="payments">
-      <div class="heading-row"><div><h2>Payments</h2><p>Payment mode, payment status and seller settlements.</p></div></div>
+      <div class="heading-row"><div><h2>Payments</h2><p>Payment mode, payment status and order payments.</p></div></div>
       <div id="paymentStats" class="stats compact-stats"></div>
       <div id="paymentsTable" class="table-wrap"></div>
       <article class="panel payment-settlements"><h2>Seller Settlements</h2><div id="paymentsPayouts" class="card-grid"></div></article>
@@ -217,18 +211,7 @@
   </div>
 </dialog>
 
-<dialog id="sellerReviewDialog">
-<form method="dialog" class="modal-card" id="sellerReviewForm">
-  <div class="modal-head"><div><span class="eyebrow">SELLER VERIFICATION</span><h2 id="sellerReviewTitle">Review Seller</h2></div><button type="button" class="icon-btn" data-close-dialog="sellerReviewDialog">×</button></div>
-  <input type="hidden" name="seller_id">
-  <div class="form-grid">
-    <label>Status<select name="status"><option value="approved">Approved</option><option value="under_review">Under Review</option><option value="rejected">Rejected</option></select></label>
-    <label class="span2">Verification Note<textarea name="note" rows="4"></textarea></label>
-  </div>
-  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Save Seller Review</button></div>
-  <p id="sellerReviewStatus" class="status"></p>
-</form>
-</dialog>
+
 
 <dialog id="fulfillmentDialog">
 <form method="dialog" class="modal-card" id="fulfillmentForm">
@@ -314,7 +297,7 @@
     <label class="span2">Storage Instruction<textarea name="detail_storage_instruction" rows="2"></textarea></label>
     <label class="span2">Disclaimer<textarea name="detail_disclaimer" rows="2"></textarea></label>
     <label class="span2">Customer Care<textarea name="detail_customer_care" rows="2"></textarea></label>
-    <label class="span2">Seller Details<textarea name="detail_seller_details" rows="2"></textarea></label>
+    <label class="span2">Sold By / Business Details<textarea name="detail_seller_details" rows="2"></textarea></label>
     <label class="span2">Manufacturer / Marketer<textarea name="detail_manufacturer_marketer" rows="3"></textarea></label>
     <label class="span2">SEO Title<input name="seo_title"></label>
     <label class="span2">SEO Description<textarea name="seo_description" rows="2"></textarea></label>
@@ -324,32 +307,7 @@
 </form>
 </dialog>
 
-<dialog id="sellerDialog">
-<form method="dialog" class="modal-card" id="sellerForm">
-  <div class="modal-head"><div><span class="eyebrow">SELLER LISTING</span><h2 id="sellerTitle">Review Listing</h2></div><button type="button" class="icon-btn" data-close-dialog="sellerDialog">×</button></div>
-  <input type="hidden" name="id">
-  <div class="form-grid">
-    <label>Status<select name="status"><option value="under_review">Under Review</option><option value="live">Live</option><option value="coming_soon">Coming Soon</option><option value="paused">Paused</option><option value="out_of_stock">Out of Stock</option><option value="changes_required">Changes Required</option><option value="rejected">Rejected</option><option value="hidden">Hidden</option></select></label>
-    <label>Seller Payout ₹<input name="seller_payout" type="number" step="0.01" min="0"></label>
-    <label class="span2">Review Note<textarea name="review_note" rows="3"></textarea></label>
-    <label>Coming Soon Date<input name="coming_soon_date" type="date"></label>
-    <label>Badge Text<input name="badge_text"></label>
-    <label>Offer Type<select name="offer_type"><option value="none">No offer</option><option value="percent">% off</option><option value="flat">₹ flat off</option></select></label>
-    <label>Offer Value<input name="offer_value" type="number" step="0.01" min="0"></label>
-    <label>Offer Label<input name="offer_label"></label>
-    <label>Offer Starts<input name="offer_starts_at" type="datetime-local"></label>
-    <label>Offer Ends<input name="offer_ends_at" type="datetime-local"></label>
-    <label>Max Qty / Order<input name="max_order_quantity" type="number" min="1"></label>
-    <label>Low Stock Alert<input name="low_stock_threshold" type="number" min="0"></label>
-    <label class="toggle"><input name="is_visible" type="checkbox"> Visible</label>
-    <label class="toggle"><input name="featured" type="checkbox"> Featured</label>
-    <label class="toggle"><input name="cod_enabled" type="checkbox"> COD</label>
-    <label class="toggle"><input name="online_payment_enabled" type="checkbox"> Online payment</label>
-  </div>
-  <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="submit" class="primary">Save Review & Listing</button></div>
-  <p id="sellerFormStatus" class="status"></p>
-</form>
-</dialog>
+
 <script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
 <script type="module" src="js/website-customization-admin.js?v=diwali-2026"></script>
 </body>

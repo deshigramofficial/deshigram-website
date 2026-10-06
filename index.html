@@ -68,6 +68,89 @@
 @media(max-width:1000px){.dg-head{grid-template-columns:190px 1fr 130px!important}.dg-now-tab{grid-column:1/-1!important}.dg-hero-grid{height:auto!important}.dg-carousel{height:auto!important;aspect-ratio:1.87/1!important}.dg-side{height:auto!important}.dg-market-footer-grid{grid-template-columns:repeat(2,1fr)!important}[data-dg-catalog]{grid-template-columns:repeat(4,1fr)!important}}
 @media(max-width:620px){.dg-head{grid-template-columns:1fr auto!important}.dg-simple-actions{gap:16px!important}.dg-simple-action svg{width:24px!important;height:24px!important}.dg-now-tab img{width:62px!important;height:50px!important}.dg-side{grid-template-columns:1fr!important}.dg-market-footer-grid{grid-template-columns:1fr!important}.dg-footer-bottom{flex-direction:column!important;gap:7px!important}[data-dg-catalog]{display:flex!important;overflow-x:auto!important}.dg-shop-card,.dg-home-product-card{min-width:155px!important}.dg-product-slider-frame,.dg-product-slide{height:135px!important}}
 </style>
+
+<style id="dg-home-premium-v4">
+/* BANNERS: show the complete artwork instead of cropping text/products */
+.dg-hero-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.8fr) minmax(330px,1fr)!important;
+  gap:12px!important;
+  height:auto!important;
+  align-items:stretch!important;
+}
+.dg-carousel{
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1.875/1!important;
+  background:#fffaf0!important;
+}
+.dg-slide img{
+  width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+  background:#fffaf0!important;
+}
+.dg-side{
+  display:grid!important;
+  grid-template-rows:1fr 1fr!important;
+  gap:12px!important;height:auto!important;
+}
+.dg-side a{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  min-height:0!important;height:auto!important;aspect-ratio:2/1!important;
+  overflow:hidden!important;background:#fffaf0!important;border-radius:12px!important;
+}
+.dg-side img{
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  object-position:center!important;display:block!important;
+}
+
+/* Login / Cart — exact clean icon-above-label pattern */
+.dg-simple-actions{display:flex!important;align-items:center!important;justify-content:center!important;gap:28px!important}
+.dg-simple-action{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ gap:4px!important;color:#111!important;text-decoration:none!important;font-size:13px!important;font-weight:500!important;line-height:1!important}
+.dg-simple-action svg{width:27px!important;height:27px!important;fill:none!important;stroke:#111!important;stroke-width:1.7!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+
+/* New premium homepage story sections */
+.dg-story{margin:28px 0 18px;background:linear-gradient(135deg,#fffaf0,#f4f8f3);border:1px solid #e6eadf;border-radius:18px;
+ padding:34px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center;overflow:hidden}
+.dg-story-kicker{display:inline-block;color:#a45d00;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.dg-story h2{font-size:32px;line-height:1.12;color:#073f2d;margin:0 0 12px;font-weight:750}
+.dg-story p{font-size:15px;line-height:1.75;color:#53615a;margin:0 0 18px;max-width:720px}
+.dg-story-points{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dg-story-point{background:#fff;border:1px solid #e6ebe7;border-radius:12px;padding:13px}
+.dg-story-point b{display:block;color:#073f2d;font-size:14px;margin-bottom:3px}.dg-story-point small{color:#68766f;font-size:11px;line-height:1.45}
+.dg-story-mark{min-height:235px;border-radius:16px;background:#073f2d;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center}
+.dg-story-mark img{width:min(100%,300px);height:auto;object-fit:contain;filter:drop-shadow(0 8px 20px #0002)}
+.dg-story-mark p{color:#e8f2ed;font-size:13px;margin:14px 0 0}.dg-story-mark strong{color:#ffb000}
+
+.dg-why{margin:22px 0}.dg-why-head{text-align:center;max-width:680px;margin:0 auto 18px}
+.dg-why-head h2{font-size:28px;color:#073f2d;margin:0 0 7px}.dg-why-head p{font-size:13px;color:#68766f;margin:0}
+.dg-why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.dg-why-card{border:1px solid #e6ebe7;border-radius:14px;padding:20px;background:#fff;min-height:145px}
+.dg-why-icon{width:42px;height:42px;border-radius:12px;background:#f1f7f3;display:grid;place-items:center;font-size:21px;margin-bottom:12px}
+.dg-why-card h3{font-size:15px;color:#073f2d;margin:0 0 6px}.dg-why-card p{font-size:12px;line-height:1.55;color:#68766f;margin:0}
+
+.dg-brand-strip{margin:24px 0;background:#073f2d;border-radius:16px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.dg-brand-strip h2{color:#fff;font-size:23px;margin:0 0 5px}.dg-brand-strip p{color:#d8e8df;font-size:12px;margin:0}.dg-brand-strip a{white-space:nowrap;background:#ffb000;color:#073f2d;text-decoration:none;font-weight:800;border-radius:9px;padding:12px 18px;font-size:13px}
+
+/* Footer stays complete; seller marketplace link is intentionally removed */
+.footer.dg-market-footer{display:block!important}
+
+@media(max-width:950px){
+ .dg-hero-grid{grid-template-columns:1fr!important}
+ .dg-side{grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+ .dg-story{grid-template-columns:1fr!important}.dg-why-grid{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:620px){
+ .dg-carousel{aspect-ratio:1.875/1!important}.dg-slide img{object-fit:contain!important}
+ .dg-side{grid-template-columns:1fr!important}.dg-side a{aspect-ratio:2/1!important}
+ .dg-story{padding:22px 17px!important;margin-top:18px!important}.dg-story h2{font-size:25px!important}
+ .dg-story-points{grid-template-columns:1fr!important}.dg-story-mark{min-height:180px!important}
+ .dg-why-grid{grid-template-columns:1fr!important}.dg-brand-strip{align-items:flex-start!important;flex-direction:column!important}
+ .dg-simple-actions{gap:17px!important}.dg-simple-action svg{width:25px!important;height:25px!important}
+}
+</style>
+
 </head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
@@ -96,6 +179,39 @@
 </section>
 <section class="dg-trust"><div>🌿<span><b>Natural Ingredients</b><small>Pure and high quality</small></span></div><div>🛡<span><b>Premium Quality</b><small>Hygienically packed</small></span></div><div>♥<span><b>Trusted by Families</b><small>From kids to adults</small></span></div><div>🚚<span><b>Pan India Delivery</b><small>Safe & secure shopping</small></span></div></section>
 <section><div class="dg-section-head"><div><h2>Our Best Sellers</h2><p>Pure, healthy and traditional foods for your family</p></div><a href="products.html">View All Products →</a></div><div data-dg-catalog data-view="home"><div>Loading products…</div></div></section>
+
+<section class="dg-story" aria-labelledby="dgAboutTitle">
+  <div>
+    <span class="dg-story-kicker">About DeshiGram</span>
+    <h2 id="dgAboutTitle">Desh Ki Parampara, Har Ghar Tak.</h2>
+    <p>DeshiGram brings thoughtfully presented food products inspired by familiar Indian tastes and everyday traditions. Our focus is simple: a clean shopping experience, clear product information and products that feel at home in an Indian kitchen.</p>
+    <div class="dg-story-points">
+      <div class="dg-story-point"><b>Tradition Inspired</b><small>Products and flavours rooted in familiar everyday food traditions.</small></div>
+      <div class="dg-story-point"><b>Clear Product Information</b><small>Important product details are kept easy to find before you buy.</small></div>
+      <div class="dg-story-point"><b>Careful Presentation</b><small>A premium, straightforward experience from product discovery to checkout.</small></div>
+      <div class="dg-story-point"><b>DeshiGram + NOW</b><small>Regular shopping and quick-delivery experiences stay clearly separated.</small></div>
+    </div>
+  </div>
+  <div class="dg-story-mark">
+    <div><img src="images/deshigram-wordmark.png" alt="DeshiGram"><p><strong>DeshiGram</strong><br>Desh Ki Parampara, Har Ghar Tak.</p></div>
+  </div>
+</section>
+
+<section class="dg-why" aria-labelledby="dgWhyTitle">
+  <div class="dg-why-head"><h2 id="dgWhyTitle">Why shop with DeshiGram?</h2><p>A simpler way to discover DeshiGram products and understand what you are buying.</p></div>
+  <div class="dg-why-grid">
+    <article class="dg-why-card"><div class="dg-why-icon">🌿</div><h3>Thoughtful Choices</h3><p>Discover DeshiGram products in a focused catalogue without unnecessary marketplace clutter.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon">🔎</div><h3>Easy to Understand</h3><p>Compact listings lead to detailed product pages with highlights and information in one place.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon">📦</div><h3>Original Product Presentation</h3><p>Product listings use the original DeshiGram product images supplied for the catalogue.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon">⚡</div><h3>DeshiGram NOW</h3><p>Quick Delivery remains a separate experience for eligible local everyday-delivery products.</p></article>
+  </div>
+</section>
+
+<section class="dg-brand-strip">
+  <div><h2>Explore the DeshiGram range</h2><p>See product sizes, prices, images and detailed information in the complete catalogue.</p></div>
+  <a href="products.html">View All Products →</a>
+</section>
+
 </main>
 <footer class="footer dg-market-footer">
   <div class="container dg-market-footer-grid">
@@ -123,7 +239,6 @@
       <a href="products.html">Products</a>
       <a href="about.html">About Us</a>
       <a href="contact.html">Contact Us</a>
-      <a href="seller.html">Become a Seller</a>
       <a href="distributors.html">Distributorship</a>
     </div>
 
