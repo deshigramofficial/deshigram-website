@@ -1,5 +1,10 @@
 (() => {
-  const legacy=[];
+  const legacy=[
+    {name:'Zym Boy',rating:5,review:'Taste aur quality dono bahut achhe lage. Product ka texture bhi sahi hai aur packaging clean, neat aur premium feel deti hai. Overall product use karne ka experience kaafi achha raha.',verified:true},
+    {name:'Deeksha Dixit',rating:4,review:'Product ka taste balanced laga aur overall quality achhi hai. Packaging bhi decent aur convenient hai. Daily use ke liye product easy laga aur overall experience positive raha.',verified:true},
+    {name:'Rashmi Yadav',rating:4,review:'Packaging achhi hai aur product fresh laga. Taste bhi pleasant hai aur quality par dhyan diya gaya hai. Overall experience kaafi achha raha aur product presentation bhi impressive hai.',verified:true},
+    {name:'Harsh Chaturvedi',rating:4,review:'Quality aur presentation dono impressive lage. Product ki packaging premium feel deti hai aur overall taste bhi achha hai. Workout ya gym routine follow karne walon ke liye bhi ye ek convenient option lagta hai. Overall experience kaafi satisfactory raha.',verified:true}
+  ];
   const CACHE_KEY='deshigram_verified_reviews_v1', CACHE_TTL=10*60*1000;
   const readCache=()=>{try{const x=JSON.parse(sessionStorage.getItem(CACHE_KEY)||'null');return x&&Date.now()-x.time<CACHE_TTL&&Array.isArray(x.items)?x.items:null}catch(_){return null}};
   const writeCache=items=>{try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({time:Date.now(),items}))}catch(_){}};
@@ -20,8 +25,8 @@
       const names=new Set(legacy.map(x=>x.name.toLowerCase()));
       const extra=items.filter(x=>x.verified && !names.has(String(x.name||'').toLowerCase()));
       const all=[...legacy,...extra];
-      track.innerHTML=all.length?all.map(card).join(''):'<p class="dg-no-verified-reviews">Verified customer ratings will appear here after approval.</p>';
-      const s=summary(all); if(summaryEl)summaryEl.innerHTML=`<strong>${s.avg.toFixed(1)}/5</strong> average from ${s.count} verified customer rating${s.count===1?'':'s'}.`;
+      track.innerHTML=all.map(card).join('');
+      if(summaryEl)summaryEl.remove();
     }
     paint(live);
     const prev=document.querySelector('[data-review-prev]'),next=document.querySelector('[data-review-next]');
