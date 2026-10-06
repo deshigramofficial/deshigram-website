@@ -216,6 +216,11 @@
  .dg-market-footer-grid{grid-template-columns:1fr!important;gap:16px!important}.dg-footer-bottom{margin-top:10px!important;gap:6px!important}
 }
 
+/* Remaining-issues only: loading placeholders and compact footer. */
+.dg-rating-summary-skeleton{display:inline-block;width:220px;max-width:60vw;height:14px;border-radius:999px;background:linear-gradient(90deg,#eef2ef 25%,#f8faf8 50%,#eef2ef 75%);background-size:200% 100%;animation:dgSkeleton 1.1s linear infinite}
+.dg-review-skeleton{min-height:150px!important;pointer-events:none}.dg-review-skeleton .dg-skeleton-line{height:12px;margin:14px 0;border-radius:8px;background:linear-gradient(90deg,#eef2ef 25%,#f8faf8 50%,#eef2ef 75%);background-size:200% 100%;animation:dgSkeleton 1.1s linear infinite}.dg-review-skeleton .dg-skeleton-line.short{width:58%}
+.footer.dg-market-footer .dg-market-footer-grid{align-items:start!important}.footer.dg-market-footer .dg-footer-column{gap:4px!important}.footer.dg-market-footer .dg-footer-column a{line-height:1.35!important}.footer.dg-market-footer .dg-footer-brand p{margin:4px 0 8px!important}.footer.dg-market-footer .dg-footer-meta{gap:6px!important}.footer.dg-market-footer .dg-footer-bottom{margin-top:10px!important;padding-top:9px!important;padding-bottom:9px!important}
+
 /* === 2026-10-07 final screenshot-spec homepage corrections === */
 .dg-hero-grid{display:block!important;width:100%!important;height:auto!important}
 .dg-carousel{width:100%!important;height:auto!important;aspect-ratio:1536/819!important;background:transparent!important}
@@ -263,7 +268,7 @@
 </div>
 </section>
 <section class="dg-trust"><div>🌿<span><b>Natural Ingredients</b><small>Pure and high quality</small></span></div><div>🛡<span><b>Premium Quality</b><small>Hygienically packed</small></span></div><div>♥<span><b>Trusted by Families</b><small>From kids to adults</small></span></div><div>🚚<span><b>Pan India Delivery</b><small>Safe & secure shopping</small></span></div></section>
-<section><div class="dg-section-head"><div><h2>Our Best Sellers</h2><p>Pure, healthy and traditional foods for your family</p></div><a href="products.html">View All Products →</a></div><div data-dg-catalog data-view="home"><div>Loading products…</div></div></section>
+<section><div class="dg-section-head"><div><h2>Our Best Sellers</h2><p>Pure, healthy and traditional foods for your family</p></div><a href="products.html">View All Products →</a></div><div data-dg-catalog data-view="home"><div class="dg-catalog-skeleton" aria-label="Loading products"><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div><div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div></div></div></section>
 
 <section class="dg-story" aria-labelledby="dgAboutTitle">
   <div>
@@ -292,7 +297,7 @@
   </div>
 </section>
 
-<section class="dg-reviews-master" aria-labelledby="dgRatingsTitle"><div class="dg-section-head"><div><h2 id="dgRatingsTitle">Verified Customer Ratings</h2><p data-review-summary>Loading verified ratings…</p></div></div><div class="dg-review-viewport" data-review-slider><div class="dg-review-track" data-live-reviews></div></div><div class="dg-review-actions"><button type="button" data-review-prev aria-label="Previous review">‹</button><button type="button" data-review-next aria-label="Next review">›</button></div></section>
+<section class="dg-reviews-master" aria-labelledby="dgRatingsTitle"><div class="dg-section-head"><div><h2 id="dgRatingsTitle">Verified Customer Ratings</h2><p data-review-summary aria-live="polite"><span class="dg-rating-summary-skeleton" aria-label="Loading verified ratings"></span></p></div></div><div class="dg-review-viewport" data-review-slider><div class="dg-review-track" data-live-reviews><article class="customer-review-card live-review-card dg-review-skeleton" aria-hidden="true"><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div><div class="dg-skeleton-line"></div></article><article class="customer-review-card live-review-card dg-review-skeleton" aria-hidden="true"><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div><div class="dg-skeleton-line"></div></article></div></div><div class="dg-review-actions"><button type="button" data-review-prev aria-label="Previous review">‹</button><button type="button" data-review-next aria-label="Next review">›</button></div></section>
 <section class="dg-journey" aria-labelledby="dgJourneyTitle"><div><span class="dg-story-kicker">Instagram</span><h2 id="dgJourneyTitle">Follow Our Journey</h2><p>See product moments, behind-the-scenes updates and new launches from DeshiGram.</p><a class="dg-ig-follow" href="https://www.instagram.com/deshigram.in/" target="_blank" rel="noopener">Follow @deshigram.in <span data-instagram-followers>on Instagram</span></a></div><div class="dg-reels"><a href="https://www.instagram.com/deshigram.in/reels/" target="_blank" rel="noopener"><strong>▶ Instagram Reels</strong><span>Watch our latest short videos</span></a><a href="https://www.instagram.com/deshigram.in/" target="_blank" rel="noopener"><strong>◎ @deshigram.in</strong><span>Open our official Instagram profile</span></a></div></section>
 <section class="dg-brand-strip">
   <div><h2>Explore the DeshiGram range</h2><p>See product sizes, prices, images and detailed information in the complete catalogue.</p></div>
