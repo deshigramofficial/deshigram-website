@@ -16,3 +16,16 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 @media(max-width:1100px) and (min-width:901px){.dg-head{grid-template-columns:155px minmax(150px,1fr) 210px max-content!important;padding-left:14px!important;padding-right:14px!important}.dg-brand img{width:155px!important}.dg-simple-actions{gap:10px!important}}
 @media(max-width:900px){.dg-head{grid-template-columns:minmax(135px,1fr) max-content!important;grid-template-rows:auto auto auto!important;overflow:visible!important}.dg-brand{grid-column:1;grid-row:1}.dg-simple-actions{grid-column:2;grid-row:1}.dg-search{grid-column:1/-1!important;grid-row:2!important}.dg-now-tab{grid-column:1/-1!important;grid-row:3!important;justify-self:stretch!important;min-width:0!important;width:100%!important;max-width:none!important}}
 @media(max-width:520px){.dg-head{padding:7px 9px!important;gap:7px!important}.dg-brand img{width:min(138px,38vw)!important;height:46px!important}.dg-now-tab{height:50px!important;min-height:50px!important;justify-content:flex-start!important;padding:3px 9px!important}.dg-now-tab img{width:62px!important;height:44px!important}.dg-now-tab b{font-size:13px!important}.dg-now-tab small{font-size:8.5px!important}.dg-simple-actions{gap:7px!important}}
+
+/* 2026-10-07 header fit correction: compact NOW tab without clipping. */
+@media(min-width:901px){
+  .dg-head{grid-template-columns:185px minmax(260px,1fr) 190px auto!important;gap:12px!important;padding:7px 18px!important;min-height:68px!important}
+  .dg-brand img{width:170px!important;height:52px!important;max-height:52px!important}
+  .dg-search{height:42px!important}
+  .dg-now-tab{box-sizing:border-box!important;width:190px!important;min-width:190px!important;height:48px!important;min-height:48px!important;display:grid!important;grid-template-columns:50px minmax(0,1fr)!important;justify-content:stretch!important;gap:7px!important;padding:3px 9px!important;overflow:hidden!important}
+  .dg-now-tab img{width:50px!important;height:40px!important;max-width:50px!important;max-height:40px!important}
+  .dg-now-tab span{min-width:0!important;overflow:hidden!important}
+  .dg-now-tab b{font-size:13px!important;line-height:1!important;white-space:nowrap!important}
+  .dg-now-tab small{font-size:8px!important;line-height:1.15!important;margin-top:3px!important;white-space:nowrap!important}
+  .dg-simple-actions{gap:13px!important}
+}
