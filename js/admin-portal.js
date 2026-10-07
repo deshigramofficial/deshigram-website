@@ -77,7 +77,7 @@ function renderDashboard(){
   (state.seller_products||[]).filter(x=>x.status==="under_review").slice(0,4).forEach(x=>a.push(`Listing review: <b>${x.name}</b>`));
   (state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup").slice(0,4).forEach(x=>a.push(`Pickup ready: <b>${x.order_number}</b> • ${x.product_name}`));
   $("#attention").innerHTML=`<div class="mini-list">${a.map(x=>`<div class="mini-row"><span>${x}</span></div>`).join("")||"Nothing urgent."}</div>`;
-  const allListings=[...(state.deshigram_products||[]),...(state.seller_products||[])];
+  const allListings=[...(state.deshigram_products||[])];
   const activeOrders=(state.orders||[]).filter(o=>o.order_status!=="cancelled");
   $("#homeLiveListings").textContent=allListings.filter(x=>x.status==="live"&&x.is_visible!==false).length;
   $("#homeInventoryUnits").textContent=allListings.reduce((n,x)=>n+Number(x.stock_quantity||0),0);
@@ -137,7 +137,7 @@ async function reviewListing(id,statusValue,note="",payout=null){const {error}=a
 
 
 function renderInventory(){
- const rows=[...(state.deshigram_products||[]).map(x=>({...x,source:"DeshiGram"})),...(state.seller_products||[]).map(x=>({...x,source:x.seller_business_name||"Seller"}))];
+ const rows=[...(state.deshigram_products||[]).map(x=>({...x,source:"DeshiGram"}))];
  const total=rows.reduce((n,x)=>n+Number(x.stock_quantity||0),0),low=rows.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length,out=rows.filter(x=>Number(x.stock_quantity||0)===0).length;
  $("#inventoryStats").innerHTML=[["Total Units",total],["Listings",rows.length],["Low Stock",low],["Out of Stock",out]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
  $("#inventoryTable").innerHTML=`<table class="data-table"><thead><tr><th>Listing</th><th>Source</th><th>SKU</th><th>Stock</th><th>Low-stock level</th><th>Status</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${x.name}</b></td><td>${x.source}</td><td>${x.sku||"—"}</td><td>${x.stock_quantity??0}</td><td>${x.low_stock_threshold??5}</td><td>${pill(x.status)}</td></tr>`).join("")}</tbody></table>`;
@@ -154,14 +154,14 @@ function renderGrowth(){
  $("#growthStats").innerHTML=[["Orders",orders.length],["Customers",customers],["Revenue",money(revenue)],["Avg Order",money(aov)]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
  const statuses=["placed","confirmed","packed","shipped","delivered","cancelled"];
  $("#growthOrderMix").innerHTML=statuses.map(st=>`<div class="metric-row"><span>${st.replaceAll("_"," ")}</span><b>${orders.filter(o=>o.order_status===st).length}</b></div>`).join("");
- const all=[...(state.deshigram_products||[]),...(state.seller_products||[])];
- $("#growthCatalogue").innerHTML=[["Live",all.filter(x=>x.status==="live").length],["Coming soon",all.filter(x=>x.status==="coming_soon").length],["Low stock",all.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length],["Seller reviews",(state.sellers||[]).filter(x=>["pending","under_review"].includes(x.verification_status)).length]].map(([a,b])=>`<div class="metric-row"><span>${a}</span><b>${b}</b></div>`).join("");
+ const all=[...(state.deshigram_products||[])];
+ $("#growthCatalogue").innerHTML=[["Live",all.filter(x=>x.status==="live").length],["Coming soon",all.filter(x=>x.status==="coming_soon").length],["Low stock",all.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length],["Visible",all.filter(x=>x.is_visible!==false).length]].map(([a,b])=>`<div class="metric-row"><span>${a}</span><b>${b}</b></div>`).join("");
 }
 function renderReports(){
  const orders=state.orders||[],cancelled=orders.filter(o=>o.order_status==="cancelled"),delivered=orders.filter(o=>o.order_status==="delivered"),ready=(state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup");
  const revenue=orders.filter(o=>o.order_status!=="cancelled"&&(o.payment_status==="paid"||paymentLabel(o)==="COD")).reduce((n,o)=>n+Number(o.total_amount||0),0);
  $("#reportStats").innerHTML=[["Orders",orders.length],["Revenue",money(revenue)],["Delivered",delivered.length],["Cancelled",cancelled.length]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
- $("#reportSummary").innerHTML=`<div><small>Ready for pickup</small><b>${ready.length}</b></div><div><small>Seller accounts</small><b>${(state.sellers||[]).length}</b></div><div><small>DeshiGram listings</small><b>${(state.deshigram_products||[]).length}</b></div><div><small>Seller listings</small><b>${(state.seller_products||[]).length}</b></div>`;
+ $("#reportSummary").innerHTML=`<div><small>Ready for pickup</small><b>${ready.length}</b></div><div><small>DeshiGram listings</small><b>${(state.deshigram_products||[]).length}</b></div><div><small>Live listings</small><b>${(state.deshigram_products||[]).filter(x=>x.status==="live"&&x.is_visible!==false).length}</b></div><div><small>Low stock</small><b>${(state.deshigram_products||[]).filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length}</b></div>`;
 }
 function exportOrdersCsv(){
  const cols=["order_number","created_at","customer_name","phone","product_name","payment_method","payment_status","total_amount","order_status"];
