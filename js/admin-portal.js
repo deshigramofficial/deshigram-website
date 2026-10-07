@@ -5,10 +5,20 @@ const $=q=>document.querySelector(q), money=v=>new Intl.NumberFormat("en-IN",{st
 function imageUrl(kind,path){if(!path)return "";if(/^https?:\/\//i.test(path)||path.startsWith("images/")||path.startsWith("./")||path.startsWith("../"))return path;const bucket=kind==="deshigram"?"deshigram-products":"seller-products";return `${URL}/storage/v1/object/public/${bucket}/${path}`}
 function paymentLabel(o){const m=String(o.payment_method||"").toLowerCase();if(m.includes("cod")||m.includes("cash"))return "COD";return o.payment_status==="paid"?"PAID":String(o.payment_status||"ONLINE").toUpperCase()}
 const status=(el,msg,type="")=>{el.textContent=msg||"";el.className=`status ${type}`};
-async function isAdmin(){const {data:{session}}=await db.auth.getSession();if(!session)return false;const {data,error}=await db.rpc("is_deshigram_admin");return !error&&data===true}
+async function isAdmin(){
+ const {data:{session},error:sessionError}=await db.auth.getSession();if(sessionError||!session)return false;
+ const {data,error}=await db.rpc("is_deshigram_admin");return !error&&data===true;
+}
+async function restoreAdminSession(){
+ let {data:{session}}=await db.auth.getSession();if(!session)return false;
+ if(await isAdmin())return true;
+ const refreshed=await db.auth.refreshSession();session=refreshed.data?.session||null;
+ return !!session&&await isAdmin();
+}
 async function boot(){
   $("#adminApp").hidden=true; $("#loginPanel").hidden=true; $("#logoutBtn").hidden=true;
-  if(await isAdmin()){showApp();await load()}else{$("#loginPanel").hidden=false}
+  try{if(await restoreAdminSession()){showApp();await load();return}}catch(e){console.warn("Admin session restore failed",e)}
+  $("#loginPanel").hidden=false;
 }
 function showApp(){$("#loginPanel").hidden=true;$("#adminApp").hidden=false;$("#logoutBtn").hidden=false}
 $("#loginForm").addEventListener("submit",async e=>{e.preventDefault();status($("#loginStatus"),"Signing in…");const f=new FormData(e.currentTarget);const {error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(error)return status($("#loginStatus"),error.message,"error");if(!(await isAdmin())){await db.auth.signOut();return status($("#loginStatus"),"Not authorized for DeshiGram Admin.","error")}showApp();await load()});
