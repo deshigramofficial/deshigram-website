@@ -82,3 +82,10 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 
 /* Footer wordmark only: transparent presentation on dark footer. */
 .footer.dg-market-footer .dg-footer-brand img{background:transparent!important;border-radius:0!important;padding:0!important;box-shadow:none!important;border:0!important}
+
+/* Cart CTA interaction */
+[data-add-to-cart]{position:relative!important;z-index:6!important;pointer-events:auto!important;cursor:pointer!important;appearance:none!important;touch-action:manipulation!important;min-width:86px!important;min-height:42px!important;border:0!important;border-radius:10px!important;background:#0d4d35!important;color:#fff!important;font-weight:800!important;box-shadow:0 5px 14px rgba(13,77,53,.18)!important;transition:transform .12s ease,box-shadow .12s ease!important}
+[data-add-to-cart]:hover{box-shadow:0 7px 18px rgba(13,77,53,.25)!important}
+[data-add-to-cart]:active{transform:scale(.97)!important}
+[data-add-to-cart]:focus-visible{outline:3px solid rgba(246,185,27,.55)!important;outline-offset:2px!important}
+[data-add-to-cart]:disabled{cursor:not-allowed!important;opacity:.55!important;box-shadow:none!important}

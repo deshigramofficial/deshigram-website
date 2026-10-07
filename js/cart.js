@@ -10,7 +10,7 @@
   function saveCart(cart){localStorage.setItem(STORAGE_KEY,JSON.stringify(cart));renderCart();document.dispatchEvent(new CustomEvent("deshigram:cart-updated",{detail:cart}));}
   function add(id,quantity=1){let product=catalog[id];if(!product&&Array.isArray(window.PRODUCTS)){const p=window.PRODUCTS.find(x=>String(x.id||x.slug)===String(id));if(p){registerProduct({id:p.id||p.slug,name:p.name,price:p.price??p.selling_price,mrp:p.oldPrice??p.mrp,weight:p.weight??p.net_quantity,packed_weight_grams:p.packed_weight_grams,image:(p.images||p.image_paths||[])[0]||'images/favicon.png',max_order_quantity:p.max_order_quantity,cod_enabled:p.cod_enabled,online_payment_enabled:p.online_payment_enabled});product=catalog[id]}}if(!product)return false;const cart=getCart();const existing=cart.find(item=>item.id===id);if(existing)existing.quantity+=quantity;else cart.push({...product,quantity});saveCart(cart);if(window.DESHIGRAM_INTEGRATIONS)window.DESHIGRAM_INTEGRATIONS.track("add_to_cart",{currency:"INR",value:Number(product.price)*quantity,items:[{item_id:product.id,item_name:product.name,price:product.price,quantity}]});openDrawer();return true;}
   function update(id,quantity){const cart=getCart();const item=cart.find(row=>row.id===id);if(!item)return;if(quantity<=0)return remove(id);item.quantity=Math.min(10,quantity);saveCart(cart);}
-  function remove(id){saveCart(getCart().filter(item=>item.id!==id);}
+  function remove(id){saveCart(getCart().filter(item=>item.id!==id));}
   function clear(){saveCart([]);}
   function subtotal(){return getCart().reduce((sum,item)=>sum+Number(item.price)*item.quantity,0);}
   function mrpTotal(){return getCart().reduce((sum,item)=>sum+Number(item.mrp)*item.quantity,0);}
