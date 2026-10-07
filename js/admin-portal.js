@@ -65,9 +65,8 @@ function renderStats(){
   const active=orders.filter(o=>o.order_status!=="cancelled");
   const revenue=active.filter(o=>o.payment_status==="paid"||o.payment_method==="COD").reduce((a,o)=>a+Number(o.total_amount||0),0);
   const ready=(state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup").length;
-  const sellerReviews=(state.sellers||[]).filter(x=>["pending","under_review"].includes(x.verification_status)).length;
-  const available=(state.fulfillment||[]).filter(x=>x.payout_status==="available").reduce((a,x)=>a+Number(x.seller_payout_unit||0)*Number(x.quantity||0),0);
-  const arr=[["Orders",orders.length],["Revenue",money(revenue)],["Cancelled",orders.filter(o=>o.order_status==="cancelled").length],["Ready Pickup",ready],["Seller Reviews",sellerReviews],["Payout Available",money(available)]];
+  const listings=(state.deshigram_products||[]),live=listings.filter(x=>x.status==="live"&&x.is_visible!==false).length,low=listings.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length;
+  const arr=[["Orders",orders.length],["Revenue",money(revenue)],["Cancelled",orders.filter(o=>o.order_status==="cancelled").length],["Ready Pickup",ready],["Live Listings",live],["Low Stock",low]];
   $("#stats").innerHTML=arr.map(([a,b])=>`<div class="stat"><strong>${b??0}</strong><span>${a}</span></div>`).join("")
 }
 function renderDashboard(){
@@ -83,8 +82,7 @@ function renderDashboard(){
     </div>`
   }).join("")||"No orders yet.";
   const a=[];
-  (state.sellers||[]).filter(x=>["pending","under_review"].includes(x.verification_status)).slice(0,4).forEach(x=>a.push(`Seller review: <b>${x.business_name||x.full_name}</b>`));
-  (state.seller_products||[]).filter(x=>x.status==="under_review").slice(0,4).forEach(x=>a.push(`Listing review: <b>${x.name}</b>`));
+  (state.deshigram_products||[]).filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).slice(0,4).forEach(x=>a.push(`Low stock: <b>${x.name}</b> • ${x.stock_quantity||0} units`));
   (state.fulfillment||[]).filter(x=>x.fulfillment_status==="ready_for_pickup").slice(0,4).forEach(x=>a.push(`Pickup ready: <b>${x.order_number}</b> • ${x.product_name}`));
   $("#attention").innerHTML=`<div class="mini-list">${a.map(x=>`<div class="mini-row"><span>${x}</span></div>`).join("")||"Nothing urgent."}</div>`;
   const allListings=[...(state.deshigram_products||[])];
@@ -140,7 +138,7 @@ async function saveProductDetailsFromForm(fd){
  const {error}=await db.from("product_details").upsert(payload,{onConflict:"product_key"});if(error)throw error;
 }
 
-$("#newProductBtn").addEventListener("click",()=>{const f=$("#productForm");f.reset();loadProductDetailsIntoForm("");f.id.value="";f.category.value="DeshiGram";f.status.value="draft";f.max_order_quantity.value=10;f.low_stock_threshold.value=5;f.is_visible.checked=true;f.cod_enabled.checked=true;f.online_payment_enabled.checked=true;$("#deleteProductBtn").hidden=true;$("#productDialogTitle").textContent="New Product";$("#productDialog").showModal()});
+$("#newProductBtn")?.addEventListener("click",()=>{const f=$("#productForm");f.reset();loadProductDetailsIntoForm("");f.id.value="";f.category.value="DeshiGram";f.status.value="draft";f.max_order_quantity.value=10;f.low_stock_threshold.value=5;f.is_visible.checked=true;f.cod_enabled.checked=true;f.online_payment_enabled.checked=true;$("#deleteProductBtn").hidden=true;$("#productDialogTitle").textContent="New Product";$("#productDialog").showModal()});
 async function uploadImages(files){const paths=[];for(const file of files){const safe=file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,"-"),path=`admin/${Date.now()}-${crypto.randomUUID().slice(0,8)}-${safe}`;const {error}=await db.storage.from("deshigram-products").upload(path,file,{contentType:file.type||"image/jpeg"});if(error)throw error;paths.push(path)}return paths}
 $("#productForm")?.addEventListener("submit",async e=>{e.preventDefault();const f=e.currentTarget,fd=new FormData(f),out=$("#productFormStatus");try{status(out,"Saving…");let images=lines(fd.get("image_paths"));const files=[...$("#imageUpload").files];if(files.length)images=[...images,...await uploadImages(files)];const payload={name:fd.get("name"),slug:fd.get("slug"),sku:fd.get("sku"),category:fd.get("category"),net_quantity:fd.get("net_quantity"),mrp:Number(fd.get("mrp")||0),selling_price:Number(fd.get("selling_price")||0),stock_quantity:Number(fd.get("stock_quantity")||0),packed_weight_grams:Number(fd.get("packed_weight_grams")||0),max_order_quantity:Number(fd.get("max_order_quantity")||10),low_stock_threshold:Number(fd.get("low_stock_threshold")||5),status:fd.get("status"),coming_soon_date:fd.get("coming_soon_date")||null,sort_order:Number(fd.get("sort_order")||100),badge_text:fd.get("badge_text"),offer_type:fd.get("offer_type"),offer_value:Number(fd.get("offer_value")||0),offer_label:fd.get("offer_label"),offer_starts_at:fd.get("offer_starts_at")||null,offer_ends_at:fd.get("offer_ends_at")||null,is_visible:fd.get("is_visible")==="on",featured:fd.get("featured")==="on",cod_enabled:fd.get("cod_enabled")==="on",online_payment_enabled:fd.get("online_payment_enabled")==="on",short_description:fd.get("short_description"),description:fd.get("description"),ingredients:lines(fd.get("ingredients")),features:lines(fd.get("features")),usage_steps:lines(fd.get("usage_steps")),storage_instructions:fd.get("storage_instructions"),image_paths:images,seo_title:fd.get("seo_title"),seo_description:fd.get("seo_description")};const {error}=await db.rpc("admin_save_deshigram_product",{p_id:fd.get("id")||null,p_payload:payload});if(error)throw error;await saveProductDetailsFromForm(fd);status(out,"Saved.","ok");setTimeout(()=>$("#productDialog").close(),250);await load()}catch(err){status(out,err.message,"error")}});
 $("#deleteProductBtn")?.addEventListener("click",async()=>{const id=$("#productForm").id.value;if(!id||!confirm("Delete this product permanently?"))return;const {error}=await db.rpc("admin_delete_deshigram_product",{p_id:id});if(error)return status($("#productFormStatus"),error.message,"error");$("#productDialog").close();await load()});
