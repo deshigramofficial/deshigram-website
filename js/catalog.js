@@ -39,7 +39,7 @@
     return products;
   }
   function money(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(v||0))}
-  function shortName(name){return String(name||'Product').replace(/^Dry Fruits Energy Powder\s*[—-]\s*/i,'')}
+  function shortName(name){return String(name||'Product')}
   function card(p,home=false){
     const coming=p.status==='coming_soon'; const out=p.status==='out_of_stock'||p.stock_quantity<=0;
     const noPrice=Number(p.price||0)<=0;
@@ -51,7 +51,7 @@
       </div>${pictures.length>1?`<div class="dg-slider-dots">${pictures.map((_,i)=>`<button type="button" class="dg-slider-dot${i===0?' is-active':''}" data-slider-dot="${i}"></button>`).join('')}</div>`:''}</div>`;
     const price=noPrice?`<div class="dg-price-pending">Price updating</div>`:`<div class="dg-price"><s>${p.oldPrice>p.price?`MRP ${money(p.oldPrice)}`:''}</s><strong>${money(p.price)}</strong></div>`;
     return `<article class="${home?'dg-home-product-card':'dg-shop-card'}" data-product-card="${p.id}">
-      ${p.badge?`<span class="dg-admin-badge">${p.badge}</span>`:''}${coming?`<span class="dg-coming-badge">COMING SOON</span>`:''}${slider}
+      ${(p.badge||(p.oldPrice>p.price?`${Math.round((1-p.price/p.oldPrice)*100)}% OFF`:''))?`<span class="dg-admin-badge">${p.badge||`${Math.round((1-p.price/p.oldPrice)*100)}% OFF`}</span>`:''}${coming?`<span class="dg-coming-badge">COMING SOON</span>`:''}${slider}
       <div class="${home?'dg-home-product-copy':'dg-shop-body'}"><small>${p.weight||''}</small><h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>${price}
       <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button>${home?'':`<a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a>`}</div></div></article>`}
   function state(el,type,message){
