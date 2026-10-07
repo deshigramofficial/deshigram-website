@@ -278,34 +278,7 @@
     <label class="span2">How to Use <small>one step per line</small><textarea name="usage_steps" rows="4"></textarea></label>
     <label class="span2">Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label></div></details>
     <label class="span2">Current Image Paths <small>one per line</small><textarea name="image_paths" rows="4"></textarea></label>
-    <label class="span2 upload-box">Upload Product Images<input id="imageUpload" type="file" accept="image/*" multiple><small>Uploaded to DeshiGram product storage. Existing paths are retained unless you edit them.</small></label>
-
-    <details class="span2"><summary>Advanced detail page & SEO (optional)</summary><div class="form-grid"><div class="span2"><strong>Product Detail Page — Highlights & Information</strong><small style="display:block">Only verified information should be entered.</small></div>
-    <label>Brand<input name="detail_brand" value="DeshiGram"></label>
-    <label>Product Type<input name="detail_product_type"></label>
-    <label>Dietary Preference<input name="detail_dietary_preference"></label>
-    <label>Spice Level<input name="detail_spice_level"></label>
-    <label>Flavour<input name="detail_flavour"></label>
-    <label>Detail Weight<input name="detail_weight"></label>
-    <label>Unit<input name="detail_unit"></label>
-    <label>Packaging Type<input name="detail_packaging_type"></label>
-    <label>Processing Type<input name="detail_processing_type"></label>
-    <label>Specialty<input name="detail_specialty"></label>
-    <label>Country of Origin<input name="detail_country_of_origin"></label>
-    <label>Shelf Life<input name="detail_shelf_life"></label>
-    <label class="span2">Key Features<textarea name="detail_key_features" rows="2"></textarea></label>
-    <label class="span2">Ingredients (detail page)<textarea name="detail_ingredients" rows="3"></textarea></label>
-    <label class="span2">Allergen Information<textarea name="detail_allergen_information" rows="2"></textarea></label>
-    <label class="span2">FSSAI License<input name="detail_fssai_license"></label>
-    <label class="span2">Nutrition Information<textarea name="detail_nutrition_information" rows="4"></textarea></label>
-    <label class="span2">Cuisine Type<input name="detail_cuisine_type"></label>
-    <label class="span2">Storage Instruction<textarea name="detail_storage_instruction" rows="2"></textarea></label>
-    <label class="span2">Disclaimer<textarea name="detail_disclaimer" rows="2"></textarea></label>
-    <label class="span2">Customer Care<textarea name="detail_customer_care" rows="2"></textarea></label>
-    
-    <label class="span2">Manufacturer / Marketer<textarea name="detail_manufacturer_marketer" rows="3"></textarea></label>
-    <label class="span2">SEO Title<input name="seo_title"></label>
-    <label class="span2">SEO Description<textarea name="seo_description" rows="2"></textarea></label></div></details>
+    <label class="span2 upload-box">Upload Product Images<input id="imageUpload" type="file" accept="image/*" multiple><small>Upload or replace product photos.</small></label>\n    <input type="hidden" name="seo_title"><input type="hidden" name="seo_description">
   </div>
   <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="button" id="deleteProductBtn" class="danger">Delete</button><button type="submit" class="primary">Save Product</button></div>
   <p id="productFormStatus" class="status"></p>
