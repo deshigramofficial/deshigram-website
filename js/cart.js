@@ -10,14 +10,14 @@
   function saveCart(cart){localStorage.setItem(STORAGE_KEY,JSON.stringify(cart));renderCart();document.dispatchEvent(new CustomEvent("deshigram:cart-updated",{detail:cart}));}
   function add(id,quantity=1){const product=catalog[id];if(!product)return;const cart=getCart();const existing=cart.find(item=>item.id===id);if(existing)existing.quantity+=quantity;else cart.push({...product,quantity});saveCart(cart);if(window.DESHIGRAM_INTEGRATIONS)window.DESHIGRAM_INTEGRATIONS.track("add_to_cart",{currency:"INR",value:Number(product.price)*quantity,items:[{item_id:product.id,item_name:product.name,price:product.price,quantity}]});openDrawer();}
   function update(id,quantity){const cart=getCart();const item=cart.find(row=>row.id===id);if(!item)return;if(quantity<=0)return remove(id);item.quantity=Math.min(10,quantity);saveCart(cart);}
-  function remove(id){saveCart(getCart().filter(item=>item.id!==id));}
+  function remove(id){saveCart(getCart().filter(item=>item.id!==id);}
   function clear(){saveCart([]);}
   function subtotal(){return getCart().reduce((sum,item)=>sum+Number(item.price)*item.quantity,0);}
   function mrpTotal(){return getCart().reduce((sum,item)=>sum+Number(item.mrp)*item.quantity,0);}
   function count(){return getCart().reduce((sum,item)=>sum+item.quantity,0);}
   function asset(path){const inProduct=window.location.pathname.includes("/product/");if(inProduct&&!document.querySelector('base[href="../"]'))return `../${path}`;return path;}
   function injectCartUI(){if(document.getElementById("cartDrawer"))return;document.body.insertAdjacentHTML("beforeend",`
-    <a class="cart-float-button dg-whatsapp-float" id="whatsappFloatButton" href="${asset('contact.html')}" aria-label="WhatsApp support"><span aria-hidden="true">☏</span><b>WhatsApp</b></a>
+    <a class="cart-float-button dg-whatsapp-float" id="whatsappFloatButton" href="${asset('contact.html')}" aria-label="WhatsApp support" title="WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2A12.6 12.6 0 0 0 5.1 22.1L3.4 28.5l6.6-1.7A12.6 12.6 0 1 0 16 3.2Z"/><path d="M11.3 9.7c-.3-.7-.6-.7-.9-.7h-.8c-.3 0-.7.1-1 .5-.4.4-1.4 1.4-1.4 3.5s1.5 4.1 1.7 4.4c.2.3 3 4.7 7.4 6.4 3.6 1.4 4.4 1.1 5.2 1 .8-.1 2.6-1.1 3-2.1.4-1 .4-1.9.3-2.1-.1-.2-.4-.3-.8-.5l-2.9-1.4c-.4-.2-.7-.3-1 .3-.3.5-1.1 1.4-1.4 1.7-.3.3-.5.3-1 .1-.5-.2-2-.8-3.8-2.4-1.4-1.2-2.3-2.7-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.5-.9.2-.3.1-.6 0-.9l-1.4-3.4Z"/></svg></a>
     <div class="cart-overlay" id="cartOverlay" hidden></div>
     <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
       <div class="cart-drawer-header"><div><small>Your order</small><h2>Shopping Cart</h2></div><button id="cartClose" aria-label="Close cart">×</button></div>
