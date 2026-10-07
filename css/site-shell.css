@@ -79,3 +79,6 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 }
 .dg-header-cart-icon{position:relative;display:inline-grid;place-items:center}.dg-header-cart-icon>[data-cart-count]{position:absolute;right:-10px;top:-8px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#0d5a3b;color:#fff;font:800 10px/18px Inter,Arial,sans-serif;text-align:center}
 .dg-whatsapp-float{background:#25D366!important;color:#fff!important;text-decoration:none!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:auto!important;min-width:52px!important;padding:0 12px!important}.dg-whatsapp-float b{font-size:11px!important}
+
+/* Footer wordmark only: transparent presentation on dark footer. */
+.footer.dg-market-footer .dg-footer-brand img{background:transparent!important;border-radius:0!important;padding:0!important;box-shadow:none!important;border:0!important}
