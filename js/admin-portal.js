@@ -1,6 +1,6 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const URL="https://kqkpbqpfnupjpthtpvdn.supabase.co",KEY="sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0",db=createClient(URL,KEY);
-let state={stats:{},orders:[],sellers:[],seller_products:[],deshigram_products:[],fulfillment:[],payouts:[]},listTab="own";
+let state={stats:{},orders:[],sellers:[],seller_products:[],deshigram_products:[],fulfillment:[],payouts:[],reviews:[]},listTab="own";
 const $=q=>document.querySelector(q), money=v=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(v||0)), fmt=v=>v?new Date(v).toLocaleString("en-IN"):"—", lines=v=>String(v||"").split("\n").map(x=>x.trim()).filter(Boolean), dt=v=>v?new Date(v).toISOString().slice(0,16):"";
 function imageUrl(kind,path){if(!path)return "";if(/^https?:\/\//i.test(path)||path.startsWith("images/")||path.startsWith("./")||path.startsWith("../"))return path;const bucket=kind==="deshigram"?"deshigram-products":"seller-products";return `${URL}/storage/v1/object/public/${bucket}/${path}`}
 function paymentLabel(o){const m=String(o.payment_method||"").toLowerCase();if(m.includes("cod")||m.includes("cash"))return "COD";return o.payment_status==="paid"?"PAID":String(o.payment_status||"ONLINE").toUpperCase()}
@@ -37,7 +37,7 @@ $("#newPasswordForm")?.addEventListener("submit",async e=>{
 });
 
 $("#logoutBtn").addEventListener("click",async()=>{await db.auth.signOut();location.reload()});
-async function load(){status($("#appStatus"),"Loading admin data…");const {data,error}=await db.rpc("admin_full_portal_data");if(error)return status($("#appStatus"),error.message,"error");state=data||state;renderAll();status($("#appStatus"),"");const target=location.hash.slice(1);if(document.querySelector(`.side-link[data-section="${target}"]`))goSection(target)}
+async function load(){status($("#appStatus"),"Loading admin data…");const {data,error}=await db.rpc("admin_full_portal_data");if(error)return status($("#appStatus"),error.message,"error");state=data||state;await loadReviews(false);renderAll();status($("#appStatus"),"");const target=location.hash.slice(1);if(document.querySelector(`.side-link[data-section="${target}"]`))goSection(target)}
 $("#refreshAll").addEventListener("click",load);
 function goSection(name){
  const b=document.querySelector(`.side-link[data-section="${name}"]`); if(!b)return;
@@ -49,7 +49,7 @@ function goSection(name){
 document.querySelectorAll(".side-link").forEach(b=>b.addEventListener("click",()=>goSection(b.dataset.section)));
 document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(j)goSection(j.dataset.jump)});
 const pill=v=>`<span class="pill ${v||""}">${String(v||"unknown").replaceAll("_"," ")}</span>`;
-function renderAll(){renderStats();renderDashboard();renderOrders();renderFulfillment();renderProducts();renderListingManager();renderInventory();renderPayments();renderGrowth();renderReports()}
+function renderAll(){renderStats();renderDashboard();renderOrders();renderFulfillment();renderProducts();renderListingManager();renderInventory();renderPayments();renderCustomers();renderReviews();renderGrowth();renderReports()}
 function renderStats(){
   const orders=state.orders||[];
   const active=orders.filter(o=>o.order_status!=="cancelled");
@@ -107,6 +107,9 @@ function renderListingManager(){
  const sellers=$("#listingSellers");if(sellers)sellers.innerHTML=(state.sellers||[]).filter(x=>!q||`${x.full_name} ${x.business_name||""} ${x.phone||""}`.toLowerCase().includes(q)).map(x=>`<article class="card"><span>${pill(x.verification_status)}</span><h3>${x.business_name||x.full_name}</h3><p>${x.full_name} • ${x.phone}</p><p>${x.city||""}, ${x.state||""} • ${x.pincode||""}</p><p>FSSAI: ${x.fssai_number||"—"} • GST: ${x.gstin||"—"}</p><div class="actions"><button class="ghost" data-review-seller="${x.user_id}">Review Seller</button><button class="primary" data-settle="${x.user_id}" data-seller-name="${x.business_name||x.full_name}">Settlement</button></div></article>`).join("")||"<p>No sellers.</p>";
 }
 ["ordersSearch","ordersStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderOrders));["sellerSearch","sellerStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderSellers));["sellerListingSearch","sellerListingStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderSellerListings));["payoutSearch","payoutStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderPayouts));["productSearch","productStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderProducts));["listingSearch","listingStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderListingManager));
+["customerSearch","customerSort"].forEach(id=>$("#"+id)?.addEventListener("input",renderCustomers));
+["reviewSearch","reviewStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderReviews));
+$("#reloadReviews")?.addEventListener("click",()=>loadReviews(true));
 document.querySelectorAll("[data-list-tab]").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll("[data-list-tab]").forEach(x=>x.classList.toggle("active",x===b));
  $("#listingOwn").hidden=b.dataset.listTab!=="own";
@@ -148,6 +151,28 @@ function renderPayments(){
  $("#paymentStats").innerHTML=[["Revenue",money(revenue)],["Paid",paid.length],["COD Orders",cod.length],["Online Orders",online.length]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
  $("#paymentsTable").innerHTML=`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Payment</th><th>Amount</th><th>Order Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td><b>${paymentLabel(o)}</b></td><td>${money(o.total_amount)}</td><td>${pill(o.order_status)}</td></tr>`).join("")}</tbody></table>`;
  const payouts=$("#paymentsPayouts");if(payouts)payouts.innerHTML=(state.payouts||[]).map(x=>`<article class="card"><span>${pill(x.status)}</span><h3>${x.seller_business_name||"Seller"}</h3><p>Net ${money(x.net_payout)} • ${x.reference||"No reference"}</p></article>`).join("")||"<p>No settlement records.</p>";
+}
+
+function customerRows(){
+ const map=new Map();
+ for(const o of state.orders||[]){const key=(o.phone||o.customer_email||o.email||o.customer_name||"unknown").toLowerCase();let x=map.get(key);if(!x)x={name:o.customer_name||"Customer",phone:o.phone||"",email:o.customer_email||o.email||"",orders:0,spend:0,last:null};x.orders++;if(o.order_status!=="cancelled")x.spend+=Number(o.total_amount||0);const d=new Date(o.created_at||0);if(!x.last||d>x.last)x.last=d;map.set(key,x)}
+ return [...map.values()];
+}
+function renderCustomers(){
+ const box=$("#customersTable");if(!box)return;const q=($("#customerSearch")?.value||"").toLowerCase(),sort=$("#customerSort")?.value||"recent";let rows=customerRows().filter(x=>!q||`${x.name} ${x.phone} ${x.email}`.toLowerCase().includes(q));
+ rows.sort((a,b)=>sort==="orders"?b.orders-a.orders:sort==="spend"?b.spend-a.spend:(b.last||0)-(a.last||0));
+ const repeat=rows.filter(x=>x.orders>1).length,total=rows.reduce((n,x)=>n+x.spend,0);$("#customerStats").innerHTML=[["Customers",rows.length],["Repeat Customers",repeat],["Orders",rows.reduce((n,x)=>n+x.orders,0)],["Recorded Spend",money(total)]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ box.innerHTML=`<table class="data-table"><thead><tr><th>Customer</th><th>Phone</th><th>Email</th><th>Orders</th><th>Spend</th><th>Last Order</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${x.name}</b></td><td>${x.phone||"—"}</td><td>${x.email||"—"}</td><td>${x.orders}</td><td>${money(x.spend)}</td><td>${x.last?fmt(x.last):"—"}</td></tr>`).join("")}</tbody></table>`;
+}
+async function loadReviews(render=true){
+ const {data,error}=await db.from("reviews").select("id,order_id,name,rating,review,verified,status,created_at").order("created_at",{ascending:false}).limit(500);
+ if(error){status($("#reviewAdminStatus"),error.message,"error");state.reviews=[]}else{state.reviews=data||[];status($("#reviewAdminStatus"),"")}
+ if(render)renderReviews();
+}
+function renderReviews(){
+ const box=$("#reviewsTable");if(!box)return;const q=($("#reviewSearch")?.value||"").toLowerCase(),st=$("#reviewStatus")?.value||"";const rows=(state.reviews||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.review}`.toLowerCase().includes(q)));
+ const avg=rows.length?(rows.reduce((n,x)=>n+Number(x.rating||0),0)/rows.length).toFixed(1):"0.0";$("#reviewStats").innerHTML=[["Reviews",rows.length],["Pending",rows.filter(x=>x.status==="pending").length],["Approved",rows.filter(x=>x.status==="approved").length],["Avg Rating",avg]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
+ box.innerHTML=`<table class="data-table"><thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${x.name||"Customer"}</b>${x.verified?"<br><small>Verified</small>":""}</td><td>${"★".repeat(Math.max(0,Math.min(5,Number(x.rating||0))))}</td><td>${x.review||""}</td><td>${pill(x.status||"pending")}</td><td>${fmt(x.created_at)}</td><td><button class="ghost" data-review-status="${x.id}:approved">Approve</button> <button class="danger" data-review-status="${x.id}:rejected">Reject</button></td></tr>`).join("")}</tbody></table>`;
 }
 function renderGrowth(){
  const orders=state.orders||[],active=orders.filter(o=>o.order_status!=="cancelled"),revenue=active.filter(o=>o.payment_status==="paid"||paymentLabel(o)==="COD").reduce((n,o)=>n+Number(o.total_amount||0),0),aov=active.length?revenue/active.length:0,customers=new Set(orders.map(o=>o.phone).filter(Boolean)).size;
@@ -205,7 +230,7 @@ async function updateOrder(id,orderStatus,paymentStatus=null){
   if(error)throw error; await load();
 }
 
-document.addEventListener("click",async e=>{try{
+document.addEventListener("click",async e=>{try{const rv=e.target.closest("[data-review-status]");if(rv){const [id,next]=rv.dataset.reviewStatus.split(":");const {error}=await db.from("reviews").update({status:next}).eq("id",id);if(error)throw error;await loadReviews(true);return}
   const closer=e.target.closest("[data-close-dialog]"); if(closer){document.getElementById(closer.dataset.closeDialog)?.close();return}
   const ml=e.target.closest("[data-media-listing]");if(ml){const [kind,id]=ml.dataset.mediaListing.split(":");openMedia(kind,id);return}
   const rm=e.target.closest("[data-remove-media]");if(rm){const [kind,id,idx]=rm.dataset.removeMedia.split(":");const arr=kind==="deshigram"?state.deshigram_products:state.seller_products,x=(arr||[]).find(v=>v.id===id),paths=[...(x.image_paths||[])];paths.splice(Number(idx),1);await saveImagePaths(kind,id,paths);await load();openMedia(kind,id);return}

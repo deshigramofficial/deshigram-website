@@ -79,6 +79,8 @@
     <button class="side-link" data-section="listings"><span class="nav-icon">▤</span>Listings</button>
     <button class="side-link" data-section="inventory"><span class="nav-icon">◇</span>Inventory</button>
     <button class="side-link" data-section="payments"><span class="nav-icon">▣</span>Payments</button>
+    <button class="side-link" data-section="customers"><span class="nav-icon">◎</span>Customers</button>
+    <button class="side-link" data-section="reviews"><span class="nav-icon">★</span>Reviews</button>
     <button class="side-link" data-section="growth"><span class="nav-icon">↗</span>Growth</button>
     <button class="side-link" data-section="reports"><span class="nav-icon">▥</span>Reports</button>
   </aside>
@@ -151,6 +153,17 @@
       <div id="paymentStats" class="stats compact-stats"></div>
       <div id="paymentsTable" class="table-wrap"></div>
       
+    </section>
+
+    <section class="section-panel" data-panel="customers">
+      <div class="heading-row"><div><h2>Customers</h2><p>Customer overview derived from Main D2C website orders.</p></div></div>
+      <div class="toolbar"><input id="customerSearch" type="search" placeholder="Search customer / phone / email"><select id="customerSort"><option value="recent">Most recent</option><option value="orders">Most orders</option><option value="spend">Highest spend</option></select></div>
+      <div id="customerStats" class="stats compact-stats"></div><div id="customersTable" class="table-wrap"></div>
+    </section>
+    <section class="section-panel" data-panel="reviews">
+      <div class="heading-row"><div><h2>Reviews</h2><p>Moderate reviews submitted through the Main D2C website.</p></div><button id="reloadReviews" class="ghost" type="button">Reload Reviews</button></div>
+      <div class="toolbar"><input id="reviewSearch" type="search" placeholder="Search customer / review"><select id="reviewStatus"><option value="">All review status</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+      <p id="reviewAdminStatus" class="status"></p><div id="reviewStats" class="stats compact-stats"></div><div id="reviewsTable" class="table-wrap"></div>
     </section>
 
     <section class="section-panel" data-panel="growth">
