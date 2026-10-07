@@ -520,6 +520,20 @@ body{background:var(--fmcg-cream)!important;color:var(--fmcg-text)!important}
 
 /* Product listing title/badge support + About wordmark contrast only. */
 
+
+/* Why Shop cards refinement only — text/content unchanged. */
+.dg-why-grid{align-items:stretch!important;gap:14px!important}
+.dg-why-card{min-height:0!important;height:100%!important;padding:18px 18px 19px!important;border:1px solid rgba(7,76,54,.10)!important;border-radius:17px!important;background:#fffefb!important;box-shadow:0 6px 18px rgba(28,54,42,.045)!important}
+.dg-why-card:hover{transform:translateY(-3px)!important;border-color:rgba(7,76,54,.16)!important;box-shadow:0 10px 24px rgba(28,54,42,.075)!important}
+.dg-why-card:after{height:2px!important;left:16px!important;right:16px!important;bottom:0!important;border-radius:3px 3px 0 0!important;background:linear-gradient(90deg,#07533b 0%,#0b6648 58%,#e5a321 100%)!important;opacity:.9!important}
+.dg-why-icon{width:40px!important;height:40px!important;flex:0 0 40px!important;border-radius:12px!important;background:#f4f8f3!important;border:1px solid rgba(7,76,54,.12)!important;box-shadow:none!important;color:#07533b!important;font-size:0!important}
+.dg-why-icon:after{content:none!important}
+.dg-why-icon svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.dg-why-icon svg .dg-icon-gold{stroke:#d99a19}
+.dg-why-card h3{margin:12px 0 6px!important;font-size:15px!important;line-height:1.25!important}
+.dg-why-card p{margin:0!important;font-size:12.5px!important;line-height:1.55!important}
+@media(max-width:760px){.dg-why-grid{gap:11px!important}.dg-why-card{padding:16px 16px 17px!important}.dg-why-icon{width:38px!important;height:38px!important;flex-basis:38px!important}.dg-why-icon svg{width:21px;height:21px}.dg-why-card h3{margin-top:11px!important}}
+
 </style></head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
@@ -568,10 +582,10 @@ body{background:var(--fmcg-cream)!important;color:var(--fmcg-text)!important}
 <section class="dg-why" aria-labelledby="dgWhyTitle">
   <div class="dg-why-head"><h2 id="dgWhyTitle">Why shop with DeshiGram?</h2><p>A simpler way to discover DeshiGram products and understand what you are buying.</p></div>
   <div class="dg-why-grid">
-    <article class="dg-why-card"><div class="dg-why-icon">🌿</div><h3>Thoughtful Choices</h3><p>Discover DeshiGram products in a focused, easy-to-browse catalogue.</p></article>
-    <article class="dg-why-card"><div class="dg-why-icon">🔎</div><h3>Easy to Understand</h3><p>Compact listings lead to detailed product pages with highlights and information in one place.</p></article>
-    <article class="dg-why-card"><div class="dg-why-icon">📦</div><h3>Original Product Presentation</h3><p>Product listings use the original DeshiGram product images supplied for the catalogue.</p></article>
-    <article class="dg-why-card"><div class="dg-why-icon">⚡</div><h3>DeshiGram NOW</h3><p>Quick Delivery remains a separate experience for eligible local everyday-delivery products.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.5 4.5C13 4.7 8.4 7.2 6.3 11.1c-1.5 2.8-.8 5.8 1.5 7.1 2.5 1.4 5.7.3 7.2-2.4 1.8-3.2 1.4-7.1 4.5-11.3Z"/><path class="dg-icon-gold" d="M5 20c2.2-4.8 5.5-8 10.3-10.2"/></svg></div><h3>Thoughtful Choices</h3><p>Discover DeshiGram products in a focused, easy-to-browse catalogue.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.8"/><path d="m15 15 4.7 4.7"/><path class="dg-icon-gold" d="M8.2 10.5h4.6M10.5 8.2v4.6"/></svg></div><h3>Easy to Understand</h3><p>Compact listings lead to detailed product pages with highlights and information in one place.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7M12 11v10"/><path class="dg-icon-gold" d="m8 5 8 4"/></svg></div><h3>Original Product Presentation</h3><p>Product listings use the original DeshiGram product images supplied for the catalogue.</p></article>
+    <article class="dg-why-card"><div class="dg-why-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m13.2 2.8-7 10h5.4l-.8 8.4 7-10h-5.4l.8-8.4Z"/><path class="dg-icon-gold" d="M17.8 5.3h2.4M18.5 9h2.7"/></svg></div><h3>DeshiGram NOW</h3><p>Quick Delivery remains a separate experience for eligible local everyday-delivery products.</p></article>
   </div>
 </section>
 
