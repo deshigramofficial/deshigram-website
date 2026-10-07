@@ -49,7 +49,7 @@ function goSection(name){
 document.querySelectorAll(".side-link").forEach(b=>b.addEventListener("click",()=>goSection(b.dataset.section)));
 document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(j)goSection(j.dataset.jump)});
 const pill=v=>`<span class="pill ${v||""}">${String(v||"unknown").replaceAll("_"," ")}</span>`;
-function renderAll(){renderStats();renderDashboard();renderOrders();renderFulfillment();renderSellers();renderSellerListings();renderPayouts();renderProducts();renderListingManager();renderInventory();renderPayments();renderGrowth();renderReports()}
+function renderAll(){renderStats();renderDashboard();renderOrders();renderFulfillment();renderProducts();renderListingManager();renderInventory();renderPayments();renderGrowth();renderReports()}
 function renderStats(){
   const orders=state.orders||[];
   const active=orders.filter(o=>o.order_status!=="cancelled");
@@ -103,15 +103,15 @@ function renderProducts(){const q=($("#productSearch").value||"").toLowerCase(),
 function renderListingManager(){
  const q=($("#listingSearch").value||"").toLowerCase(),st=$("#listingStatus").value;
  $("#listingOwn").innerHTML=(state.deshigram_products||[]).filter(x=>(!st||x.status===st)&&(!q||x.name.toLowerCase().includes(q))).map(ownCard).join("")||"<p>No DeshiGram listings.</p>";
- $("#listingSeller").innerHTML=(state.seller_products||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.seller_business_name||""}`.toLowerCase().includes(q))).map(sellerCard).join("")||"<p>No seller listings.</p>";
- $("#listingSellers").innerHTML=(state.sellers||[]).filter(x=>!q||`${x.full_name} ${x.business_name||""} ${x.phone||""}`.toLowerCase().includes(q)).map(x=>`<article class="card"><span>${pill(x.verification_status)}</span><h3>${x.business_name||x.full_name}</h3><p>${x.full_name} • ${x.phone}</p><p>${x.city||""}, ${x.state||""} • ${x.pincode||""}</p><p>FSSAI: ${x.fssai_number||"—"} • GST: ${x.gstin||"—"}</p><div class="actions"><button class="ghost" data-review-seller="${x.user_id}">Review Seller</button><button class="primary" data-settle="${x.user_id}" data-seller-name="${x.business_name||x.full_name}">Settlement</button></div></article>`).join("")||"<p>No sellers.</p>";
+ const sellerListings=$("#listingSeller");if(sellerListings)sellerListings.innerHTML=(state.seller_products||[]).filter(x=>(!st||x.status===st)&&(!q||`${x.name} ${x.seller_business_name||""}`.toLowerCase().includes(q))).map(sellerCard).join("")||"<p>No seller listings.</p>";
+ const sellers=$("#listingSellers");if(sellers)sellers.innerHTML=(state.sellers||[]).filter(x=>!q||`${x.full_name} ${x.business_name||""} ${x.phone||""}`.toLowerCase().includes(q)).map(x=>`<article class="card"><span>${pill(x.verification_status)}</span><h3>${x.business_name||x.full_name}</h3><p>${x.full_name} • ${x.phone}</p><p>${x.city||""}, ${x.state||""} • ${x.pincode||""}</p><p>FSSAI: ${x.fssai_number||"—"} • GST: ${x.gstin||"—"}</p><div class="actions"><button class="ghost" data-review-seller="${x.user_id}">Review Seller</button><button class="primary" data-settle="${x.user_id}" data-seller-name="${x.business_name||x.full_name}">Settlement</button></div></article>`).join("")||"<p>No sellers.</p>";
 }
-["ordersSearch","ordersStatus"].forEach(id=>$("#"+id).addEventListener("input",renderOrders));["sellerSearch","sellerStatus"].forEach(id=>$("#"+id).addEventListener("input",renderSellers));["sellerListingSearch","sellerListingStatus"].forEach(id=>$("#"+id).addEventListener("input",renderSellerListings));["payoutSearch","payoutStatus"].forEach(id=>$("#"+id).addEventListener("input",renderPayouts));["productSearch","productStatus"].forEach(id=>$("#"+id).addEventListener("input",renderProducts));["listingSearch","listingStatus"].forEach(id=>$("#"+id).addEventListener("input",renderListingManager));
+["ordersSearch","ordersStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderOrders));["sellerSearch","sellerStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderSellers));["sellerListingSearch","sellerListingStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderSellerListings));["payoutSearch","payoutStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderPayouts));["productSearch","productStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderProducts));["listingSearch","listingStatus"].forEach(id=>$("#"+id)?.addEventListener("input",renderListingManager));
 document.querySelectorAll("[data-list-tab]").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll("[data-list-tab]").forEach(x=>x.classList.toggle("active",x===b));
  $("#listingOwn").hidden=b.dataset.listTab!=="own";
- $("#listingSeller").hidden=b.dataset.listTab!=="seller";
- $("#listingSellers").hidden=b.dataset.listTab!=="sellers";
+ const sellerListings=$("#listingSeller");if(sellerListings)sellerListings.hidden=b.dataset.listTab!=="seller";
+ const sellers=$("#listingSellers");if(sellers)sellers.hidden=b.dataset.listTab!=="sellers";
 }));
 function fill(form,p){[...form.elements].forEach(el=>{if(!el.name)return;const v=p?.[el.name];if(el.type==="checkbox")el.checked=v!==false;else if(el.type==="datetime-local")el.value=dt(v);else if(Array.isArray(v))el.value=v.join("\n");else el.value=v??""})}
 
@@ -147,7 +147,7 @@ function renderPayments(){
  const revenue=orders.filter(o=>o.order_status!=="cancelled"&&(o.payment_status==="paid"||paymentLabel(o)==="COD")).reduce((n,o)=>n+Number(o.total_amount||0),0);
  $("#paymentStats").innerHTML=[["Revenue",money(revenue)],["Paid",paid.length],["COD Orders",cod.length],["Online Orders",online.length]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
  $("#paymentsTable").innerHTML=`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Payment</th><th>Amount</th><th>Order Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td><b>${paymentLabel(o)}</b></td><td>${money(o.total_amount)}</td><td>${pill(o.order_status)}</td></tr>`).join("")}</tbody></table>`;
- $("#paymentsPayouts").innerHTML=(state.payouts||[]).map(x=>`<article class="card"><span>${pill(x.status)}</span><h3>${x.seller_business_name||"Seller"}</h3><p>Net ${money(x.net_payout)} • ${x.reference||"No reference"}</p></article>`).join("")||"<p>No settlement records.</p>";
+ const payouts=$("#paymentsPayouts");if(payouts)payouts.innerHTML=(state.payouts||[]).map(x=>`<article class="card"><span>${pill(x.status)}</span><h3>${x.seller_business_name||"Seller"}</h3><p>Net ${money(x.net_payout)} • ${x.reference||"No reference"}</p></article>`).join("")||"<p>No settlement records.</p>";
 }
 function renderGrowth(){
  const orders=state.orders||[],active=orders.filter(o=>o.order_status!=="cancelled"),revenue=active.filter(o=>o.payment_status==="paid"||paymentLabel(o)==="COD").reduce((n,o)=>n+Number(o.total_amount||0),0),aov=active.length?revenue/active.length:0,customers=new Set(orders.map(o=>o.phone).filter(Boolean)).size;
