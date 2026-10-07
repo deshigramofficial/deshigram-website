@@ -248,14 +248,14 @@
   <input type="hidden" name="id">
   <div class="form-grid">
     <label class="span2">Product Name<input name="name" required></label>
-    <label>Slug<input name="slug" placeholder="pack-1"></label>
+    <label>Product Key<input name="slug" placeholder="pack-1" readonly><small>Auto-managed</small></label>
     <label>SKU<input name="sku"></label>
-    <label>Category<input name="category" value="DeshiGram"></label>
+    <input type="hidden" name="category" value="DeshiGram">
     <label>Net Quantity<input name="net_quantity" placeholder="100g × 1"></label>
     <label>MRP ₹<input name="mrp" type="number" step="0.01" min="0" required></label>
     <label>Selling Price ₹<input name="selling_price" type="number" step="0.01" min="0" required></label>
     <label>Stock<input name="stock_quantity" type="number" min="0" value="0"></label>
-    <label>Packed Weight (g)<input name="packed_weight_grams" type="number" min="0"></label>
+    <details class="span2"><summary>Advanced product settings</summary><div class="form-grid"><label>Packed Weight (g)<input name="packed_weight_grams" type="number" min="0"></label>
     <label>Max Qty / Order<input name="max_order_quantity" type="number" min="1" value="10"></label>
     <label>Low Stock Alert<input name="low_stock_threshold" type="number" min="0" value="5"></label>
     <label>Status<select name="status"><option value="live">Live</option><option value="coming_soon">Coming Soon</option><option value="draft">Draft</option><option value="out_of_stock">Out of Stock</option><option value="hidden">Hidden</option></select></label>
@@ -270,17 +270,17 @@
     <label class="toggle"><input name="is_visible" type="checkbox" checked> Visible on website</label>
     <label class="toggle"><input name="featured" type="checkbox"> Featured / show first</label>
     <label class="toggle"><input name="cod_enabled" type="checkbox" checked> COD enabled</label>
-    <label class="toggle"><input name="online_payment_enabled" type="checkbox" checked> Online payment enabled</label>
-    <label class="span2">Short Description<textarea name="short_description" rows="2"></textarea></label>
+    <label class="toggle"><input name="online_payment_enabled" type="checkbox" checked> Online payment enabled</label></div></details>
+    <details class="span2"><summary>Descriptions & product information (optional)</summary><div class="form-grid"><label class="span2">Short Description<textarea name="short_description" rows="2"></textarea></label>
     <label class="span2">Full Description<textarea name="description" rows="4"></textarea></label>
     <label class="span2">Ingredients <small>one per line</small><textarea name="ingredients" rows="4"></textarea></label>
     <label class="span2">Features <small>one per line</small><textarea name="features" rows="4"></textarea></label>
     <label class="span2">How to Use <small>one step per line</small><textarea name="usage_steps" rows="4"></textarea></label>
-    <label class="span2">Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label>
+    <label class="span2">Storage Instructions<textarea name="storage_instructions" rows="2"></textarea></label></div></details>
     <label class="span2">Current Image Paths <small>one per line</small><textarea name="image_paths" rows="4"></textarea></label>
     <label class="span2 upload-box">Upload Product Images<input id="imageUpload" type="file" accept="image/*" multiple><small>Uploaded to DeshiGram product storage. Existing paths are retained unless you edit them.</small></label>
 
-    <div class="span2" style="border-top:1px solid #dfe5e2;margin-top:8px;padding-top:12px"><strong>Product Detail Page — Highlights & Information</strong><small style="display:block">Only verified information should be entered.</small></div>
+    <details class="span2"><summary>Advanced detail page & SEO (optional)</summary><div class="form-grid"><div class="span2"><strong>Product Detail Page — Highlights & Information</strong><small style="display:block">Only verified information should be entered.</small></div>
     <label>Brand<input name="detail_brand" value="DeshiGram"></label>
     <label>Product Type<input name="detail_product_type"></label>
     <label>Dietary Preference<input name="detail_dietary_preference"></label>
@@ -305,7 +305,7 @@
     
     <label class="span2">Manufacturer / Marketer<textarea name="detail_manufacturer_marketer" rows="3"></textarea></label>
     <label class="span2">SEO Title<input name="seo_title"></label>
-    <label class="span2">SEO Description<textarea name="seo_description" rows="2"></textarea></label>
+    <label class="span2">SEO Description<textarea name="seo_description" rows="2"></textarea></label></div></details>
   </div>
   <div class="modal-actions"><button value="cancel" class="ghost">Cancel</button><button type="button" id="deleteProductBtn" class="danger">Delete</button><button type="submit" class="primary">Save Product</button></div>
   <p id="productFormStatus" class="status"></p>
