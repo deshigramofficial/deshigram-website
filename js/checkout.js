@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const paymentAllowed=method=>(method==='cod'?quick.cod!==false:quick.online_payment!==false)&&quick.accept_orders!==false;
   const methodInputs=()=>form.querySelectorAll('input[name="paymentMethod"]');
-  const codAlert=document.createElement('p');codAlert.id='codUnavailableAlert';codAlert.setAttribute('role','alert');codAlert.style.cssText='display:none;color:#c62828;font-weight:800;margin:10px 0;padding:12px;border:1px solid #e57373;border-radius:10px;background:#fff0f0';codAlert.textContent='Cash on Delivery is currently not available. Please choose Razorpay.';
-  form.querySelector('.payment-method-card.active-cod')?.after(codAlert);
+  const codAlert=document.createElement('p');codAlert.id='codUnavailableAlert';codAlert.setAttribute('role','alert');codAlert.style.cssText='display:none;color:#c62828;font-size:11px;font-weight:700;margin:3px 0 0;padding:0;border:0;background:transparent';codAlert.textContent='Currently unavailable';
+  form.querySelector('.payment-method-card.active-cod span:last-child')?.append(codAlert);
   const flashCod=()=>{codAlert.style.display='block';codAlert.classList.remove('dg-cod-flash');void codAlert.offsetWidth;codAlert.classList.add('dg-cod-flash');};
   const refreshPaymentChoices=()=>{
     methodInputs().forEach(input=>{
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     const checked=form.querySelector('input[name="paymentMethod"]:checked');
     if(!checked||checked.disabled){if(checked)checked.checked=false;const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
-    if(quick.cod===false){codAlert.style.display='block';}else codAlert.style.display='none';
+    codAlert.style.display=quick.cod===false?'block':'none';
   };
   form.querySelector('.payment-method-card.active-cod')?.addEventListener('click',event=>{if(quick.cod===false){event.preventDefault();event.stopPropagation();flashCod();}});
   refreshPaymentChoices();
