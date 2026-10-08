@@ -1,7 +1,7 @@
 (()=>{
   const URL='https://kqkpbqpfnupjpthtpvdn.supabase.co';
   const KEY='sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0';
-  let products=[];
+  let products=[];let quick={};fetch(URL+'/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:KEY}}).then(r=>r.ok?r.json():[]).then(rows=>{rows.forEach(x=>quick[x.key]=x.enabled);render()}).catch(()=>{});
   const fallback=()=>Array.isArray(window.PRODUCTS)?window.PRODUCTS.map(p=>({...p,slug:p.id,mrp:Number(p.oldPrice||p.mrp||0),selling_price:Number(p.price||p.selling_price||0),net_quantity:p.weight||p.net_quantity||'',packed_weight_grams:Number(p.packed_weight_grams||0),image_paths:p.images||[]})):[];
   const imageUrl=path=>{if(!path)return 'images/favicon.png';if(/^https?:\/\//i.test(path)||path.startsWith('images/'))return path;return `${URL}/storage/v1/object/public/deshigram-products/${path}`};
   const offerActive=p=>{
@@ -12,11 +12,11 @@
   const normalize=p=>{
     const base=Number(p.selling_price??p.price??0), mrp=Number(p.mrp??p.oldPrice??0);
     let effective=base;
-    if(offerActive(p)){
+    if(quick.offers!==false&&offerActive(p)){
       if(p.offer_type==='percent') effective=Math.max(0,base*(1-Number(p.offer_value||0)/100));
       if(p.offer_type==='flat') effective=Math.max(0,base-Number(p.offer_value||0));
     }
-    const autoBadge=offerActive(p)?(p.offer_label||`${p.offer_value}${p.offer_type==='percent'?'%':'₹'} OFF`):'';
+    const autoBadge=quick.offers!==false&&offerActive(p)?(p.offer_label||`${p.offer_value}${p.offer_type==='percent'?'%':'₹'} OFF`):'';
     return {id:p.slug||p.id,db_id:p.id,slug:p.slug||p.id,name:p.name,category:p.category||'DeshiGram',description:p.description||'',shortDescription:p.short_description||p.shortDescription||'',weight:p.net_quantity||p.weight||'',price:Number(effective.toFixed(2)),basePrice:base,oldPrice:mrp,mrp,packed_weight_grams:Number(p.packed_weight_grams||0),stock_quantity:Number(p.stock_quantity??100),images:(p.image_paths||p.images||[]).map(imageUrl),ingredients:p.ingredients||[],features:p.features||[],usage:p.usage_steps||p.usage||[],storage:p.storage_instructions||p.storage||'',status:p.status||'live',is_visible:p.is_visible!==false,featured:!!p.featured,badge:p.badge_text||autoBadge,coming_soon_date:p.coming_soon_date||'',offer_type:p.offer_type||'none',offer_value:Number(p.offer_value||0),offer_label:p.offer_label||'',max_order_quantity:Number(p.max_order_quantity||10),low_stock_threshold:Number(p.low_stock_threshold||5),cod_enabled:p.cod_enabled!==false,online_payment_enabled:p.online_payment_enabled!==false,seo_title:p.seo_title||'',seo_description:p.seo_description||''};
   };
   async function load(force=false){
@@ -41,8 +41,8 @@
   function money(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(v||0))}
   function shortName(name){return String(name||'Product')}
   function card(p,home=false){
-    const coming=p.status==='coming_soon'; const out=p.status==='out_of_stock'||p.stock_quantity<=0;
-    const noPrice=Number(p.price||0)<=0;
+    const coming=p.status==='coming_soon'; const out=p.status==='out_of_stock'||(quick.enforce_stock!==false&&p.stock_quantity<=0);
+    const noPrice=Number(p.price||0)<=0;const paused=quick.accept_orders===false;
     const imgs=[...(p.images||[])].filter((src,i,a)=>src&&a.indexOf(src)===i).slice(0,3);
     const pictures=imgs.length?imgs:['images/favicon.png'];
     const slider=`<div class="dg-product-slider" data-product-slider data-current="0"><div class="dg-product-slider-frame">
@@ -53,7 +53,7 @@
     return `<article class="${home?'dg-home-product-card':'dg-shop-card'}" data-product-card="${p.id}">
       ${(p.badge||(p.oldPrice>p.price?`${Math.round((1-p.price/p.oldPrice)*100)}% OFF`:''))?`<span class="dg-admin-badge">${p.badge||`${Math.round((1-p.price/p.oldPrice)*100)}% OFF`}</span>`:''}${coming?`<span class="dg-coming-badge">COMING SOON</span>`:''}${slider}
       <div class="${home?'dg-home-product-copy':'dg-shop-body'}"><small>${p.weight||''}</small><h${home?'3':'2'}>${shortName(p.name)}</h${home?'3':'2'}>${price}
-      <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button>${home?'':`<a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a>`}</div></div></article>`}
+      <div class="dg-card-actions"><button class="button button-primary" data-add-to-cart="${p.id}" type="button" ${(out||coming||noPrice||paused)?'disabled':''}>${noPrice?'UPDATE':coming?'SOON':out?'OUT':'ADD'}</button>${home?'':`<a class="button button-secondary" href="product/index.html?id=${encodeURIComponent(p.id)}">Details</a>`}</div></div></article>`}
   function state(el,type,message){
     el.innerHTML=`<div class="dg-catalog-state dg-catalog-${type}" role="status"><p>${message}</p>${type==='error'?'<button type="button" data-catalog-retry>Retry</button>':''}</div>`;
   }

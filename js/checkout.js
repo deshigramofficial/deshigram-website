@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const session = await integrations.getSession();
   if (!session) { location.replace('account.html?next=checkout.html'); return; }
 
+  const quick={};try{const r=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'}});if(r.ok)(await r.json()).forEach(x=>quick[x.key]=x.enabled)}catch(_){}
   const itemsEl = document.getElementById('checkoutItems');
   const mrpEl = document.getElementById('checkoutMrpTotal');
   const discountEl = document.getElementById('checkoutDiscount');
@@ -39,6 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     return { product, mrp, discount, logistics, platform, packaging, payment, extra, total: product + extra };
   };
 
+  const paymentAllowed=method=>(method==='cod'?quick.cod!==false:quick.online_payment!==false)&&quick.accept_orders!==false;
+  const methodInputs=()=>form.querySelectorAll('input[name="paymentMethod"]');
+  methodInputs().forEach(input=>{if(!paymentAllowed(input.value)){input.disabled=true;input.closest('.payment-method-card')?.setAttribute('hidden','');}});
+  if(!form.querySelector('input[name="paymentMethod"]:checked:not(:disabled)')){const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
   const setStatus = (msg,type='') => {
     status.textContent = msg || '';
@@ -192,6 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit',async event=>{
     event.preventDefault();
     if(!validForm())return;
+    if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
     const c=customerData();
     const method=paymentMethod();
     confirmButton.disabled=true;
