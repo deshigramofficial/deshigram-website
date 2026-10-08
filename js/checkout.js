@@ -197,6 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit',async event=>{
     event.preventDefault();
     if(!validForm())return;
+    try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
     if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
     const c=customerData();
     const method=paymentMethod();
