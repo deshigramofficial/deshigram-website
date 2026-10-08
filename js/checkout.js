@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   function setPaymentUI(){
-    const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='upi';
-    upiBox.hidden=true; transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : manual ? '<strong>One-click UPI selected.</strong> Continue to secure Razorpay UPI payment. Your payment will be automatically verified.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
-    confirmButton.textContent = online ? 'Pay Securely' : manual ? 'Pay with UPI Securely' : 'Place COD Order';
+    const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='bharatpe'; const upi=method==='upi';
+    upiBox.hidden=!manual; transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Secure UPI payment through Razorpay.' : manual ? '<strong>BharatPe selected.</strong> Manual UPI is not automatically verified. Do not pay until this option is enabled for verified orders.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    confirmButton.textContent = online ? 'Pay Securely' : upi ? 'Pay with UPI Securely' : manual ? 'BharatPe Verification Required' : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
     });
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function startRazorpay(c){
-    if(typeof window.Razorpay!=='function') throw new Error('Razorpay checkout did not load. Please refresh and try again.');
+    if(typeof window.Razorpay!=='function') throw new Error('Razorpay checkout script did not load. Check connection or browser blocking, then retry.');
     const client=integrations.getClient();
     const t=totals();
     setStatus('Opening secure payment…');
@@ -162,8 +162,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const {data,error}=await client.functions.invoke('razorpay-payment',{
       body:{action:'create_order',items:orderItems(),receipt}
     });
-    if(error) throw new Error(error.message||'Could not start Razorpay payment');
+    if(error) throw new Error(data?.error||error.context?.message||error.message||'Could not start Razorpay payment');
     if(data?.error) throw new Error(data.error);
+    if(!data?.key_id||!data?.order_id||!data?.amount)throw new Error('Payment gateway returned incomplete order details. Please retry.');
 
     return new Promise((resolve,reject)=>{
       const rzp=new Razorpay({
@@ -214,6 +215,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
     refreshPaymentChoices();
     if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
+    if(paymentMethod()==='bharatpe'){setStatus('BharatPe direct payment needs verification setup. Please choose Razorpay or One-click UPI. Do not send payment manually yet.','error');return;}
     const c=customerData();
     const method=paymentMethod();
     confirmButton.disabled=true;
