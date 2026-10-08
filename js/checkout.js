@@ -42,8 +42,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const paymentAllowed=method=>(method==='cod'?quick.cod!==false:quick.online_payment!==false)&&quick.accept_orders!==false;
   const methodInputs=()=>form.querySelectorAll('input[name="paymentMethod"]');
-  methodInputs().forEach(input=>{if(!paymentAllowed(input.value)){input.disabled=true;input.closest('.payment-method-card')?.setAttribute('hidden','');}});
-  if(!form.querySelector('input[name="paymentMethod"]:checked:not(:disabled)')){const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
+  const codAlert=document.createElement('p');codAlert.id='codUnavailableAlert';codAlert.setAttribute('role','alert');codAlert.style.cssText='display:none;color:#c62828;font-weight:800;margin:10px 0;padding:12px;border:1px solid #e57373;border-radius:10px;background:#fff0f0';codAlert.textContent='Cash on Delivery is currently not available. Please choose Razorpay.';
+  form.querySelector('.payment-method-card.active-cod')?.after(codAlert);
+  const flashCod=()=>{codAlert.style.display='block';codAlert.classList.remove('dg-cod-flash');void codAlert.offsetWidth;codAlert.classList.add('dg-cod-flash');};
+  const refreshPaymentChoices=()=>{
+    methodInputs().forEach(input=>{
+      const allowed=paymentAllowed(input.value)&&input.value!=='upi';
+      input.disabled=!allowed;
+      const card=input.closest('.payment-method-card');
+      if(card){card.hidden=false;card.style.opacity=allowed?'1':'.55';card.style.cursor=allowed?'pointer':'not-allowed';card.setAttribute('aria-disabled',String(!allowed));}
+    });
+    const checked=form.querySelector('input[name="paymentMethod"]:checked');
+    if(!checked||checked.disabled){if(checked)checked.checked=false;const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
+    if(quick.cod===false){codAlert.style.display='block';}else codAlert.style.display='none';
+  };
+  form.querySelector('.payment-method-card.active-cod')?.addEventListener('click',event=>{if(quick.cod===false){event.preventDefault();event.stopPropagation();flashCod();}});
+  refreshPaymentChoices();
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
   const setStatus = (msg,type='') => {
     status.textContent = msg || '';
@@ -198,6 +212,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     event.preventDefault();
     if(!validForm())return;
     try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
+    refreshPaymentChoices();
     if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
     const c=customerData();
     const method=paymentMethod();
