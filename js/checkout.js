@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const flashCod=()=>{codAlert.style.display='block';codAlert.classList.remove('dg-cod-flash');void codAlert.offsetWidth;codAlert.classList.add('dg-cod-flash');};
   const refreshPaymentChoices=()=>{
     methodInputs().forEach(input=>{
-      const allowed=paymentAllowed(input.value)&&input.value!=='upi';
+      const allowed=paymentAllowed(input.value);
       input.disabled=!allowed;
       const card=input.closest('.payment-method-card');
       if(card){card.hidden=false;card.style.opacity=allowed?'1':'.55';card.style.cursor=allowed?'pointer':'not-allowed';card.setAttribute('aria-disabled',String(!allowed));}
@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function setPaymentUI(){
     const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='upi';
-    upiBox.hidden=!manual; transactionLabel.hidden=!manual; transactionInput.required=manual; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : manual ? '<strong>One-click UPI selected.</strong> Tap Pay via UPI, complete payment, then enter the UTR.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
-    confirmButton.textContent = online ? 'Pay Securely' : manual ? 'Confirm UPI Order' : 'Place COD Order';
+    upiBox.hidden=true; transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : manual ? '<strong>One-click UPI selected.</strong> Continue to secure Razorpay UPI payment. Your payment will be automatically verified.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    confirmButton.textContent = online ? 'Pay Securely' : manual ? 'Pay with UPI Securely' : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
     });
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',setPaymentUI));
 
-  payButton?.addEventListener('click',()=>{ const t=totals(); const link=`upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(receiverName)}&am=${t.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent('DeshiGram order payment')}`; window.location.href=link; setTimeout(()=>{qrFallback.hidden=false},900); });
+  payButton?.addEventListener('click',()=>{setStatus('For secure UPI payment, choose Razorpay. UPI apps are supported there and payment is verified automatically.','error');const razor=form.querySelector('input[name="paymentMethod"][value="razorpay"]');if(razor&&!razor.disabled){razor.checked=true;setPaymentUI();}});
 
   form.addEventListener('submit',async event=>{
     event.preventDefault();
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){ throw new Error('Manual UPI is temporarily unavailable. Please use Razorpay or Cash on Delivery.'); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){ const paid=await startRazorpay(c); setStatus('Saving your verified UPI order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
