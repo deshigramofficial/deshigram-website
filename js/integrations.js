@@ -102,17 +102,20 @@
 
   async function getProfile(){
     const s=await getSession(); if(!s) return null;
-    const rows=await api(`/customer_profiles?select=user_id,full_name,phone,created_at&user_id=eq.${encodeURIComponent(s.user.id)}&limit=1`);
+    const rows=await api(`/customer_profiles?select=user_id,full_name,phone,saved_address,saved_city,saved_state,saved_pincode,created_at&user_id=eq.${encodeURIComponent(s.user.id)}&limit=1`);
     return rows?.[0]||null;
   }
-  async function updateProfile({full_name,phone}){
+  async function updateProfile({full_name,phone,saved_address,saved_city,saved_state,saved_pincode}){
     const s=await getSession(); if(!s) throw new Error('Please login');
-    return api(`/customer_profiles?user_id=eq.${encodeURIComponent(s.user.id)}`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({full_name:String(full_name||'').trim(),phone:normalizePhone(phone),updated_at:new Date().toISOString()})});
+    return api(`/customer_profiles?user_id=eq.${encodeURIComponent(s.user.id)}`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({full_name:String(full_name||'').trim(),phone:normalizePhone(phone),saved_address:String(saved_address||'').trim(),saved_city:String(saved_city||'').trim(),saved_state:String(saved_state||'').trim(),saved_pincode:String(saved_pincode||'').trim(),updated_at:new Date().toISOString()})});
   }
   async function getMyOrders(){
     const s=await getSession(); if(!s) return [];
     return api(`/orders?select=id,order_number,product_name,quantity,total_amount,payment_status,order_status,payment_method,shipping_address,city,state,pincode,created_at&user_id=eq.${encodeURIComponent(s.user.id)}&order=created_at.desc`);
   }
+  async function getMyOrderItems(){const session=await getSession();if(!session)return [];return api('/order_items?select=order_id,product_name,quantity,fulfillment_status,courier_name,tracking_id&order=created_at.desc');}
+  async function getMyOrderNotifications(){const session=await getSession();if(!session)return [];return api('/main_order_notifications?select=id,order_id,event_type,message,created_at,read_at&order=created_at.desc&limit=30');}
+  async function markMyNotificationsRead(ids){if(!ids?.length)return;return api('/main_order_notifications?id=in.('+ids.map(Number).filter(Number.isSafeInteger).join(',')+')',{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});}
   async function getApprovedReviews(){ return api('/reviews?select=id,order_id,name,rating,review,verified,created_at&status=eq.approved&order=created_at.desc&limit=100'); }
   async function submitOrderReview({orderId,rating,review}){
     return api('/rpc/submit_order_review',{method:'POST',body:JSON.stringify({p_order_id:orderId,p_rating:Number(rating),p_review:review})});
@@ -130,7 +133,7 @@
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}
 
   window.DESHIGRAM_INTEGRATIONS={
-    getClient,getSession,requireSession,signUpCustomer,signInCustomer,signInWithGoogle,signOut,getProfile,updateProfile,getMyOrders,
+    getClient,getSession,requireSession,signUpCustomer,signInCustomer,signInWithGoogle,signOut,getProfile,updateProfile,getMyOrders,getMyOrderItems,getMyOrderNotifications,markMyNotificationsRead,
     getApprovedReviews,submitOrderReview,placeOrder,placeMarketplaceOrder,sendPasswordReset,updatePassword,track,emailNotice,normalizePhone
   };
 })();
