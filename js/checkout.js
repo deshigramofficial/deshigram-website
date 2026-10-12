@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   refreshPaymentChoices();
   let upiStarted=false;
+  let submitting=false;
+  let verifiedPayment=null;
   const directUpiLink=()=> 'upi://pay?'+new URLSearchParams({pa:upiId,pn:receiverName,am:totals().total.toFixed(2),cu:'INR',tn:'DeshiGram order payment'}).toString();
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'razorpay';
   const setStatus = (msg,type='') => {
@@ -140,6 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     status.classList.remove('is-error');status.classList.add('is-success');
     status.innerHTML=`<strong>Order placed: ${orderNumber}</strong><br>${method==='COD'?'Cash on Delivery selected.':method==='UPI'?'UPI payment verification pending. We will verify before dispatch.':'Payment verified successfully.'} <a href="account.html" data-direct-account>View order history</a>.`;
     openWhatsapp(msg);
+    verifiedPayment=null;
     cart.clearCart();
     confirmButton.disabled=true;
   }
@@ -196,26 +199,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{upiStarted=false;setPaymentUI();}));
+  form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{upiStarted=false;verifiedPayment=null;setPaymentUI();}));
 
   form.addEventListener('submit',async event=>{
     event.preventDefault();
-    if(!validForm())return;
-    try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
+    if(submitting||!validForm())return;
+    submitting=true;
+    try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){submitting=false;setStatus(err.message||'Unable to verify checkout availability.','error');return;}
     refreshPaymentChoices();
-    if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
-    if(paymentMethod()==='upi'&&!upiStarted){upiStarted=true;setPaymentUI();setStatus('Opening UPI app for ₹'+totals().total.toFixed(2)+'. After payment, return here and tap I\'ve Paid — Place Order.');window.location.href=directUpiLink();return;}
+    if(!paymentAllowed(paymentMethod())){submitting=false;setStatus('This payment method or new orders are currently unavailable.','error');return;}
+    if(paymentMethod()==='upi'&&!upiStarted){upiStarted=true;setPaymentUI();setStatus('Opening UPI app for ₹'+totals().total.toFixed(2)+'. After payment, return here and tap I\'ve Paid — Place Order.');submitting=false;window.location.href=directUpiLink();return;}
     const c=customerData();
     const method=paymentMethod();
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){setStatus('Submitting order for manual payment verification…');await saveOrder(c,'UPI','','');} else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=verifiedPayment||await startRazorpay(c);verifiedPayment=paid;setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){setStatus('Submitting order for manual payment verification…');await saveOrder(c,'UPI','','');} else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
       confirmButton.disabled=false;
-    }
+    }finally{submitting=false;}
   });
 
   document.addEventListener('deshigram:cart-updated',render);
