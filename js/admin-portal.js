@@ -191,7 +191,7 @@ function renderReviews(){
 function renderGrowth(){
  const orders=state.orders||[],active=orders.filter(o=>o.order_status!=="cancelled"),revenue=active.filter(o=>o.payment_status==="paid"||paymentLabel(o)==="COD").reduce((n,o)=>n+Number(o.total_amount||0),0),aov=active.length?revenue/active.length:0,customers=new Set(orders.map(o=>o.phone).filter(Boolean)).size;
  $("#growthStats").innerHTML=[["Orders",orders.length],["Customers",customers],["Revenue",money(revenue)],["Avg Order",money(aov)]].map(([a,b])=>`<div class="stat"><strong>${b}</strong><span>${a}</span></div>`).join("");
- const statuses=["placed","confirmed","packed","shipped","delivered","cancelled"];
+ const statuses=["placed","confirmed","packed","shipped","out_for_delivery","delivered","cancelled"];
  $("#growthOrderMix").innerHTML=statuses.map(st=>`<div class="metric-row"><span>${st.replaceAll("_"," ")}</span><b>${orders.filter(o=>o.order_status===st).length}</b></div>`).join("");
  const all=[...(state.deshigram_products||[])];
  $("#growthCatalogue").innerHTML=[["Live",all.filter(x=>x.status==="live").length],["Coming soon",all.filter(x=>x.status==="coming_soon").length],["Low stock",all.filter(x=>Number(x.stock_quantity||0)<=Number(x.low_stock_threshold||5)).length],["Visible",all.filter(x=>x.is_visible!==false).length]].map(([a,b])=>`<div class="metric-row"><span>${a}</span><b>${b}</b></div>`).join("");
