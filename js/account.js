@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   async function loadDashboard(){
     const session=await api.getSession();
     if(!session){authPanel.hidden=false;dashboard.hidden=true;return;}
+    if(next && next!=='account.html'){location.replace(next);return;}
     authPanel.hidden=true;dashboard.hidden=false;renderAccountCart();
     const [profile,orders,reviews]=await Promise.all([api.getProfile(),api.getMyOrders(),api.getApprovedReviews()]);
     document.getElementById('accountName').textContent=profile?.full_name||'Customer';
