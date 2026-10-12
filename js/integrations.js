@@ -58,6 +58,14 @@
     return data;
   }
 
+  async function signInWithGoogle(){
+    const c=getClient();if(!c)throw new Error('Account service did not load');
+    const next=new URLSearchParams(location.search).get('next');
+    const allowed=['cart.html','checkout.html','account.html'];
+    const dest=allowed.includes(next)?next:'account.html';
+    const {error}=await c.auth.signInWithOAuth({provider:'google',options:{redirectTo:new URL(dest,location.href).href}});
+    if(error)throw error;
+  }
   async function signInCustomer({identifier,phone,password}){
     const c=getClient();
     if(!c) throw new Error('Account service did not load');
@@ -122,7 +130,7 @@
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}
 
   window.DESHIGRAM_INTEGRATIONS={
-    getClient,getSession,requireSession,signUpCustomer,signInCustomer,signOut,getProfile,updateProfile,getMyOrders,
+    getClient,getSession,requireSession,signUpCustomer,signInCustomer,signInWithGoogle,signOut,getProfile,updateProfile,getMyOrders,
     getApprovedReviews,submitOrderReview,placeOrder,placeMarketplaceOrder,sendPasswordReset,updatePassword,track,emailNotice,normalizePhone
   };
 })();
