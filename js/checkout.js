@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const status = document.getElementById('checkoutStatus');
   const confirmButton = document.getElementById('confirmPaymentButton');
   const notice = document.getElementById('checkoutNotice');
-  const payButton=document.getElementById('payWithUpiButton'); const upiBox=document.getElementById('upiPaymentBox'); const qrFallback=document.getElementById('upiQrFallback'); const transactionLabel=document.getElementById('transactionLabel'); const transactionInput=document.getElementById('transactionId');
+  const transactionLabel=document.getElementById('transactionLabel'); const transactionInput=document.getElementById('transactionId');
   const upiId='9557735797@apl'; const receiverName='DeshiGram';
 
   const DELIVERY_FEE = 55;
@@ -42,49 +42,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const paymentAllowed=method=>(method==='cod'?quick.cod!==false:quick.online_payment!==false)&&quick.accept_orders!==false;
   const methodInputs=()=>form.querySelectorAll('input[name="paymentMethod"]');
-  const codAlert=document.createElement('p');codAlert.id='codUnavailableAlert';codAlert.setAttribute('role','alert');codAlert.style.cssText='display:none;color:#c62828;font-size:11px;font-weight:700;margin:3px 0 0;padding:0;border:0;background:transparent';codAlert.textContent='Currently unavailable';
-  form.querySelector('.payment-method-card.active-cod span:last-child')?.append(codAlert);
-  const flashCod=()=>{codAlert.style.display='block';codAlert.classList.remove('dg-cod-flash');void codAlert.offsetWidth;codAlert.classList.add('dg-cod-flash');};
   const refreshPaymentChoices=()=>{
-    methodInputs().forEach(input=>{
-      const allowed=paymentAllowed(input.value);
-      input.disabled=!allowed;
-      const card=input.closest('.payment-method-card');
-      if(card){card.hidden=false;card.style.opacity=allowed?'1':'.55';card.style.cursor=allowed?'pointer':'not-allowed';card.setAttribute('aria-disabled',String(!allowed));}
-    });
-    const checked=form.querySelector('input[name="paymentMethod"]:checked');
-    if(!checked||checked.disabled){if(checked)checked.checked=false;const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
-    codAlert.style.display=quick.cod===false?'block':'none';
+    methodInputs().forEach(input=>{input.disabled=!paymentAllowed(input.value);const card=input.closest('.payment-method-card');if(card){card.style.opacity=input.disabled?'.55':'1';card.setAttribute('aria-disabled',String(input.disabled));}});
+    const checked=form.querySelector('input[name="paymentMethod"]:checked');if(!checked||checked.disabled){if(checked)checked.checked=false;const first=[...methodInputs()].find(x=>!x.disabled);if(first)first.checked=true;}
   };
-  form.querySelector('.payment-method-card.active-cod')?.addEventListener('click',event=>{if(quick.cod===false){event.preventDefault();event.stopPropagation();flashCod();}});
   refreshPaymentChoices();
   let upiStarted=false;
   const directUpiLink=()=> 'upi://pay?'+new URLSearchParams({pa:upiId,pn:receiverName,am:totals().total.toFixed(2),cu:'INR',tn:'DeshiGram order payment'}).toString();
-  const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
+  const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'razorpay';
   const setStatus = (msg,type='') => {
     status.textContent = msg || '';
     status.classList.remove('is-error','is-success');
     if(type) status.classList.add(type==='error'?'is-error':'is-success');
   };
 
-  let qrRenderedAmount='';
-  function showExactQr(){
-    const amount=totals().total.toFixed(2);
-    const box=document.getElementById('dynamicUpiQr');
-    if(!box||qrRenderedAmount===amount)return;
-    box.replaceChildren();
-    document.getElementById('dynamicUpiAmount').textContent='Pay exactly ₹'+amount;
-    const uri=directUpiLink();
-    if(typeof window.QRCode==='function'){
-      new window.QRCode(box,{text:uri,width:220,height:220,correctLevel:window.QRCode.CorrectLevel.M});
-      qrRenderedAmount=amount;
-    }else box.textContent='QR could not load. Please refresh this page.';
-  }
   function setPaymentUI(){
-    const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='bharatpe'; const upi=method==='upi';
-    upiBox.hidden=!manual;if(manual)showExactQr(); transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : manual ? '<strong>QR Payment selected.</strong> Scan the exact-amount QR. Payment confirmation is not automatic.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
-    confirmButton.textContent = online ? 'Pay Securely' : upi ? (upiStarted ? "I've Paid — Place Order" : 'Pay with UPI') : manual ? "I've Paid — Place Order" : 'Place COD Order';
+    const method=paymentMethod(); const online=method==='razorpay'; const upi=method==='upi';
+    transactionLabel.hidden=true; transactionInput.required=false;
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    confirmButton.textContent = online ? 'Pay Securely' : upi ? (upiStarted ? "I've Paid — Place Order" : 'Pay with UPI') : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
     });
@@ -118,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const t=totals();
     mrpEl.textContent=money(t.mrp);
     discountEl.textContent=`− ${money(t.discount)}`;
-    totalEl.textContent=money(t.total);qrRenderedAmount='';if(paymentMethod()==='bharatpe')showExactQr();
+    totalEl.textContent=money(t.total);
     if(deliveryEl)deliveryEl.textContent=money(t.logistics);
     if(platformEl)platformEl.textContent=money(t.platform);
     if(packagingEl)packagingEl.textContent=money(t.packaging);
@@ -222,8 +198,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{upiStarted=false;setPaymentUI();}));
 
-  payButton?.addEventListener('click',()=>{if(paymentMethod()==='bharatpe'){showExactQr();setStatus('Scan the QR to pay the exact amount. Payment is not automatically confirmed.');return;}setStatus('For secure UPI payment, choose Razorpay. UPI apps are supported there and payment is verified automatically.','error');const razor=form.querySelector('input[name="paymentMethod"][value="razorpay"]');if(razor&&!razor.disabled){razor.checked=true;setPaymentUI();}});
-
   form.addEventListener('submit',async event=>{
     event.preventDefault();
     if(!validForm())return;
@@ -236,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'||method==='bharatpe'){setStatus('Submitting order for manual payment verification…');await saveOrder(c,'UPI','','');} else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){setStatus('Submitting order for manual payment verification…');await saveOrder(c,'UPI','','');} else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
