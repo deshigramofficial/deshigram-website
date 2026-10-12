@@ -108,6 +108,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(profile){form.name.value=profile.full_name||'';form.phone.value=profile.phone||'';}
   }catch(_){}
 
+  const pinInput=form.elements.namedItem('pincode');
+  const cityInput=form.elements.namedItem('city');
+  const stateInput=form.elements.namedItem('state');
+  let pinRequest=0;
+  pinInput?.addEventListener('input',async()=>{
+    const pin=String(pinInput.value||'').trim();const request=++pinRequest;
+    if(!/^[0-9]{6}$/.test(pin))return;
+    try{
+      const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),6000);
+      let response;try{response=await fetch('https://api.postalpincode.in/pincode/'+encodeURIComponent(pin),{signal:controller.signal});}finally{clearTimeout(timeout)}
+      if(!response.ok)return;
+      const data=await response.json();if(request!==pinRequest||pin!==pinInput.value.trim())return;
+      const offices=data?.[0]?.PostOffice;if(!Array.isArray(offices)||!offices.length)return;
+      const office=offices[0];
+      if(stateInput)stateInput.value=office.State||stateInput.value;
+      if(cityInput)cityInput.value=office.District||cityInput.value;
+      setStatus('City and state suggested from PIN code. Please confirm your address.');
+    }catch(_){/* Pincode lookup is optional. */}
+  });
   const customerData=()=>Object.fromEntries(new FormData(form).entries());
   const orderItems=()=>cart.getCart().map(i=>({product_id:i.id,quantity:i.quantity}));
   const requestStore='dg_main_checkout_request';
