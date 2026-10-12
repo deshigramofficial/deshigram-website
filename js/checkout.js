@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function setPaymentUI(){
     const method=paymentMethod(); const online=method==='razorpay'; const upi=method==='upi';
     transactionLabel.hidden=true; transactionInput.required=false;
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : '';
-    confirmButton.textContent = online ? 'Pay Securely' : upi ? (upiStarted ? "I've Paid — Place Order" : 'Pay with UPI') : 'Pay Securely';
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    confirmButton.textContent = online ? 'Pay Securely' : upi ? (upiStarted ? "I've Paid — Place Order" : 'Pay with UPI') : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
     });
