@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const customerData=()=>Object.fromEntries(new FormData(form).entries());
   const orderItems=()=>cart.getCart().map(i=>({product_id:i.id,quantity:i.quantity}));
   const requestStore='dg_main_checkout_request';
-  const getOrderRequestKey=()=>{
-    const fingerprint=JSON.stringify({user:session.user.id,items:orderItems().slice().sort((a,b)=>String(a.product_id).localeCompare(String(b.product_id)))});
+  const getOrderRequestKey=(method,customer)=>{
+    const fingerprint=JSON.stringify({user:session.user.id,method,customer,items:orderItems().slice().sort((a,b)=>String(a.product_id).localeCompare(String(b.product_id)))});
     let saved;try{saved=JSON.parse(sessionStorage.getItem(requestStore)||'null');}catch(_){}
     if(saved?.fingerprint===fingerprint&&saved?.key)return saved.key;
     const key=crypto.randomUUID();sessionStorage.setItem(requestStore,JSON.stringify({fingerprint,key}));return key;
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function saveOrder(c, method, transactionId='', gatewayOrderId=''){
     const t=totals();
-    const result=await integrations.placeOrder({p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_items:orderItems(),p_payment_method:method,p_request_key:getOrderRequestKey(),p_gateway_order_id:gatewayOrderId||null,p_gateway_payment_id:transactionId||null});
+    const result=await integrations.placeOrder({p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_items:orderItems(),p_payment_method:method,p_request_key:getOrderRequestKey(method,c),p_gateway_order_id:gatewayOrderId||null,p_gateway_payment_id:transactionId||null});
     const row=Array.isArray(result)?result[0]:result;
     const orderNumber=row?.order_number||'Not generated';
 
