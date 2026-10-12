@@ -146,6 +146,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     return true;
   }
 
+  function showOrderConfirmation(orderNumber,method){
+    const previous=document.getElementById('dgOrderSuccessOverlay');if(previous)previous.remove();
+    const overlay=document.createElement('div');overlay.id='dgOrderSuccessOverlay';
+    overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Order confirmed');
+    overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(5,32,19,.72);display:flex;align-items:center;justify-content:center;padding:20px';
+    const card=document.createElement('div');card.style.cssText='background:white;color:#123b27;border-radius:18px;max-width:440px;width:100%;padding:30px 24px;text-align:center;box-shadow:0 20px 70px #0004';
+    const symbol=document.createElement('div');symbol.textContent='✓';symbol.style.cssText='margin:0 auto 14px;background:#e1f6e8;color:#0a8342;border-radius:50%;width:64px;height:64px;line-height:64px;font-size:38px;font-weight:800';
+    const title=document.createElement('h2');title.textContent='Your Order is Confirmed! 🎉';title.style.cssText='font-size:24px;margin:8px 0 12px';
+    const description=document.createElement('p');description.textContent='Thank you for shopping with DeshiGram. You can track your order in My Orders.';
+    const number=document.createElement('p');number.style.cssText='padding:12px;background:#f2f8f3;border-radius:10px;font-weight:700';number.textContent='Order ID: '+orderNumber;
+    const payment=document.createElement('p');payment.style.cssText='font-weight:700;color:#12783e';payment.textContent=method==='COD'?'Cash on Delivery — Payment Pending':method==='UPI'?'UPI — Payment Verification Pending':'Payment Successful';
+    const button=document.createElement('button');button.type='button';button.textContent='Continue Shopping →';button.style.cssText='border:0;border-radius:10px;background:#168447;color:white;padding:15px 24px;width:100%;font-size:16px;font-weight:700;cursor:pointer';
+    button.addEventListener('click',()=>location.replace('index.html'));
+    card.append(symbol,title,description,number,payment,button);overlay.append(card);document.body.append(overlay);button.focus();
+  }
+
   async function saveOrder(c, method, transactionId='', gatewayOrderId=''){
     const t=totals();
     const result=await integrations.placeOrder({p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_items:orderItems(),p_payment_method:method,p_request_key:getOrderRequestKey(method,c),p_gateway_order_id:gatewayOrderId||null,p_gateway_payment_id:transactionId||null});
@@ -167,11 +183,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     status.classList.remove('is-error');status.classList.add('is-success');
     status.innerHTML=`<strong>Order placed: ${orderNumber}</strong><br>${method==='COD'?'Cash on Delivery selected.':method==='UPI'?'UPI payment verification pending. We will verify before dispatch.':'Payment verified successfully.'} <a href="account.html" data-direct-account>View order history</a>.`;
-    openWhatsapp(msg);
+    // Order confirmation stays on the website; WhatsApp navigation must not interrupt it.
     verifiedPayment=null;
     sessionStorage.removeItem(requestStore);
     cart.clearCart();
     confirmButton.disabled=true;
+    showOrderConfirmation(orderNumber,method);
   }
 
   async function startRazorpay(c){
@@ -246,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       cart.clearCart();
       setStatus('Paid order recovered: '+order.order_number+'. Payment verified. View it in My Orders.','success');
       recoveryButton.disabled=true;confirmButton.disabled=true;
-      const link=document.createElement('a');link.href='account.html';link.textContent=' View My Orders';status.append(link);
+      showOrderConfirmation(order.order_number,'RAZORPAY');
     }catch(err){setStatus(err.message||'Could not recover payment. Do not pay again; contact support.','error');recoveryButton.disabled=false;}
     finally{submitting=false;}
   });
