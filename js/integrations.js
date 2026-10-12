@@ -111,7 +111,7 @@
   }
   async function getMyOrders(){
     const s=await getSession(); if(!s) return [];
-    return api(`/orders?select=id,order_number,product_name,quantity,total_amount,payment_status,order_status,courier_name,awb_code,tracking_url,created_at&user_id=eq.${encodeURIComponent(s.user.id)}&order=created_at.desc`);
+    return api(`/orders?select=id,order_number,product_name,quantity,total_amount,payment_status,order_status,payment_method,shipping_address,city,state,pincode,created_at&user_id=eq.${encodeURIComponent(s.user.id)}&order=created_at.desc`);
   }
   async function getApprovedReviews(){ return api('/reviews?select=id,order_id,name,rating,review,verified,created_at&status=eq.approved&order=created_at.desc&limit=100'); }
   async function submitOrderReview({orderId,rating,review}){
