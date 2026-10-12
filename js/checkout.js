@@ -66,10 +66,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(type) status.classList.add(type==='error'?'is-error':'is-success');
   };
 
+  let qrRenderedAmount='';
+  function showExactQr(){
+    const amount=totals().total.toFixed(2);
+    const box=document.getElementById('dynamicUpiQr');
+    if(!box||qrRenderedAmount===amount)return;
+    box.replaceChildren();
+    document.getElementById('dynamicUpiAmount').textContent='Pay exactly ₹'+amount;
+    const uri=directUpiLink();
+    if(typeof window.QRCode==='function'){
+      new window.QRCode(box,{text:uri,width:220,height:220,correctLevel:window.QRCode.CorrectLevel.M});
+      qrRenderedAmount=amount;
+    }else box.textContent='QR could not load. Please refresh this page.';
+  }
   function setPaymentUI(){
     const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='bharatpe'; const upi=method==='upi';
-    upiBox.hidden=!manual; transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : manual ? '<strong>QR Payment selected.</strong> Automatic confirmation is unavailable. Please use verified online payment until QR orders are enabled.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    upiBox.hidden=!manual;if(manual)showExactQr(); transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : manual ? '<strong>QR Payment selected.</strong> Scan the exact-amount QR. Payment confirmation is not automatic.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
     confirmButton.textContent = online ? 'Pay Securely' : upi ? 'Pay with UPI Securely' : manual ? 'QR Verification Required' : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
@@ -104,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const t=totals();
     mrpEl.textContent=money(t.mrp);
     discountEl.textContent=`− ${money(t.discount)}`;
-    totalEl.textContent=money(t.total);
+    totalEl.textContent=money(t.total);qrRenderedAmount='';if(paymentMethod()==='bharatpe')showExactQr();
     if(deliveryEl)deliveryEl.textContent=money(t.logistics);
     if(platformEl)platformEl.textContent=money(t.platform);
     if(packagingEl)packagingEl.textContent=money(t.packaging);
@@ -208,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',setPaymentUI));
 
-  payButton?.addEventListener('click',()=>{setStatus('For secure UPI payment, choose Razorpay. UPI apps are supported there and payment is verified automatically.','error');const razor=form.querySelector('input[name="paymentMethod"][value="razorpay"]');if(razor&&!razor.disabled){razor.checked=true;setPaymentUI();}});
+  payButton?.addEventListener('click',()=>{if(paymentMethod()==='bharatpe'){showExactQr();setStatus('Scan the QR to pay the exact amount. Payment is not automatically confirmed.');return;}setStatus('For secure UPI payment, choose Razorpay. UPI apps are supported there and payment is verified automatically.','error');const razor=form.querySelector('input[name="paymentMethod"][value="razorpay"]');if(razor&&!razor.disabled){razor.checked=true;setPaymentUI();}});
 
   form.addEventListener('submit',async event=>{
     event.preventDefault();
