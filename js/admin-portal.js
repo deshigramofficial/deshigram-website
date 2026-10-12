@@ -9,7 +9,7 @@ const websiteListingRefs=[
 function adminListings(){const live=state.deshigram_products||[],slugs=new Set(live.map(x=>x.slug));return [...live,...websiteListingRefs.filter(x=>!slugs.has(x.slug))]}
 const $=q=>document.querySelector(q), money=v=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(v||0)), fmt=v=>v?new Date(v).toLocaleString("en-IN"):"—", lines=v=>String(v||"").split("\n").map(x=>x.trim()).filter(Boolean), dt=v=>v?new Date(v).toISOString().slice(0,16):"";
 function imageUrl(kind,path){if(!path)return "";if(/^https?:\/\//i.test(path)||path.startsWith("images/")||path.startsWith("./")||path.startsWith("../"))return path;const bucket=kind==="deshigram"?"deshigram-products":"seller-products";return `${URL}/storage/v1/object/public/${bucket}/${path}`}
-function paymentLabel(o){const m=String(o.payment_method||"").toLowerCase();if(m.includes("cod")||m.includes("cash"))return "COD";return o.payment_status==="paid"?"PAID":String(o.payment_status||"ONLINE").toUpperCase()}
+function paymentLabel(o){const m=String(o.payment_method||"").toLowerCase();if(m.includes("cod")||m.includes("cash"))return "COD";if(m==="upi")return o.payment_status==="paid"?"UPI PAID":"UPI VERIFY PENDING";return o.payment_status==="paid"?"PAID":String(o.payment_status||"ONLINE").toUpperCase()}
 const status=(el,msg,type="")=>{el.textContent=msg||"";el.className=`status ${type}`};
 async function isAdmin(){
  const {data:{session},error:sessionError}=await db.auth.getSession();if(sessionError||!session)return false;
