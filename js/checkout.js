@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   form.querySelector('.payment-method-card.active-cod')?.addEventListener('click',event=>{if(quick.cod===false){event.preventDefault();event.stopPropagation();flashCod();}});
   refreshPaymentChoices();
+  let upiStarted=false;
   const directUpiLink=()=> 'upi://pay?'+new URLSearchParams({pa:upiId,pn:receiverName,am:totals().total.toFixed(2),cu:'INR',tn:'DeshiGram order payment'}).toString();
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
   const setStatus = (msg,type='') => {
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='bharatpe'; const upi=method==='upi';
     upiBox.hidden=!manual;if(manual)showExactQr(); transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
     notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : manual ? '<strong>QR Payment selected.</strong> Scan the exact-amount QR. Payment confirmation is not automatic.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
-    confirmButton.textContent = online ? 'Pay Securely' : upi ? 'Pay with UPI Securely' : manual ? 'QR Verification Required' : 'Place COD Order';
+    confirmButton.textContent = online ? 'Pay Securely' : upi ? (upiStarted ? "I've Paid — Place Order" : 'Pay with UPI') : manual ? "I've Paid — Place Order" : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
     });
@@ -153,15 +154,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     integrations.emailNotice('New DeshiGram Website Order',{
       Order_ID:orderNumber,Name:c.name,Phone:c.phone,Products:productSummary(),Total:money(t.total),
-      Payment_Method:method,Transaction_ID:transactionId||'COD',Account_Link:'https://deshigram.in/account.html'
+      Payment_Method:method,Transaction_ID:transactionId||(method==='UPI'?'Pending verification':'COD'),Account_Link:'https://deshigram.in/account.html'
     });
 
     const feeLines=t.extra?`Delivery: ${money(t.logistics)}\nPlatform fee: ${money(t.platform)}\nPayment processing: ${money(t.payment)}`:'Delivery & platform charges: Included in listing price';
-    const paymentLine=method==='COD' ? `Payment method: Cash on Delivery\nAmount to collect: ${money(t.total)}` : method==='UPI' ? `Payment method: One-click UPI\nUPI ID: ${upiId}\nUTR: ${transactionId}` : `Payment method: Razorpay\nPayment ID: ${transactionId}`;
+    const paymentLine=method==='COD' ? `Payment method: Cash on Delivery\nAmount to collect: ${money(t.total)}` : method==='UPI' ? `Payment method: UPI (verification pending)\nUPI ID: ${upiId}` : `Payment method: Razorpay\nPayment ID: ${transactionId}`;
     const msg=`Hello DeshiGram, I want to confirm my order.\n\nOrder ID: ${orderNumber}\n${orderLines().join('\n')}\n\nMRP total: ${money(t.mrp)}\nDiscount: -${money(t.discount)}\n${feeLines}\n${paymentLine}\n\nCustomer Details:\nName: ${c.name}\nPhone: ${c.phone}\nAddress: ${c.address}, ${c.city}, ${c.state} - ${c.pincode}`;
 
     status.classList.remove('is-error');status.classList.add('is-success');
-    status.innerHTML=`<strong>Order placed: ${orderNumber}</strong><br>${method==='COD'?'Cash on Delivery selected.':'Payment verified successfully.'} <a href="account.html" data-direct-account>View order history</a>.`;
+    status.innerHTML=`<strong>Order placed: ${orderNumber}</strong><br>${method==='COD'?'Cash on Delivery selected.':method==='UPI'?'UPI payment verification pending. We will verify before dispatch.':'Payment verified successfully.'} <a href="account.html" data-direct-account>View order history</a>.`;
     openWhatsapp(msg);
     cart.clearCart();
     confirmButton.disabled=true;
@@ -219,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',setPaymentUI));
+  form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{upiStarted=false;setPaymentUI();}));
 
   payButton?.addEventListener('click',()=>{if(paymentMethod()==='bharatpe'){showExactQr();setStatus('Scan the QR to pay the exact amount. Payment is not automatically confirmed.');return;}setStatus('For secure UPI payment, choose Razorpay. UPI apps are supported there and payment is verified automatically.','error');const razor=form.querySelector('input[name="paymentMethod"][value="razorpay"]');if(razor&&!razor.disabled){razor.checked=true;setPaymentUI();}});
 
@@ -229,14 +230,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
     refreshPaymentChoices();
     if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
-    if(paymentMethod()==='upi'){setStatus('Opening UPI app for ₹'+totals().total.toFixed(2)+'. Payment is not automatically verified and no order has been placed.');window.location.href=directUpiLink();return;}
-    if(paymentMethod()==='bharatpe'){setStatus('QR payment needs a pending-verification order flow. Please choose Razorpay or One-click UPI. Do not send payment manually yet.','error');return;}
+    if(paymentMethod()==='upi'&&!upiStarted){upiStarted=true;setPaymentUI();setStatus('Opening UPI app for ₹'+totals().total.toFixed(2)+'. After payment, return here and tap I\'ve Paid — Place Order.');window.location.href=directUpiLink();return;}
     const c=customerData();
     const method=paymentMethod();
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'||method==='bharatpe'){setStatus('Submitting order for manual payment verification…');await saveOrder(c,'UPI','','');} else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
