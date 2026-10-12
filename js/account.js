@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const canReview=o.order_status!=='cancelled' && !reviewed;
     return `<article class="account-order-card">
       <div class="account-order-head"><div><small>${new Date(o.created_at).toLocaleDateString('en-IN')}</small><h3>${o.order_number}</h3></div><span class="order-status">${String(o.order_status||'placed').replace(/\b\w/g,m=>m.toUpperCase())}</span></div>
-      <p>${o.product_name}</p><div class="account-order-meta"><span>Qty ${o.quantity}</span><strong>${money(o.total_amount)}</strong></div>
+      <p>${o.product_name}</p><p>Payment: ${o.payment_status==='paid'?'Paid':o.payment_status||'Pending'} (${o.payment_method||'—'})</p><div class="account-order-meta"><span>Qty ${o.quantity}</span><strong>${money(o.total_amount)}</strong></div>
       ${o.awb_code?`<div class="account-tracking"><span>Tracking: <strong>${o.awb_code}</strong>${o.courier_name?` • ${o.courier_name}`:''}</span>${o.tracking_url?`<a href="${o.tracking_url}" target="_blank" rel="noopener">Track shipment →</a>`:''}</div>`:''}
       ${reviewed?'<span class="reviewed-pill">✓ Review submitted</span>':canReview?`<button class="button button-secondary rate-order-btn" type="button" data-order-id="${o.id}" data-order-number="${o.order_number}">Rate Product</button>`:''}
     </article>`;
@@ -52,12 +52,15 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     if(!session){authPanel.hidden=false;dashboard.hidden=true;return;}
     if(next && next!=='account.html'){location.replace(next);return;}
     authPanel.hidden=true;dashboard.hidden=false;renderAccountCart();
-    const [profile,orders,reviews]=await Promise.all([api.getProfile(),api.getMyOrders(),api.getApprovedReviews()]);
+    const [profileResult,ordersResult,reviewsResult]=await Promise.allSettled([api.getProfile(),api.getMyOrders(),api.getApprovedReviews()]);
+    const profile=profileResult.status==='fulfilled'?profileResult.value:null;
+    const orders=ordersResult.status==='fulfilled'?ordersResult.value:null;
+    const reviews=reviewsResult.status==='fulfilled'?reviewsResult.value:[];
     document.getElementById('accountName').textContent=profile?.full_name||'Customer';
     profileForm.full_name.value=profile?.full_name||'';
     profileForm.phone.value=profile?.phone||'';
     const reviewed=new Set((reviews||[]).filter(r=>r.order_id).map(r=>r.order_id));
-    ordersEl.innerHTML=orders?.length?orders.map(o=>orderCard(o,reviewed.has(o.id))).join(''):'<div class="account-empty"><h3>No orders yet</h3><p>Your DeshiGram orders will appear here.</p><a class="button button-primary" href="products.html">Shop Products</a></div>';
+    ordersEl.innerHTML=ordersResult.status==='rejected'?'<div class="account-empty"><h3>Could not load orders</h3><p>Please refresh or sign in again.</p></div>':orders?.length?orders.map(o=>orderCard(o,reviewed.has(o.id))).join(''):'<div class="account-empty"><h3>No orders yet</h3><p>Your DeshiGram orders will appear here.</p><a class="button button-primary" href="products.html">Shop Products</a></div>';
     document.querySelectorAll('.rate-order-btn').forEach(btn=>btn.addEventListener('click',()=>openReview(btn.dataset.orderId,btn.dataset.orderNumber)));
   }
 
