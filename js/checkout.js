@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   form.querySelector('.payment-method-card.active-cod')?.addEventListener('click',event=>{if(quick.cod===false){event.preventDefault();event.stopPropagation();flashCod();}});
   refreshPaymentChoices();
+  const directUpiLink=()=> 'upi://pay?'+new URLSearchParams({pa:upiId,pn:receiverName,am:totals().total.toFixed(2),cu:'INR',tn:'DeshiGram order payment'}).toString();
   const paymentMethod = () => form.querySelector('input[name="paymentMethod"]:checked')?.value || 'cod';
   const setStatus = (msg,type='') => {
     status.textContent = msg || '';
@@ -68,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function setPaymentUI(){
     const method=paymentMethod(); const online=method==='razorpay'; const manual=method==='bharatpe'; const upi=method==='upi';
     upiBox.hidden=!manual; transactionLabel.hidden=true; transactionInput.required=false; if(!manual){transactionInput.value='';qrFallback.hidden=true;}
-    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Secure UPI payment through Razorpay.' : manual ? '<strong>QR Payment selected.</strong> Automatic confirmation is unavailable. Please use verified online payment until QR orders are enabled.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
+    notice.innerHTML = online ? '<strong>Razorpay selected.</strong> Payment will be automatically verified.' : upi ? '<strong>One-click UPI selected.</strong> Direct payment to DeshiGram UPI. Payment confirmation is not automatic.' : manual ? '<strong>QR Payment selected.</strong> Automatic confirmation is unavailable. Please use verified online payment until QR orders are enabled.' : '<strong>Cash on Delivery selected.</strong> Pay when your parcel is delivered.';
     confirmButton.textContent = online ? 'Pay Securely' : upi ? 'Pay with UPI Securely' : manual ? 'QR Verification Required' : 'Place COD Order';
     form.querySelectorAll('.payment-method-card').forEach(card=>{
       card.classList.toggle('is-selected',card.querySelector('input')?.checked);
@@ -215,13 +216,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     try{const response=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/rest/v1/d2c_quick_controls?select=key,enabled',{headers:{apikey:'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0'},cache:'no-store'});if(!response.ok)throw new Error('Store availability could not be verified. Please retry.');(await response.json()).forEach(x=>quick[x.key]=x.enabled)}catch(err){setStatus(err.message||'Unable to verify checkout availability.','error');return;}
     refreshPaymentChoices();
     if(!paymentAllowed(paymentMethod())){setStatus('This payment method or new orders are currently unavailable.','error');return;}
+    if(paymentMethod()==='upi'){setStatus('Opening UPI app for ₹'+totals().total.toFixed(2)+'. Payment is not automatically verified and no order has been placed.');window.location.href=directUpiLink();return;}
     if(paymentMethod()==='bharatpe'){setStatus('QR payment needs a pending-verification order flow. Please choose Razorpay or One-click UPI. Do not send payment manually yet.','error');return;}
     const c=customerData();
     const method=paymentMethod();
     confirmButton.disabled=true;
     try{
       integrations.track('begin_checkout',{currency:'INR',value:totals().total,items:cart.getCart().map(i=>({item_id:i.id,item_name:i.name,price:i.price,quantity:i.quantity}))});
-      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else if(method==='upi'){ const paid=await startRazorpay(c); setStatus('Saving your verified UPI order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
+      if(method==='razorpay'){ const paid=await startRazorpay(c); setStatus('Saving your paid order…'); await saveOrder(c,'RAZORPAY',paid.paymentId,paid.gatewayOrderId); } else { setStatus('Placing your order…'); await saveOrder(c,'COD','',''); }
     }catch(err){
       console.error(err);
       setStatus(err.message||'Order could not be completed.','error');
