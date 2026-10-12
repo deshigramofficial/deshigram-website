@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const confirmButton = document.getElementById('confirmPaymentButton');
   const notice = document.getElementById('checkoutNotice');
   const payButton=document.getElementById('payWithUpiButton'); const upiBox=document.getElementById('upiPaymentBox'); const qrFallback=document.getElementById('upiQrFallback'); const transactionLabel=document.getElementById('transactionLabel'); const transactionInput=document.getElementById('transactionId');
-  const upiId='BHARATPE09891189128@yesbankltd'; const receiverName='ABHINENDRA SINGH';
+  const upiId='9557735797@apl'; const receiverName='DeshiGram';
 
   const DELIVERY_FEE = 55;
   const PLATFORM_FEE = 10;
