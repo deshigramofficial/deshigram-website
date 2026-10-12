@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const logoutBtn=document.getElementById('logoutBtn');
   const accountCart=document.getElementById('accountCartItems');
   const switchBtns=document.querySelectorAll('[data-auth-tab]');
-  const params=new URLSearchParams(location.search); const next=params.get('next') || ''; let recoveryMode=params.get('recovery')==='1' || location.hash.includes('type=recovery');
+  document.getElementById('googleSignIn')?.addEventListener('click',async()=>{try{await api.signInWithGoogle();}catch(err){setStatus(authStatus,err.message||'Google sign-in unavailable.','error');}});
+  const params=new URLSearchParams(location.search); const next=['cart.html','checkout.html','account.html'].includes(params.get('next'))?params.get('next'):''; let recoveryMode=params.get('recovery')==='1' || location.hash.includes('type=recovery');
   const forgotForm=document.getElementById('forgotPasswordForm');
   const newPasswordForm=document.getElementById('newPasswordForm');
   const showForgot=document.getElementById('showForgotPassword');
