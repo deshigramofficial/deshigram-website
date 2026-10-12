@@ -226,6 +226,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Recover an already verified, unlinked Razorpay payment without opening payment gateway again.
+  const recoveryButton=document.createElement('button');
+  recoveryButton.type='button';recoveryButton.textContent='Already Paid? Recover My Order (No New Payment)';
+  recoveryButton.style.cssText='width:100%;margin-top:12px;padding:13px;border:1px solid #16884d;border-radius:9px;background:white;color:#07552e;font-weight:700;cursor:pointer';
+  confirmButton.insertAdjacentElement('afterend',recoveryButton);
+  recoveryButton.addEventListener('click',async()=>{
+    if(submitting||!validForm())return;
+    submitting=true;recoveryButton.disabled=true;
+    try{
+      const c=customerData();
+      const {data,error}=await integrations.getClient().rpc('recover_verified_deshigram_payment',{
+        p_customer_name:c.name,p_phone:c.phone,p_shipping_address:c.address,p_city:c.city,p_state:c.state,p_pincode:c.pincode,p_items:orderItems()
+      });
+      if(error)throw error;
+      const order=Array.isArray(data)?data[0]:data;
+      if(!order?.order_number)throw new Error('Recovery returned no order. Please contact support.');
+      sessionStorage.removeItem(requestStore);
+      cart.clearCart();
+      setStatus('Paid order recovered: '+order.order_number+'. Payment verified. View it in My Orders.','success');
+      recoveryButton.disabled=true;confirmButton.disabled=true;
+      const link=document.createElement('a');link.href='account.html';link.textContent=' View My Orders';status.append(link);
+    }catch(err){setStatus(err.message||'Could not recover payment. Do not pay again; contact support.','error');recoveryButton.disabled=false;}
+    finally{submitting=false;}
+  });
+
   form.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{upiStarted=false;verifiedPayment=null;setPaymentUI();}));
 
   form.addEventListener('submit',async event=>{
