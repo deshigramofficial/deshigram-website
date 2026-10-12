@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const {data,error}=await client.functions.invoke('razorpay-payment',{
       body:{action:'create_order',items:orderItems(),receipt}
     });
-    if(error) throw new Error(data?.error||error.context?.message||error.message||'Could not start Razorpay payment');
+    if(error){let detail=data?.error;try{const body=await error.context?.json?.();detail=body?.error||detail;}catch(_){}throw new Error(detail||error.message||'Could not start Razorpay payment');}
     if(data?.error) throw new Error(data.error);
     if(!data?.key_id||!data?.order_id||!data?.amount)throw new Error('Payment gateway returned incomplete order details. Please retry.');
 
