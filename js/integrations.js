@@ -115,7 +115,7 @@
   }
   async function getMyOrderItems(){const session=await getSession();if(!session)return [];return api('/order_items?select=order_id,product_name,quantity,fulfillment_status,courier_name,tracking_id,tracking_url&order=created_at.desc');}
   async function cancelMyOrder(orderId){return api('/rpc/cancel_main_order',{method:'POST',body:JSON.stringify({p_order_id:orderId})});}
-  async function getMyOrderNotifications(){const session=await getSession();if(!session)return [];return api('/main_order_notifications?select=id,order_id,event_type,message,created_at,read_at&order=created_at.desc&limit=30');}
+  async function getMyOrderNotifications(){const session=await getSession();if(!session)return [];return api('/main_order_notifications?select=id,order_id,event_type,message,created_at,read_at&order=created_at.desc&limit=500');}
   async function markMyNotificationsRead(ids){if(!ids?.length)return;return api('/main_order_notifications?id=in.('+ids.map(Number).filter(Number.isSafeInteger).join(',')+')',{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});}
   async function getApprovedReviews(){ return api('/reviews?select=id,order_id,name,rating,review,verified,created_at&status=eq.approved&order=created_at.desc&limit=100'); }
   async function submitOrderReview({orderId,rating,review}){
