@@ -35,20 +35,30 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
   function money(v){return `₹${Number(v||0).toFixed(2)}`}
   const safe=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  let orderItems=[];
+  let orderItems=[],orderNotifications=[];
+  const policy='Orders can be cancelled before shipping. Once shipped, cancellation is not available. For order issues, please contact support as per our Return & Refund Policy.';
+  const formatStatus=value=>String(value||'placed').replace(/_/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());
+  function trackingLink(item){
+    if(!item?.tracking_url)return '';
+    try{const u=new URL(item.tracking_url);if(u.protocol!=='https:'||u.username||u.password||!u.hostname.includes('.')||/^(localhost|127\\.|10\\.|192\\.168\\.)/i.test(u.hostname))return '';return u.href;}catch{return '';}
+  }
   function orderCard(o,reviewed){
     const stages=['placed','confirmed','packed','shipped','out_for_delivery','delivered'];
-    const current=stages.indexOf(o.order_status);const cancelled=o.order_status==='cancelled';
+    const current=stages.indexOf(o.order_status);
+    const cancelled=o.order_status==='cancelled';
     const items=orderItems.filter(x=>x.order_id===o.id);
-    const courier=items.find(x=>x.tracking_id||x.courier_name);
-    const canReview=!cancelled&&!reviewed;
-    return `<article class="account-order-card"><div class="account-order-head"><div><small>${new Date(o.created_at).toLocaleDateString('en-IN')}</small><h3>${safe(o.order_number)}</h3></div><span class="order-status">${safe(cancelled?'Cancelled':String(o.order_status||'placed').replace(/_/g,' ').replace(/\\b\\w/g,m=>m.toUpperCase()))}</span></div>
-      <p>${safe(o.product_name)}</p><p>Payment: ${safe(o.payment_status==='paid'?'Paid':o.payment_status||'Pending')} (${safe(o.payment_method||'—')})</p><div class="account-order-meta"><span>Qty ${Number(o.quantity)||1}</span><strong>${money(o.total_amount)}</strong></div>
-      <div class="dg-order-progress">${cancelled?'<span>Order Cancelled</span>':stages.map((x,i)=>`<span class="${i<=current?'done':''}">${safe(x.replace(/_/g,' ').replace(/\\b\\w/g,m=>m.toUpperCase()))}</span>`).join('')}</div>
-      ${courier?`<p>Courier: ${safe(courier.courier_name||'Pending')} · Tracking: ${safe(courier.tracking_id||'Pending')}</p>`:''}
-      <p>Delivery: ${safe([o.shipping_address,o.city,o.state,o.pincode].filter(Boolean).join(', '))}</p>
-      <a href="mailto:support@deshigram.in?subject=${encodeURIComponent('Help with order '+o.order_number)}">Help with this order →</a>
-      ${reviewed?'<span class="reviewed-pill">✓ Review submitted</span>':canReview?`<button class="button button-secondary rate-order-btn" type="button" data-order-id="${safe(o.id)}" data-order-number="${safe(o.order_number)}">Rate Product</button>`:''}</article>`;
+    const activity=orderNotifications.filter(n=>n.order_id===o.id);
+    const courier=items.find(x=>x.tracking_url||x.tracking_id||x.courier_name);
+    const url=trackingLink(courier);
+    const canCancel=['placed','confirmed','packed'].includes(o.order_status)&&!items.some(x=>['picked_up','shipped','delivered'].includes(x.fulfillment_status));
+    const products=items.length?items.map(x=>safe(x.product_name)+' × '+(Number(x.quantity)||1)).join(', '):safe(o.product_name)+' × '+(Number(o.quantity)||1);
+    return `<article class="account-order-card dg-premium-order"><div class="account-order-head"><div><small>${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</small><h3>${safe(o.order_number)}</h3></div><span class="order-status">${safe(formatStatus(o.order_status))}</span></div>
+    <p class="dg-order-products">${products}</p><div class="dg-order-amount"><strong>${money(o.total_amount)}</strong><span>Payment: ${safe(formatStatus(o.payment_status))} · ${safe(o.payment_method||'—')}</span></div>
+    <div class="dg-order-progress" aria-label="Order progress">${cancelled?'<span class="dg-cancelled">Cancelled</span>':stages.map((x,i)=>`<span class="${i<=current?'done':''}">${safe(formatStatus(x))}</span>`).join('')}</div>
+    ${courier?`<div class="dg-courier-box">${courier.courier_name?`<span>Courier: <strong>${safe(courier.courier_name)}</strong></span>`:''}${courier.tracking_id?`<span>Tracking: ${url?`<a href="${safe(url)}" target="_blank" rel="noopener noreferrer">${safe(courier.tracking_id)}</a>`:`<strong>${safe(courier.tracking_id)}</strong>`}</span>`:''}${url?`<a class="button button-secondary" href="${safe(url)}" target="_blank" rel="noopener noreferrer">Track Order ↗</a>`:''}</div>`:''}
+    <div class="dg-order-actions"><a href="mailto:support@deshigram.in?subject=${encodeURIComponent('Help with order '+o.order_number)}">Help with order</a>${canCancel?`<button type="button" class="dg-cancel-order" data-cancel-order="${safe(o.id)}">Cancel Order</button>`:''}${reviewed?'<span>✓ Reviewed</span>':!cancelled?`<button class="button button-secondary rate-order-btn" type="button" data-order-id="${safe(o.id)}" data-order-number="${safe(o.order_number)}">Rate Product</button>`:''}</div>
+    ${activity.length?`<details class="dg-order-activity"><summary>Order activity (${activity.length})</summary><ol>${activity.map(n=>`<li><time>${new Date(n.created_at).toLocaleString('en-IN')}</time><p>${safe(n.message)}</p></li>`).join('')}</ol></details>`:''}
+    </article>`;
   }
 
 
@@ -62,8 +72,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     authPanel.hidden=true;dashboard.hidden=false;renderAccountCart();
     const [profileResult,ordersResult,reviewsResult,itemsResult,notificationsResult]=await Promise.allSettled([api.getProfile(),api.getMyOrders(),api.getApprovedReviews(),api.getMyOrderItems(),api.getMyOrderNotifications()]);
     orderItems=itemsResult.status==='fulfilled'?itemsResult.value:[];
-    const inbox=document.getElementById('orderNotifications');
-    if(inbox){const messages=notificationsResult.status==='fulfilled'?notificationsResult.value:[];inbox.innerHTML=messages.length?'<h4>Order Updates</h4>'+messages.slice(0,8).map(n=>'<div class="dg-inbox"><strong>'+safe(n.message)+'</strong><div><time>'+new Date(n.created_at).toLocaleString('en-IN')+'</time></div></div>').join(''):'';}
+    orderNotifications=notificationsResult.status==='fulfilled'?notificationsResult.value:[];
+    const inbox=document.getElementById('orderNotifications');if(inbox)inbox.innerHTML='';
     const profile=profileResult.status==='fulfilled'?profileResult.value:null;
     const orders=ordersResult.status==='fulfilled'?ordersResult.value:null;
     const reviews=reviewsResult.status==='fulfilled'?reviewsResult.value:[];
@@ -72,8 +82,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     profileForm.phone.value=profile?.phone||'';
     for(const field of ['saved_address','saved_city','saved_state','saved_pincode'])if(profileForm.elements[field])profileForm.elements[field].value=profile?.[field]||'';
     const reviewed=new Set((reviews||[]).filter(r=>r.order_id).map(r=>r.order_id));
-    ordersEl.innerHTML=ordersResult.status==='rejected'?'<div class="account-empty"><h3>Could not load orders</h3><p>Please refresh or sign in again.</p></div>':orders?.length?orders.map(o=>orderCard(o,reviewed.has(o.id))).join(''):'<div class="account-empty"><h3>No orders yet</h3><p>Your DeshiGram orders will appear here.</p><a class="button button-primary" href="products.html">Shop Products</a></div>';
+    ordersEl.innerHTML=ordersResult.status==='rejected'?'<div class="account-empty"><h3>Could not load orders</h3><p>Please refresh or sign in again.</p></div>':orders?.length?(()=>{const ordered=[...orders].sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at));const active=ordered.filter(o=>!['delivered','cancelled'].includes(o.order_status));const past=ordered.filter(o=>['delivered','cancelled'].includes(o.order_status));return (active.length?'<h3 class="dg-order-group-title">Active Orders</h3>'+active.map(o=>orderCard(o,reviewed.has(o.id))).join(''):'')+(past.length?'<h3 class="dg-order-group-title">Past Orders</h3>'+past.map(o=>orderCard(o,reviewed.has(o.id))).join(''):'');})():'<div class="account-empty"><h3>No orders yet</h3><p>Your DeshiGram orders will appear here.</p><a class="button button-primary" href="products.html">Shop Products</a></div>';
     document.querySelectorAll('.rate-order-btn').forEach(btn=>btn.addEventListener('click',()=>openReview(btn.dataset.orderId,btn.dataset.orderNumber)));
+    document.querySelectorAll('[data-cancel-order]').forEach(btn=>btn.addEventListener('click',async()=>{if(!confirm(policy+'\\n\\nCancel this order?'))return;btn.disabled=true;try{await api.cancelMyOrder(btn.dataset.cancelOrder);await loadDashboard();}catch(err){alert(err.message||'Cancellation unavailable. Contact support.');btn.disabled=false;}}));
   }
 
   showForgot?.addEventListener('click',()=>{loginForm.hidden=true;signupForm.hidden=true;forgotForm.hidden=false;setStatus(authStatus,'');});
