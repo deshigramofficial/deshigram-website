@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const formatStatus=value=>String(value||'placed').replace(/_/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());
   function trackingLink(item){
     if(!item?.tracking_url)return '';
-    try{const u=new URL(item.tracking_url);if(u.protocol!=='https:'||u.username||u.password||!u.hostname.includes('.')||/^(localhost|127\\.|10\\.|192\\.168\\.)/i.test(u.hostname))return '';return u.href;}catch{return '';}
+    try{const u=new URL(item.tracking_url);const domains=['delhivery.com','bluedart.com','dtdc.in','ecomexpress.in','xpressbees.com','indiapost.gov.in','shiprocket.in','shadowfax.in','ekartlogistics.com','amazonshipping.in','trackon.in'];if(u.protocol!=='https:'||u.username||u.password||!domains.some(d=>u.hostname===d||u.hostname.endsWith('.'+d)))return '';return u.href;}catch{return '';}
   }
   function orderCard(o,reviewed){
     const stages=['placed','confirmed','packed','shipped','out_for_delivery','delivered'];
