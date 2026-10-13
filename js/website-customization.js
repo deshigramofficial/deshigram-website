@@ -13,6 +13,10 @@ if(carousel){
   if(row.mobile_image_url&&img){let picture=slide.querySelector('picture');if(!picture){picture=document.createElement('picture');img.replaceWith(picture);picture.append(img)}let source=picture.querySelector('source[data-admin-mobile]');if(!source){source=document.createElement('source');source.dataset.adminMobile='1';source.media='(max-width: 760px)';picture.prepend(source)}source.srcset=row.mobile_image_url}
   const href=safe(row.link_url);if(href)slide.href=href;if(row.new_tab){slide.target='_blank';slide.rel='noopener noreferrer'}else{slide.removeAttribute('target');slide.removeAttribute('rel')}
  }
+ // If the first slide was disabled in Admin, promote the next visible slide.
+ const visibleSlides=slides.filter(slide=>!slide.hidden&&slide.style.display!=='none');
+ slides.forEach(slide=>slide.classList.remove('active'));
+ if(visibleSlides.length)visibleSlides[0].classList.add('active');
  carousel.dispatchEvent(new Event('dg:banners-updated'));
 }
 const hero=map.get('hero');if(hero){const sec=document.querySelector('.dg-hero');if(sec){sec.hidden=hero.visible===false;const img=sec.querySelector('.dg-hero-visual img');if(img&&hero.image_url)img.src=hero.image_url;const h=sec.querySelector('.dg-hero-copy h1');if(h&&hero.title)h.textContent=hero.title;const p=sec.querySelector('.dg-hero-copy p');if(p&&hero.subtitle)p.textContent=hero.subtitle;const a=sec.querySelector('.dg-hero-actions a');if(a&&safe(hero.link_url))a.href=safe(hero.link_url)}}
