@@ -559,6 +559,13 @@ main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img { object-fit:contain
 html,body{overflow-x:clip!important}
 body>.dg-head,body>header.dg-head{position:sticky!important;top:0!important;z-index:1000!important;background:#fff!important}
 </style>
+<style id="dg-fixed-header-scroll-fix">
+/* Fixed navigation avoids sticky failures caused by ancestor overflow and transforms. */
+body > header.dg-head {position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;z-index:2147483000!important;background:#fff!important;}
+</style>
+<script id="dg-fixed-header-offset">
+(function(){function update(){var h=document.querySelector('body > header.dg-head');if(!h)return;var n=h.getBoundingClientRect().height;document.body.style.paddingTop=n+'px';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',update);else update();window.addEventListener('resize',update);window.addEventListener('load',update);})();
+</script>
 </head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
@@ -708,4 +715,4 @@ body>.dg-head,body>header.dg-head{position:sticky!important;top:0!important;z-in
 </div></footer>
 <script src="js/integrations.js"></script><script src="js/login-choice.js"></script><script src="js/script.js"></script><script src="js/reviews.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/catalog.js?v=20261006b"></script><script src="js/premium-final.js?v=20261014-autoplay-sticky"></script><script defer src="js/website-customization.js?v=20261014-showcase-3-fix"></script>
 <script src="js/site-shell.js?v=20261006master"></script>
-</body></html>
+<script id="dg-header-offset-runtime">(function(){const h=document.querySelector('body > header.dg-head');if(!h)return;const update=()=>{document.body.style.paddingTop=h.getBoundingClientRect().height+'px'};update();window.addEventListener('resize',update);window.addEventListener('load',update);if(window.ResizeObserver)new ResizeObserver(update).observe(h);})();</script></body></html>
