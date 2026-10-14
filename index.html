@@ -554,6 +554,11 @@ main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide { position:absolute!impo
 main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img,main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide picture { display:block!important; width:100%!important; height:100%!important; }
 main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img { object-fit:contain!important; object-position:center!important; }
 </style>
+<style id="dg-sticky-header-and-banner-autoplay">
+/* Main navigation stays visible while the page scrolls. */
+html,body{overflow-x:clip!important}
+body>.dg-head,body>header.dg-head{position:sticky!important;top:0!important;z-index:1000!important;background:#fff!important}
+</style>
 </head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
@@ -701,6 +706,6 @@ main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img { object-fit:contain
   <span class="dg-made-india">🇮🇳 Made in India</span>
   <span>Powered by <strong>RK &amp; Sons Retail Group</strong></span>
 </div></footer>
-<script src="js/integrations.js"></script><script src="js/login-choice.js"></script><script src="js/script.js"></script><script src="js/reviews.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/catalog.js?v=20261006b"></script><script src="js/premium-final.js?v=20261014-syntax-fix"></script><script defer src="js/website-customization.js?v=20261014-showcase-3-fix"></script>
+<script src="js/integrations.js"></script><script src="js/login-choice.js"></script><script src="js/script.js"></script><script src="js/reviews.js"></script><script src="js/products-data.js"></script><script src="js/cart.js"></script><script src="js/catalog.js?v=20261006b"></script><script src="js/premium-final.js?v=20261014-autoplay-sticky"></script><script defer src="js/website-customization.js?v=20261014-showcase-3-fix"></script>
 <script src="js/site-shell.js?v=20261006master"></script>
 </body></html>
