@@ -16,7 +16,7 @@ if(carousel){
    const slide=document.createElement('a');slide.className='dg-slide';
    const href=safe(row.link_url);slide.href=href||'products.html';
    if(row.new_tab){slide.target='_blank';slide.rel='noopener noreferrer'}
-   const img=document.createElement('img');img.src=row.image_url;img.alt=row.title||'DeshiGram promotional banner';img.decoding='async';img.loading=slides.length?'lazy':'eager';
+   const img=document.createElement('img');img.src=row.image_url;img.alt=row.title||'DeshiGram promotional banner';img.decoding='async';img.style.setProperty('transform',`scale(${Math.min(150,Math.max(60,Number(row.banner_scale)||100))/100})`);img.loading=slides.length?'lazy':'eager';
    if(row.mobile_image_url){const picture=document.createElement('picture');const source=document.createElement('source');source.media='(max-width: 760px)';source.srcset=row.mobile_image_url;picture.append(source,img);slide.append(picture)}else slide.append(img);
    slides.push(slide);
   }
@@ -31,5 +31,5 @@ if(carousel){
  carousel.dispatchEvent(new Event('dg:banners-updated'));
 }
 const hero=map.get('hero');if(hero){const sec=document.querySelector('.dg-hero');if(sec){sec.hidden=hero.visible===false;const img=sec.querySelector('.dg-hero-visual img');if(img&&hero.image_url)img.src=hero.image_url;const h=sec.querySelector('.dg-hero-copy h1');if(h&&hero.title)h.textContent=hero.title;const p=sec.querySelector('.dg-hero-copy p');if(p&&hero.subtitle)p.textContent=hero.subtitle;const a=sec.querySelector('.dg-hero-actions a');if(a&&safe(hero.link_url))a.href=safe(hero.link_url)}}
-const featured=map.get('featured');if(featured){const sec=document.querySelector('#featured-products');if(sec){sec.hidden=featured.visible===false;const h=sec.querySelector('h2');if(h&&featured.title)h.textContent=featured.title}}
+const featured=map.get('featured');if(featured){const sec=document.querySelector('.dg-now-promo');if(sec){sec.hidden=featured.visible===false;const img=sec.querySelector('img');if(img&&featured.image_url){img.src=featured.image_url;img.style.transform='scale('+Math.min(150,Math.max(60,Number(featured.banner_scale)||100))/100+')';img.style.transformOrigin='center';}const a=sec.querySelector('a');if(a&&safe(featured.link_url))a.href=safe(featured.link_url)}}
 })();
