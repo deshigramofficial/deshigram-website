@@ -5,17 +5,28 @@ let rows;try{const control=await fetch(base+'/rest/v1/d2c_quick_controls?key=eq.
 const map=new Map(rows.map(r=>[r.slot,r]));const safe=u=>{if(!u)return '';try{const x=new URL(u,location.href);return ['https:','http:'].includes(x.protocol)?x.href:''}catch{return ''}};
 const carousel=document.querySelector('[data-carousel]');
 if(carousel){
- const slides=[...carousel.querySelectorAll('.dg-slide')];
- for(const [i,slide] of slides.entries()){
-  const row=map.get('showcase_'+(i+1));if(!row)continue;
-  slide.hidden=row.visible===false;slide.style.display=row.visible===false?'none':'';
-  const img=slide.querySelector('img');if(img&&row.image_url)img.src=row.image_url;if(img&&row.title)img.alt=row.title;
-  if(row.mobile_image_url&&img){let picture=slide.querySelector('picture');if(!picture){picture=document.createElement('picture');img.replaceWith(picture);picture.append(img)}let source=picture.querySelector('source[data-admin-mobile]');if(!source){source=document.createElement('source');source.dataset.adminMobile='1';source.media='(max-width: 760px)';picture.prepend(source)}source.srcset=row.mobile_image_url}
-  const href=safe(row.link_url);if(href)slide.href=href;if(row.new_tab){slide.target='_blank';slide.rel='noopener noreferrer'}else{slide.removeAttribute('target');slide.removeAttribute('rel')}
+ const saved=[...map.entries()].filter(([slot])=>/^showcase_\\d+$/.test(slot)).sort((a,b)=>Number(a[0].split('_')[1])-Number(b[0].split('_')[1]));
+ const original=[...carousel.querySelectorAll('.dg-slide')];
+ // Admin is the source of truth: render every published, visible showcase banner.
+ // Retain the static artwork only if Admin has no published showcase rows.
+ if(saved.length){
+  const slides=[];
+  for(const [slot,row] of saved){
+   if(row.visible===false||!row.image_url)continue;
+   const slide=document.createElement('a');slide.className='dg-slide';
+   const href=safe(row.link_url);slide.href=href||'products.html';
+   if(row.new_tab){slide.target='_blank';slide.rel='noopener noreferrer'}
+   const img=document.createElement('img');img.src=row.image_url;img.alt=row.title||'DeshiGram promotional banner';img.decoding='async';img.loading=slides.length?'lazy':'eager';
+   if(row.mobile_image_url){const picture=document.createElement('picture');const source=document.createElement('source');source.media='(max-width: 760px)';source.srcset=row.mobile_image_url;picture.append(source,img);slide.append(picture)}else slide.append(img);
+   slides.push(slide);
+  }
+  original.forEach(slide=>slide.remove());
+  const controls=carousel.querySelector('.dg-prev');
+  slides.forEach(slide=>carousel.insertBefore(slide,controls));
  }
  // If the first slide was disabled in Admin, promote the next visible slide.
- const visibleSlides=slides.filter(slide=>!slide.hidden&&slide.style.display!=='none');
- slides.forEach(slide=>slide.classList.remove('active'));
+ const visibleSlides=[...carousel.querySelectorAll('.dg-slide')].filter(slide=>!slide.hidden&&slide.style.display!=='none');
+ visibleSlides.forEach(slide=>slide.classList.remove('active'));
  if(visibleSlides.length)visibleSlides[0].classList.add('active');
  carousel.dispatchEvent(new Event('dg:banners-updated'));
 }
