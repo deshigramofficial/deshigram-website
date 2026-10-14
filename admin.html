@@ -76,7 +76,6 @@
     <button class="side-link" data-section="orders"><span class="nav-icon">☷</span>Orders</button>
     <button class="side-link" data-section="shipmozo"><span class="nav-icon">🚚</span>Shipping / Shipmozo</button>
     <button class="side-link" data-section="fulfillment"><span class="nav-icon">⌁</span>Pickup & Fulfilment</button>
-    <button class="side-link" data-section="announcements"><span class="nav-icon">☷</span>Announcement Management</button>
     <button class="side-link" data-section="customization"><span class="nav-icon">▧</span>Website Customization</button>
     <button class="side-link" data-section="listings"><span class="nav-icon">▤</span>Listings</button>
     <button class="side-link" data-section="inventory"><span class="nav-icon">◇</span>Inventory</button>
@@ -105,28 +104,7 @@
       </div>
     </section>
 
-    <section class="section-panel" data-panel="announcements">
-<h2>Announcement Management</h2><p>Manage the two existing customer announcement strips independently. Settings are saved only after the database migration is approved and applied.</p>
-<div id="dgAnnouncementAdminStatus" role="status"></div><div class="dg-announcement-admin-grid">
-<form class="panel dg-announcement-form" data-announcement-strip="top">
-<h3>Top Announcement Strip</h3>
-<label><input type="checkbox" name="enabled" checked> Enabled</label>
-<div class="dg-announcement-messages" data-message-list></div>
-<button type="button" data-add-message>Add message</button>
-<div class="dg-announcement-controls"><label>Background color <input type="color" name="background_color" value="#eee5d7"></label><label>Text color <input type="color" name="text_color" value="#453d30"></label></div>
-<strong>Live preview</strong><div class="dg-announcement-preview" data-announcement-preview></div>
-<button class="primary" type="submit">Save Top Strip</button>
-</form><form class="panel dg-announcement-form" data-announcement-strip="offer">
-<h3>Auto-Scrolling Announcement / Offer Strip</h3>
-<label><input type="checkbox" name="enabled" checked> Enabled</label>
-<div class="dg-announcement-messages" data-message-list></div>
-<button type="button" data-add-message>Add message</button>
-<div class="dg-announcement-controls"><label>Background color <input type="color" name="background_color" value="#f2e8d7"></label><label>Text color <input type="color" name="text_color" value="#453d30"></label><label>Scroll speed <select name="speed"><option value="slow">Slow</option><option value="normal" selected>Normal</option><option value="fast">Fast</option></select></label></div>
-<strong>Live preview</strong><div class="dg-announcement-preview" data-announcement-preview></div>
-<button class="primary" type="submit">Save Offer Strip</button>
-</form>
-</div></section>
-<section class="section-panel" data-panel="shipmozo"><div class="panel"><h2>Shipping Manager · Shipmozo</h2><p class="panel-sub">Existing DeshiGram Main Website orders. Production actions remain locked until Shipmozo API guide, backend credentials and explicit admin confirmation are configured.</p><p id="shipmozoStatus" class="status">Loading eligible orders…</p><div id="shipmozoOrders" class="table-wrap"></div><div style="margin-top:18px"><h3>Shipping Actions</h3><p>Check Rates · Create Shipment · Select Courier · Schedule Pickup · Print Label · Track Order · Cancel Shipment</p><p><strong>Safe mode:</strong> No external Shipmozo API requests or production shipment creation are enabled.</p></div></div></section>
+    <section class="section-panel" data-panel="shipmozo"><div class="panel"><h2>Shipping Manager · Shipmozo</h2><p class="panel-sub">Existing DeshiGram Main Website orders. Production actions remain locked until Shipmozo API guide, backend credentials and explicit admin confirmation are configured.</p><p id="shipmozoStatus" class="status">Loading eligible orders…</p><div id="shipmozoOrders" class="table-wrap"></div><div style="margin-top:18px"><h3>Shipping Actions</h3><p>Check Rates · Create Shipment · Select Courier · Schedule Pickup · Print Label · Track Order · Cancel Shipment</p><p><strong>Safe mode:</strong> No external Shipmozo API requests or production shipment creation are enabled.</p></div></div></section>
 <section class="section-panel" data-panel="orders">
       <div class="toolbar"><input id="ordersSearch" type="search" placeholder="Search order / customer / phone"><select id="ordersStatus"><option value="">All order status</option><option>placed</option><option>confirmed</option><option>processing</option><option>shipped</option><option>delivered</option><option>cancelled</option></select></div>
       <div id="ordersTable" class="table-wrap"></div>
@@ -157,6 +135,27 @@
  <div class="dg-custom-actions"><button class="primary" type="button" id="dgAddBanner">+ Add Banner</button></div><div class="dg-custom-grid" id="dgCustomCards"></div>
  <div class="dg-custom-actions"><button class="primary" type="button" id="dgPublishCustom">Publish Changes</button><button class="ghost" type="button" id="dgReloadCustom">Reload Published</button><span class="status" id="dgCustomStatus" role="status"></span></div>
  <details class="dg-banner-advanced"><summary>Banner help & technical details (optional)</summary><p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended desktop banner: 2048 × 738 px. Mobile: upload a separate image if needed. Add, hide or delete banners and toggle Diwali edge lights; Publish saves changes.</p></details>
+<section class="dg-announcements-inside" id="dgAnnouncementsInside">
+<h2>Announcement Management</h2><p>Manage the two existing customer announcement strips independently. Settings are saved only after the database migration is approved and applied.</p>
+<div id="dgAnnouncementAdminStatus" role="status"></div><div class="dg-announcement-admin-grid">
+<form class="panel dg-announcement-form" data-announcement-strip="top">
+<h3>Top Announcement Strip</h3>
+<label><input type="checkbox" name="enabled" checked> Enabled</label>
+<div class="dg-announcement-messages" data-message-list></div>
+<button type="button" data-add-message>Add message</button>
+<div class="dg-announcement-controls"><label>Background color <input type="color" name="background_color" value="#eee5d7"></label><label>Text color <input type="color" name="text_color" value="#453d30"></label></div>
+<strong>Live preview</strong><div class="dg-announcement-preview" data-announcement-preview></div>
+<button class="primary" type="submit">Save Top Strip</button>
+</form><form class="panel dg-announcement-form" data-announcement-strip="offer">
+<h3>Auto-Scrolling Announcement / Offer Strip</h3>
+<label><input type="checkbox" name="enabled" checked> Enabled</label>
+<div class="dg-announcement-messages" data-message-list></div>
+<button type="button" data-add-message>Add message</button>
+<div class="dg-announcement-controls"><label>Background color <input type="color" name="background_color" value="#f2e8d7"></label><label>Text color <input type="color" name="text_color" value="#453d30"></label><label>Scroll speed <select name="speed"><option value="slow">Slow</option><option value="normal" selected>Normal</option><option value="fast">Fast</option></select></label></div>
+<strong>Live preview</strong><div class="dg-announcement-preview" data-announcement-preview></div>
+<button class="primary" type="submit">Save Offer Strip</button>
+</form>
+</div></section>
 <section class="dg-founder-settings" id="dgFounderSettings"><article class="panel dg-owner-panel"><h2>Founder & Owner — Website Section</h2><p class="panel-sub">Current website details appear below. Edit and save to update Home and About pages.</p><form id="dgOwnerForm"><div class="dg-owner-layout"><div><img id="dgOwnerPreview" src="images/founder-abhinendra.webp" alt="Owner profile preview"><label>Owner photo<input id="dgOwnerPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label></div><div class="dg-owner-fields"><label>Owner name<input name="owner_name" maxlength="100" required></label><label>Designation<input name="role_title" maxlength="100" placeholder="Founder / Owner"></label><label>Short introduction<textarea name="bio" rows="4" maxlength="600" placeholder="Brief owner introduction (optional)"></textarea></label><details class="dg-founder-optional"><summary>Optional settings — Founder quote & social links</summary><div class="dg-owner-fields"><label>Founder quote<textarea name="founder_quote" rows="3" maxlength="600"></textarea></label><label>Instagram URL<input name="instagram_url" type="url" maxlength="500"></label><label>Facebook URL<input name="facebook_url" type="url" maxlength="500"></label></div></details><button class="primary" type="submit" id="dgOwnerSave">Save Owner Profile</button><p class="status" id="dgOwnerStatus" role="status"></p></div></div></form></article></section>
     </section>
 <section class="section-panel" data-panel="listings">
@@ -316,5 +315,5 @@
 <section id="quickControlsPanel" style="position:fixed;right:16px;bottom:16px;z-index:1000;background:#fff;border:1px solid #dce6df;border-radius:16px;padding:16px;width:min(350px,calc(100vw - 32px));max-height:75vh;overflow:auto;box-shadow:0 12px 35px #0002" hidden><h3>Store Quick Controls <button type="button" id="quickControlsClose" style="float:right">×</button></h3><p id="quickControlsStatus" role="status">Loading…</p><div id="quickControlsList"></div></section><button type="button" id="quickControlsOpen" class="primary" style="position:fixed;right:16px;bottom:16px;z-index:999" hidden>⚙ Store Controls</button><script type="module" src="js/d2c-quick-controls-admin.js"></script>
 <script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
 <script type="module" src="js/website-customization-admin.js?v=20261014-banner-sizes-now-fix"></script>
-<script type="module" src="js/shipmozo-admin.js?v=foundation-1"></script><link rel="stylesheet" href="css/main-announcements-admin.css?v=1"><script type="module" src="js/main-announcements-admin.js?v=1"></script><script type="module" src="js/admin-owner-profile.js?v=20261014-existing-details"></script></body>
+<script type="module" src="js/shipmozo-admin.js?v=foundation-1"></script><link rel="stylesheet" href="css/main-announcements-admin.css?v=1"><script type="module" src="js/main-announcements-admin.js?v=20261014-customization"></script><script type="module" src="js/admin-owner-profile.js?v=20261014-existing-details"></script></body>
 </html>
