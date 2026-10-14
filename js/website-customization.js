@@ -5,7 +5,7 @@ let rows;try{const control=await fetch(base+'/rest/v1/d2c_quick_controls?key=eq.
 const map=new Map(rows.map(r=>[r.slot,r]));const safe=u=>{if(!u)return '';try{const x=new URL(u,location.href);return ['https:','http:'].includes(x.protocol)?x.href:''}catch{return ''}};
 const carousel=document.querySelector('[data-carousel]');
 if(carousel){
- const saved=[...map.entries()].filter(([slot])=>/^showcase_\\d+$/.test(slot)).sort((a,b)=>Number(a[0].split('_')[1])-Number(b[0].split('_')[1]));
+ const saved=[...map.entries()].filter(([slot])=>/^showcase_\d+$/.test(slot)).sort((a,b)=>Number(a[0].split('_')[1])-Number(b[0].split('_')[1]));
  const original=[...carousel.querySelectorAll('.dg-slide')];
  // Admin is the source of truth: render every published, visible showcase banner.
  // Retain the static artwork only if Admin has no published showcase rows.
