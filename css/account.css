@@ -39,3 +39,10 @@ small, .muted, .hint, .subtext {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
+
+/* Order history product identification only. */
+.dg-order-product-list{display:flex;flex-direction:column;gap:8px;margin:6px 0 10px}
+.dg-order-product-link{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;width:fit-content;max-width:100%}
+.dg-order-product-link img{width:64px;height:64px;object-fit:contain;flex:none;border:1px solid #e8e4dc;border-radius:8px;background:#fff}
+.dg-order-product-link span{font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.dg-order-product-link:hover span,.dg-order-product-link:focus-visible span{text-decoration:underline}
