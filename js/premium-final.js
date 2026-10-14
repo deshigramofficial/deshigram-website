@@ -11,7 +11,7 @@
  c.querySelector('.dg-prev')?.addEventListener('click',e=>{e.preventDefault();move(-1)});
  c.querySelector('.dg-next')?.addEventListener('click',e=>{e.preventDefault();move(1)});
  c.addEventListener('dg:banners-updated',()=>{index=0;paint();schedule()});
- c.addEventListener('mouseenter',()=>clearInterval(timer));c.addEventListener('mouseleave',schedule);
+ // Auto-rotate even while the pointer is over the banner; only explicit navigation resets the clock.
  paint();schedule();
 })();
 function slug(v){return (v||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
