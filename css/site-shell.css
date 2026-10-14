@@ -89,3 +89,11 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 [data-add-to-cart]:active{transform:scale(.97)!important}
 [data-add-to-cart]:focus-visible{outline:3px solid rgba(246,185,27,.55)!important;outline-offset:2px!important}
 [data-add-to-cart]:disabled{cursor:not-allowed!important;opacity:.55!important;box-shadow:none!important}
+
+/* Live: slim premium offer strip; leave the top announcement independent. */
+.dg-offer-ticker{background:#f2e8d7!important;color:#453d30!important;border-bottom:1px solid #e4d8c5!important;height:29px!important;min-height:29px!important}
+.dg-offer-ticker>div{animation-duration:32s!important}
+.dg-offer-ticker:hover>div{animation-play-state:paused!important}
+.dg-slider-arrow::before,.dg-slider-arrow::after,.dg-arrow::before,.dg-arrow::after{content:none!important;display:none!important}
+.dg-slider-arrow,.dg-arrow{font-family:Arial,sans-serif!important}
+@media(prefers-reduced-motion:reduce){.dg-offer-ticker>div{animation:none!important}}
