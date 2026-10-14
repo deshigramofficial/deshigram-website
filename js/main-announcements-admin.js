@@ -57,5 +57,5 @@ forms.forEach(form=>{
   message(error?'Save failed: '+error.message:'Saved '+payload.strip+' strip.',!!error);
  });
 });
-document.querySelector('[data-section="announcements"]')?.addEventListener('click',load);
-if(location.hash==='#announcements')load();
+document.querySelector('[data-section="customization"]')?.addEventListener('click',load);
+if(location.hash==='#customization'||location.hash==='#announcements')load();
