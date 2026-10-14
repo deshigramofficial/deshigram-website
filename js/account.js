@@ -51,7 +51,21 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const courier=items.find(x=>x.tracking_url||x.tracking_id||x.courier_name);
     const url=trackingLink(courier);
     const canCancel=['placed','confirmed','packed'].includes(o.order_status)&&!items.some(x=>['picked_up','shipped','delivered'].includes(x.fulfillment_status));
-    const products=items.length?items.map(x=>safe(x.product_name)+' × '+(Number(x.quantity)||1)).join(', '):safe(o.product_name)+' × '+(Number(o.quantity)||1);
+    const productRows=items.length?items:[{product_name:o.product_name,quantity:o.quantity}];
+    const productMedia=productRows.map(item=>{
+      const name=String(item.product_name||'').toLowerCase();
+      const family=/panch.poshan|seed powder/.test(name)?'panch':/dry.fruit|energy powder/.test(name)?'dry':null;
+      const packMatch=name.match(/pack\s*(?:of\s*)?([123])\b/);
+      const pack=packMatch?packMatch[1]:null;
+      // Do not guess a different pack or product when the historical item is ambiguous.
+      if(!family||!pack)return '<span class="dg-order-product-name">'+safe(item.product_name||'Product')+' × '+(Number(item.quantity)||1)+'</span>';
+      const slug=family==='panch'?'panch-poshan-'+(pack==='1'?'100g':'pack-'+pack):'pack-'+pack;
+      const image=family==='panch'?'images/panch-poshan-'+(pack==='1'?'100g':'pack-'+pack)+'.png':'images/pack-'+pack+'.webp';
+      const link='product/index.html?id='+encodeURIComponent(slug);
+      return '<a class="dg-order-product-link" href="'+safe(link)+'" aria-label="View '+safe(item.product_name)+'"><img src="'+safe(image)+'" alt="" loading="lazy" width="64" height="64"><span>'+safe(item.product_name)+' × '+(Number(item.quantity)||1)+'</span></a>';
+    }).join('');
+    const products='<div class="dg-order-product-list">'+productMedia+'</div>';
+    
     return `<article class="account-order-card dg-premium-order"><div class="account-order-head"><div><small>${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</small><h3>${safe(o.order_number)}</h3></div><span class="order-status">${safe(formatStatus(o.order_status))}</span></div>
     <p class="dg-order-products">${products}</p><div class="dg-order-amount"><strong>${money(o.total_amount)}</strong><span>Payment: ${safe(formatStatus(o.payment_status))} · ${safe(o.payment_method||'—')}</span></div>
     <div class="dg-order-progress" aria-label="Order progress">${cancelled?'<span class="dg-cancelled">Cancelled</span>':stages.map((x,i)=>`<span class="${i<=current?'done':''}">${safe(formatStatus(x))}</span>`).join('')}</div>
