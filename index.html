@@ -566,6 +566,37 @@ body > header.dg-head {position:fixed!important;top:0!important;left:0!important
 <script id="dg-fixed-header-offset">
 (function(){function update(){var h=document.querySelector('body > header.dg-head');if(!h)return;var n=h.getBoundingClientRect().height;document.body.style.paddingTop=n+'px';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',update);else update();window.addEventListener('resize',update);window.addEventListener('load',update);})();
 </script>
+<style id="dg-desktop-banner-fit-viewport">
+/* Desktop/laptop: show the entire image within the available viewport height.
+   Mobile retains its existing layout and banner sizing. */
+@media (min-width: 1024px) {
+  main.dg-main > .dg-hero-grid > .dg-carousel {
+    width:100%!important;
+    height:min(620px, calc(100vh - 190px))!important;
+    min-height:360px!important;
+    max-height:620px!important;
+    aspect-ratio:auto!important;
+    overflow:hidden!important;
+    background:#fffaf0!important;
+  }
+  main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide {
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+  }
+  main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img,
+  main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide picture {
+    width:100%!important;
+    height:100%!important;
+    display:block!important;
+  }
+  main.dg-main > .dg-hero-grid > .dg-carousel > .dg-slide img {
+    object-fit:contain!important;
+    object-position:center!important;
+  }
+}
+</style>
 </head><body>
 <div class="dg-top"><span>Desh Ki Parampara, Har Ghar Tak</span><span>Pure • Traditional • Trusted</span><span>🇮🇳 Made in India &nbsp; 🛡 GST Certified &nbsp; 🎧 Support</span></div>
 <header class="dg-head">
