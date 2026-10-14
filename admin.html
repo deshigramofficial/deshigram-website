@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DeshiGram Admin Portal</title>
 <link rel="icon" href="favicon.png">
-<link rel="stylesheet" href="css/admin-portal.css">
+<link rel="stylesheet" href="css/admin-portal.css?v=20261014-owner-nav">
 <link rel="stylesheet" href="css/website-customization-admin.css?v=1">
 <link rel="stylesheet" href="css/product-commerce-v3.css?v=3"></head>
 <body>
 <header class="admin-topbar">
-  <div class="brand"><strong>DeshiGram Admin</strong><span>Operations</span></div>
+  <div class="brand"><img class="dg-admin-logo" src="images/logo.webp" alt="DeshiGram logo"><span>Admin Portal</span></div>
   <nav><a href="index.html" target="_blank">View Website</a><button id="logoutBtn" class="ghost" hidden>Logout</button></nav>
 </header>
 
@@ -18,7 +18,7 @@
 <section id="loginPanel" class="login-experience">
   <div class="login-brand-side" aria-hidden="true">
     <div class="login-brand-copy">
-      <div class="login-monogram">DG</div>
+      <img class="dg-login-brand-logo" src="images/logo.webp" alt="DeshiGram logo">
       <p class="login-kicker">DESHIGRAM • OPERATIONS</p>
       <h1>Rooted in goodness.<br>Managed with clarity.</h1>
       <p class="login-brand-text">One secure workspace for a growing FMCG business — catalogue, orders, fulfilment, inventory, payments and store operations.</p>
@@ -28,7 +28,7 @@
   </div>
   <div class="login-form-side">
     <div class="login-card">
-      <div class="login-logo"><span>Deshi</span><b>Gram</b></div>
+      <div class="login-logo"><img class="dg-login-logo" src="images/logo.webp" alt="DeshiGram logo"></div>
       <p class="login-kicker">ADMIN HUB</p>
       <h2>Welcome back</h2>
       <p class="login-intro">Sign in to continue to your DeshiGram control centre.</p>
@@ -71,7 +71,7 @@
 
 <section id="adminApp" class="portal" hidden>
   <aside class="sidebar">
-    <div class="nav-brand-mark"><span>DG</span><b>Admin Hub</b></div>
+    <div class="nav-brand-mark"><img class="dg-sidebar-logo" src="images/logo.webp" alt="DeshiGram logo"><b>Admin Hub</b></div>
     <button class="side-link active" data-section="dashboard"><span class="nav-icon">⌂</span>Home</button>
     <button class="side-link" data-section="orders"><span class="nav-icon">☷</span>Orders</button>
     <button class="side-link" data-section="shipmozo"><span class="nav-icon">🚚</span>Shipping / Shipmozo</button>
@@ -85,12 +85,14 @@
     <button class="side-link" data-section="reviews"><span class="nav-icon">★</span>Reviews</button>
     <button class="side-link" data-section="growth"><span class="nav-icon">↗</span>Growth</button>
     <button class="side-link" data-section="reports"><span class="nav-icon">▥</span>Reports</button>
+    <button class="side-link" data-section="owner"><span class="nav-icon">◎</span>Owner Profile</button>
   </aside>
 
   <section class="content">
     <div class="portal-toolbar"><div><span class="eyebrow">DESHIGRAM CONTROL CENTER</span><h1 id="sectionTitle">Dashboard</h1></div><button id="refreshAll" class="ghost">Refresh</button></div>
     <p id="appStatus" class="status"></p>
 
+    <section class="section-panel" data-panel="owner"><article class="panel dg-owner-panel"><h2>Owner Profile</h2><p class="panel-sub">Update owner photo and essential information. Only authorized Admin can edit this profile.</p><form id="dgOwnerForm"><div class="dg-owner-layout"><div><img id="dgOwnerPreview" src="images/logo.webp" alt="Owner profile preview"><label>Owner photo<input id="dgOwnerPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label></div><div class="dg-owner-fields"><label>Owner name<input name="owner_name" maxlength="100" required></label><label>Designation<input name="role_title" maxlength="100" placeholder="Founder / Owner"></label><label>Short introduction<textarea name="bio" rows="4" maxlength="600" placeholder="Brief owner introduction (optional)"></textarea></label><button class="primary" type="submit" id="dgOwnerSave">Save Owner Profile</button><p class="status" id="dgOwnerStatus" role="status"></p></div></div></form></article></section>
     <section class="section-panel active" data-panel="dashboard">
       <div class="stats" id="stats"></div>
       <div class="dashboard-grid">
@@ -315,5 +317,5 @@
 <section id="quickControlsPanel" style="position:fixed;right:16px;bottom:16px;z-index:1000;background:#fff;border:1px solid #dce6df;border-radius:16px;padding:16px;width:min(350px,calc(100vw - 32px));max-height:75vh;overflow:auto;box-shadow:0 12px 35px #0002" hidden><h3>Store Quick Controls <button type="button" id="quickControlsClose" style="float:right">×</button></h3><p id="quickControlsStatus" role="status">Loading…</p><div id="quickControlsList"></div></section><button type="button" id="quickControlsOpen" class="primary" style="position:fixed;right:16px;bottom:16px;z-index:999" hidden>⚙ Store Controls</button><script type="module" src="js/d2c-quick-controls-admin.js"></script>
 <script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
 <script type="module" src="js/website-customization-admin.js?v=20261014-banner-sizes-now-fix"></script>
-<script type="module" src="js/shipmozo-admin.js?v=foundation-1"></script><link rel="stylesheet" href="css/main-announcements-admin.css?v=1"><script type="module" src="js/main-announcements-admin.js?v=1"></script></body>
+<script type="module" src="js/shipmozo-admin.js?v=foundation-1"></script><link rel="stylesheet" href="css/main-announcements-admin.css?v=1"><script type="module" src="js/main-announcements-admin.js?v=1"></script><script type="module" src="js/admin-owner-profile.js?v=20261014"></script></body>
 </html>
