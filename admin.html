@@ -85,14 +85,12 @@
     <button class="side-link" data-section="reviews"><span class="nav-icon">★</span>Reviews</button>
     <button class="side-link" data-section="growth"><span class="nav-icon">↗</span>Growth</button>
     <button class="side-link" data-section="reports"><span class="nav-icon">▥</span>Reports</button>
-    <button class="side-link" data-section="owner"><span class="nav-icon">◎</span>Owner Profile</button>
   </aside>
 
   <section class="content">
     <div class="portal-toolbar"><div><span class="eyebrow">DESHIGRAM CONTROL CENTER</span><h1 id="sectionTitle">Dashboard</h1></div><button id="refreshAll" class="ghost">Refresh</button></div>
     <p id="appStatus" class="status"></p>
 
-    <section class="section-panel" data-panel="owner"><article class="panel dg-owner-panel"><h2>Owner Profile</h2><p class="panel-sub">Update owner photo and essential information. Only authorized Admin can edit this profile.</p><form id="dgOwnerForm"><div class="dg-owner-layout"><div><img id="dgOwnerPreview" src="images/logo.webp" alt="Owner profile preview"><label>Owner photo<input id="dgOwnerPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label></div><div class="dg-owner-fields"><label>Owner name<input name="owner_name" maxlength="100" required></label><label>Designation<input name="role_title" maxlength="100" placeholder="Founder / Owner"></label><label>Short introduction<textarea name="bio" rows="4" maxlength="600" placeholder="Brief owner introduction (optional)"></textarea></label><button class="primary" type="submit" id="dgOwnerSave">Save Owner Profile</button><p class="status" id="dgOwnerStatus" role="status"></p></div></div></form></article></section>
     <section class="section-panel active" data-panel="dashboard">
       <div class="stats" id="stats"></div>
       <div class="dashboard-grid">
@@ -158,8 +156,9 @@
  <div class="heading-row"><div><h2>Website Customization</h2><p>Manage clickable showcase banners, hero image and homepage text. Changes publish to the live site through Supabase.</p></div></div>
  <div class="dg-custom-actions"><button class="primary" type="button" id="dgAddBanner">+ Add Banner</button></div><div class="dg-custom-grid" id="dgCustomCards"></div>
  <div class="dg-custom-actions"><button class="primary" type="button" id="dgPublishCustom">Publish Changes</button><button class="ghost" type="button" id="dgReloadCustom">Reload Published</button><span class="status" id="dgCustomStatus" role="status"></span></div>
- <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended desktop banner: 2048 × 768 px. Mobile: upload a separate image if needed. Add, hide or delete banners and toggle Diwali edge lights; Publish saves changes.</p>
-</section>
+ <p class="dg-custom-note">Images are uploaded to your Supabase public website-images bucket. First run the included <code>website-customization-setup.sql</code> once in Supabase SQL Editor. Recommended desktop banner: 2048 × 738 px. Mobile: upload a separate image if needed. Add, hide or delete banners and toggle Diwali edge lights; Publish saves changes.</p>
+<section class="dg-founder-settings" id="dgFounderSettings"><article class="panel dg-owner-panel"><h2>Owner Profile</h2><p class="panel-sub">Update owner photo and essential information. Only authorized Admin can edit this profile.</p><form id="dgOwnerForm"><div class="dg-owner-layout"><div><img id="dgOwnerPreview" src="images/logo.webp" alt="Owner profile preview"><label>Owner photo<input id="dgOwnerPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label></div><div class="dg-owner-fields"><label>Owner name<input name="owner_name" maxlength="100" required></label><label>Designation<input name="role_title" maxlength="100" placeholder="Founder / Owner"></label><label>Short introduction<textarea name="bio" rows="4" maxlength="600" placeholder="Brief owner introduction (optional)"></textarea></label><button class="primary" type="submit" id="dgOwnerSave">Save Owner Profile</button><p class="status" id="dgOwnerStatus" role="status"></p></div></div></form></article></section>
+    </section>
 <section class="section-panel" data-panel="listings">
       <div class="heading-row"><div><h2>Listing Manager</h2><p>Quick merchandising controls for DeshiGram listings.</p></div><button id="newListingBtn" type="button" class="primary">+ New Listing</button></div>
       <div class="tabs listing-tabs"><button class="tab active" data-list-tab="own">DeshiGram Listings</button></div>
