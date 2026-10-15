@@ -12,7 +12,7 @@ style.textContent+=`
 .dg-journey .dg-reel-card{width:100%!important;min-width:200px!important;max-width:none!important;aspect-ratio:9/10!important;background:#111;border-radius:8px}
 .dg-journey .dg-reel-card img,.dg-journey .dg-reel-card iframe{width:100%;height:100%;object-fit:cover;display:block}
 .dg-journey .dg-reel-card:after,.dg-journey .dg-reel-title,.dg-journey .dg-reel-caption{display:none!important}
-@media(max-width:650px){.dg-journey .dg-reels-track{grid-auto-columns:clamp(155px,48vw,210px)!important}}
+@media(max-width:650px){.dg-journey .dg-reels,.dg-journey .dg-reels-inner,.dg-journey .dg-reels-content{width:100%!important;min-width:0!important;max-width:100%!important;overflow:hidden!important}.dg-journey .dg-reels-track{display:flex!important;grid-auto-columns:unset!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;overscroll-behavior-x:contain;padding:4px 0 12px!important}.dg-journey .dg-reels-track>.dg-reel-card{flex:0 0 calc((100% - 12px)/2)!important;width:calc((100% - 12px)/2)!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important;position:relative!important;scroll-snap-align:start!important}}
 `;document.head.append(style);
 function init(){const main=document.querySelector("main");if(!main||document.getElementById("dg-instagram-reels"))return;
 const section=document.createElement("section");section.className="dg-reels";section.id="dg-instagram-reels";section.setAttribute("aria-label","DeshiGram Instagram Reels");
