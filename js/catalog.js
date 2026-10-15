@@ -24,7 +24,7 @@
     if(!force && !products.length && local.length){products=local.slice(); window.PRODUCTS=products;}
     try{
       const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),8000);
-      const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal});
+      const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal,cache:"no-store"});
       clearTimeout(timer); if(!r.ok) throw new Error('catalog');
       const remote=(await r.json()).map(normalize);
       if(remote.length) products=remote;
