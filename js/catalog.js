@@ -23,7 +23,7 @@
     const local=fallback().map(normalize);
     if(!force && !products.length && local.length){products=local.slice(); window.PRODUCTS=products;}
     try{
-      const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),4500);
+      const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),8000);
       const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal});
       clearTimeout(timer); if(!r.ok) throw new Error('catalog');
       const remote=(await r.json()).map(normalize);
@@ -62,7 +62,7 @@
   }
   async function render(){
     const local=fallback().map(normalize);
-    if(products.length) paint(products); else if(local.length){products=local.slice();paint(products)} else document.querySelectorAll('[data-dg-catalog]').forEach(el=>{el.innerHTML='<div class="dg-catalog-skeleton" aria-label="Loading products">'+Array.from({length:6},()=>'<div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div>').join('')+'</div>'});
+    if(products.length) paint(products); else document.querySelectorAll('[data-dg-catalog]').forEach(el=>{el.innerHTML='<div class="dg-catalog-skeleton" aria-label="Loading products">'+Array.from({length:6},()=>'<div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div>').join('')+'</div>'});
     try{const list=await load(true);paint(list)}catch(e){document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'error','Unable to load products. Retry'))}
   }
   window.DESHIGRAM_CATALOG={load,render,get products(){return products},imageUrl,money};
