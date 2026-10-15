@@ -97,3 +97,7 @@ html,body{max-width:100%;overflow-x:hidden}.dg-offer-ticker>div{display:flex!imp
 .dg-slider-arrow::before,.dg-slider-arrow::after,.dg-arrow::before,.dg-arrow::after{content:none!important;display:none!important}
 .dg-slider-arrow,.dg-arrow{font-family:Arial,sans-serif!important}
 @media(prefers-reduced-motion:reduce){.dg-offer-ticker>div{animation:none!important}}
+
+/* WhatsApp floating action: recognizable white mark on WhatsApp green */
+.dg-whatsapp-float{background:#25D366!important;color:#fff!important;border-radius:50%!important;width:54px!important;height:54px!important;min-width:54px!important;padding:0!important;box-sizing:border-box!important;box-shadow:0 4px 16px #0003!important}
+.dg-whatsapp-float svg{width:30px!important;height:30px!important;fill:currentColor!important;stroke:none!important;display:block!important}
