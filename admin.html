@@ -282,7 +282,7 @@
     <label>Net Quantity<input name="net_quantity" placeholder="100g × 1"></label>
     <label>MRP ₹<input name="mrp" type="number" step="0.01" min="0" required></label>
     <label>Selling Price ₹<input name="selling_price" type="number" step="0.01" min="0" required></label>
-    <label>Stock<input name="stock_quantity" type="number" min="0" value="0"></label>
+    <label>Stock<input name="stock_quantity" type="number" min="0" value="0"></label><fieldset class="span2" style="border:1px solid #dbe7df;border-radius:14px;padding:16px;margin:8px 0;background:#f8fbf9"><legend style="padding:0 8px;font-weight:700;color:#245237">Shipping & Tax · Shipmozo</legend><p style="font-size:13px;color:#607468;margin:0 0 14px">Use actual packed parcel measurements. HSN and GST must be confirmed with your tax advisor.</p><div class="form-grid"><label>Packed Weight (grams)<input name="ship_weight" type="number" min="0.01" step="0.01" placeholder="e.g. 100"></label><label>Length (cm)<input name="package_length_cm" type="number" min="0.01" step="0.01" placeholder="26"></label><label>Breadth / Width (cm)<input name="package_width_cm" type="number" min="0.01" step="0.01" placeholder="13"></label><label>Height (cm)<input name="package_height_cm" type="number" min="0.01" step="0.01" placeholder="3.5"></label><label>HSN Code<input name="hsn_code" inputmode="numeric" pattern="[0-9]{4,8}" placeholder="Confirm before entering"></label><label>GST Rate (%)<input name="gst_rate" type="number" min="0" max="100" step="0.01" placeholder="Confirm rate"></label></div></fieldset>
     <details class="span2"><summary>Advanced product settings</summary><div class="form-grid"><label>Packed Weight (g)<input name="packed_weight_grams" type="number" min="0"></label>
     <label>Max Qty / Order<input name="max_order_quantity" type="number" min="1" value="10"></label>
     <label>Low Stock Alert<input name="low_stock_threshold" type="number" min="0" value="5"></label>
@@ -316,7 +316,7 @@
 
 
 <section id="quickControlsPanel" style="position:fixed;right:16px;bottom:16px;z-index:1000;background:#fff;border:1px solid #dce6df;border-radius:16px;padding:16px;width:min(350px,calc(100vw - 32px));max-height:75vh;overflow:auto;box-shadow:0 12px 35px #0002" hidden><h3>Store Quick Controls <button type="button" id="quickControlsClose" style="float:right">×</button></h3><p id="quickControlsStatus" role="status">Loading…</p><div id="quickControlsList"></div></section><button type="button" id="quickControlsOpen" class="primary" style="position:fixed;right:16px;bottom:16px;z-index:999" hidden>⚙ Store Controls</button><script type="module" src="js/d2c-quick-controls-admin.js"></script>
-<script type="module" src="js/admin-portal.js?v=new-listing-fix-1"></script>
+<script type="module" src="js/admin-portal.js?v=20261017-shipping-fields"></script>
 <script type="module" src="js/website-customization-admin.js?v=20261015-syntax-fixed"></script>
 <script type="module" src="js/shipmozo-admin.js?v=20261017-shipping-listing"></script><link rel="stylesheet" href="css/main-announcements-admin.css?v=1"><script type="module" src="js/main-announcements-admin.js?v=20261014-customization"></script><script type="module" src="js/admin-owner-profile.js?v=20261014-existing-details"></script><script type="module" src="js/instagram-reels-admin.js?v=20261015-video"></script></body>
 </html>
