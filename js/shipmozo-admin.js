@@ -38,3 +38,15 @@ document.querySelector('[data-section="shipmozo"]')?.addEventListener('click',lo
 document.getElementById('shippingConnectForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;msg.textContent='Saving keys securely…';try{const d=await shippingAction({action:'save_shipmozo',public_key:form.elements.public_key.value,private_key:form.elements.private_key.value});form.reset();msg.textContent=d.message;await loadProviders();}catch(err){msg.textContent=err.message;}});
 document.getElementById('shippingTest')?.addEventListener('click',async()=>{msg.textContent='Checking Shipmozo API…';try{const d=await shippingAction({action:'test_shipmozo'});msg.textContent=d.message;const sel=document.getElementById('shippingWarehouse');sel.innerHTML='<option value="">Select pickup warehouse</option>'+(d.warehouses||[]).filter(w=>w.status==='ACTIVE').map(w=>'<option value="'+esc(w.id)+'">'+esc(w.name)+'</option>').join('');await loadProviders();}catch(err){msg.textContent=err.message;}});
 document.getElementById('shippingSaveWarehouse')?.addEventListener('click',async()=>{const id=document.getElementById('shippingWarehouse').value;if(!id){msg.textContent='Choose a warehouse first';return;}try{await shippingAction({action:'set_warehouse',warehouse_id:id});msg.textContent='Pickup warehouse saved';}catch(err){msg.textContent=err.message;}});
+
+const testButton=document.createElement('button');
+testButton.type='button';
+testButton.textContent='Sync queued orders to Shipmozo';
+settings.append(testButton);
+testButton.addEventListener('click',async()=>{
+ const {data:{session}}=await db.auth.getSession();
+ if(!session){msg.textContent='Login required';return;}
+ const res=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/functions/v1/shipping-sync-worker',{method:'POST',headers:{Authorization:'Bearer '+session.access_token}});
+ const result=await res.json();
+ msg.textContent=JSON.stringify(result);
+});
