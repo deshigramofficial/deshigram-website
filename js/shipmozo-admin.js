@@ -3,18 +3,24 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 const db=createClient('https://kqkpbqpfnupjpthtpvdn.supabase.co','sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const panel=document.querySelector('[data-panel="shipmozo"]'),output=document.getElementById('shipmozoOrders'),status=document.getElementById('shipmozoStatus');
+const money=n=>'₹'+Number(n||0).toFixed(2);
+const pill=(v)=>'<span class="sm-pill">'+esc(String(v||'Pending').replaceAll('_',' '))+'</span>';
+const box=(label,value,note)=>'<article class="sm-stat"><small>'+esc(label)+'</small><strong>'+esc(value)+'</strong><span>'+esc(note)+'</span></article>';
 async function refresh(){
  if(!panel||!panel.classList.contains('active'))return;
- status.textContent='Loading eligible website orders…';
+ status.textContent='Loading shipping orders…';
  const {data,error}=await db.rpc('main_shipmozo_shipping_overview');
- if(error||!data){status.textContent='Unable to load Shipping Manager: '+(error?.message||'Admin authentication required');return;}
- const shipments=new Map((data.shipments||[]).map(s=>[s.order_id,s]));
- const orders=data.orders||[];
- status.textContent=orders.length+' eligible orders · '+shipments.size+' shipment records · Live automatic shipping sync enabled';
- output.innerHTML='<p style="margin:0 0 12px;padding:12px;border:1px solid #d8e3da;border-radius:8px"><strong>Shipmozo automatic sync:</strong> Eligible COD and paid orders sync automatically to Shipmozo. Courier booking remains in Shipmozo Dashboard. Cancellation and tracking status are polled automatically.</p><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:760px"><thead><tr><th>Order</th><th>Status</th><th>Payment</th><th>Destination</th><th>Courier / AWB</th><th>Shipping</th><th>Sync</th></tr></thead><tbody>'+orders.map(o=>{
- const sh=shipments.get(o.id),payment=String(o.payment_method||'').toUpperCase()==='COD'?'COD':'PREPAID';
- return '<tr><td><strong>'+esc(o.order_number)+'</strong><br><small>'+esc(o.product_name)+'</small></td><td>'+esc(o.order_status)+'</td><td>'+esc(payment)+'<br>₹'+Number(o.total_amount||0).toFixed(2)+'</td><td>'+esc(o.pincode)+'</td><td>'+esc(sh?.courier_name||'Not assigned')+'<br>'+esc(sh?.awb_number||'—')+'</td><td>'+esc(sh?.state||'Not booked')+'<br>'+esc(sh?.shipping_charge==null?'—':'₹'+sh.shipping_charge)+'</td><td>'+esc(sh?.state||'Awaiting sync')+'</td></tr>';
- }).join('')+'</tbody></table></div>';
+ if(error||!data){status.textContent='Unable to load Shipping Manager: '+(error?.message||'Admin login required');return;}
+ const shipments=new Map((data.shipments||[]).map(s=>[s.order_id,s])),orders=data.orders||[];
+ const synced=orders.filter(o=>shipments.has(o.id)).length,cod=orders.filter(o=>String(o.payment_method||'').toUpperCase()==='COD').length;
+ status.textContent='Last refreshed '+new Date().toLocaleTimeString('en-IN')+' · '+orders.length+' eligible orders';
+ const summary='<div class="sm-stats">'+box('Eligible orders',orders.length,'COD and paid orders')+box('Shipmozo records',synced,'Linked shipments')+box('COD orders',cod,'Collect total, not just product price')+box('Awaiting sync',Math.max(0,orders.length-synced),'Check queue if delayed')+'</div>';
+ const rows=orders.map(o=>{
+  const sh=shipments.get(o.id),isCod=String(o.payment_method||'').toUpperCase()==='COD',total=Number(o.total_amount||0),fees=['delivery_fee','platform_fee','packaging_fee','payment_fee'].reduce((n,k)=>n+Number(o[k]||0),0);
+  const product=Math.max(0,total-fees);
+  return '<tr><td><strong>'+esc(o.order_number)+'</strong><small>'+esc(o.product_name||'Product')+'</small></td><td>'+pill(o.order_status)+'</td><td><strong>'+esc(isCod?'COD':'PREPAID')+'</strong><small>'+money(total)+' payable</small></td><td>'+esc(o.pincode||'—')+'</td><td>'+esc(sh?.courier_name||'Not assigned')+'<small>AWB: '+esc(sh?.awb_number||'Pending')+'</small></td><td>'+pill(sh?.state||'Awaiting sync')+'</td><td><details><summary>View details</summary><div class="sm-details"><div><b>Website order</b><span>'+esc(o.order_number)+'</span></div><div><b>Shipmozo ID</b><span>'+esc(sh?.shipmozo_order_id||'Not created')+'</span></div><div><b>Product value (estimated)</b><span>'+money(product)+'</span></div><div><b>Website fees</b><span>'+money(fees)+'</span></div><div><b>Customer payable</b><span>'+money(total)+'</span></div><div><b>COD collectible</b><span>'+money(isCod?total:0)+'</span></div><div><b>Courier / AWB</b><span>'+esc(sh?.courier_name||'—')+' / '+esc(sh?.awb_number||'—')+'</span></div><div><b>Last tracking</b><span>'+esc(sh?.last_tracking_status||'Awaiting update')+'</span></div></div></details></td></tr>';
+ }).join('');
+ output.innerHTML=summary+'<div class="sm-note"><strong>Invoice and COD are different:</strong> Shipmozo Push-Order supports product prices and COD amount, but the supplied API guide does not document separate invoice fields for delivery, platform, packaging or payment fees. Never increase product price just to match COD.</div><div class="sm-table-wrap"><table class="sm-table"><thead><tr><th>Order / product</th><th>Order status</th><th>Payment</th><th>PIN</th><th>Courier / AWB</th><th>Shipmozo status</th><th>Details</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+(orders.length?'':'<p class="sm-empty">No eligible orders yet.</p>');
 }
 document.querySelector('[data-section="shipmozo"]')?.addEventListener('click',refresh);
 document.getElementById('refreshAll')?.addEventListener('click',()=>{if(panel?.classList.contains('active'))refresh()});
@@ -50,3 +56,23 @@ testButton.addEventListener('click',async()=>{
  const result=await res.json();
  msg.textContent=JSON.stringify(result);
 });
+
+const shippingStyles=document.createElement('style');
+shippingStyles.textContent=`
+[data-panel="shipmozo"] .panel{max-width:100%}
+.sm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}
+.sm-stat{padding:18px;border:1px solid #dce7df;border-radius:14px;background:linear-gradient(145deg,#fff,#f5faf6);display:grid;gap:7px}
+.sm-stat small{font-weight:700;color:#56715d}.sm-stat strong{font-size:27px;color:#183b28}.sm-stat span{font-size:12px;color:#6b7d71}
+.sm-note{background:#f5f8f5;border-left:3px solid #47785a;padding:13px 16px;border-radius:9px;margin:12px 0 18px;color:#3d5144;line-height:1.6}
+.sm-table-wrap{overflow-x:auto;border:1px solid #e1e9e3;border-radius:12px}
+.sm-table{width:100%;border-collapse:collapse;min-width:850px;text-align:left}
+.sm-table th{background:#f2f7f3;color:#47604e;font-size:12px;padding:13px}
+.sm-table td{padding:14px 13px;border-top:1px solid #e9eeea;vertical-align:top;font-size:13px}
+.sm-table td small{display:block;color:#78877c;margin-top:5px}.sm-pill{display:inline-block;background:#e9f4ec;color:#27613a;border-radius:30px;padding:5px 10px;text-transform:capitalize;font-size:12px;font-weight:700}
+.sm-table details{min-width:120px}.sm-table summary{cursor:pointer;color:#236a41;font-weight:700}
+.sm-details{min-width:260px;display:grid;gap:9px;margin-top:10px;padding:12px;background:#f7faf7;border-radius:10px}
+.sm-details div{display:flex;justify-content:space-between;gap:15px}.sm-details b{color:#637568;font-size:11px}.sm-details span{font-size:12px;text-align:right;overflow-wrap:anywhere}
+@media(max-width:800px){.sm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.sm-stats{grid-template-columns:1fr}}
+`;
+document.head.append(shippingStyles);
