@@ -18,3 +18,23 @@ async function refresh(){
 }
 document.querySelector('[data-section="shipmozo"]')?.addEventListener('click',refresh);
 document.getElementById('refreshAll')?.addEventListener('click',()=>{if(panel?.classList.contains('active'))refresh()});
+
+const settings=document.createElement('div');settings.style.cssText='margin-bottom:20px;padding:16px;border:1px solid #dce6df;border-radius:12px';
+settings.innerHTML='<h3>Shipping Providers</h3><p>Connect Shipmozo now; Shiprocket connector can be added later. Credentials are stored in the secure backend, never in browser storage.</p><div id="shippingProvidersStatus">Open Shipping Manager to load providers.</div><form id="shippingConnectForm" autocomplete="off" style="display:grid;gap:10px;max-width:520px;margin-top:16px"><label>Shipmozo Public Key<input name="public_key" type="password" required autocomplete="off" placeholder="Public Key" style="width:100%"></label><label>Shipmozo Private Key<input name="private_key" type="password" required autocomplete="off" placeholder="Private Key" style="width:100%"></label><button type="submit">Save Shipmozo Keys Securely</button></form><div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" id="shippingTest">Test Shipmozo Connection</button><select id="shippingWarehouse"><option value="">Select pickup warehouse after test</option></select><button type="button" id="shippingSaveWarehouse">Save Warehouse</button></div><p id="shippingConnectionMessage" role="status"></p><p><strong>Automatic order sync:</strong> not active until the backend order connector and tracking scheduler are tested. No orders will be pushed by this setup screen.</p>';
+panel?.querySelector('.panel')?.prepend(settings);
+const endpoint='https://kqkpbqpfnupjpthtpvdn.supabase.co/functions/v1/shipping-admin';
+async function shippingAction(body){
+ const {data:{session}}=await db.auth.getSession();
+ if(!session?.access_token)throw Error('Admin login required');
+ const r=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','apikey':'sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0','authorization':'Bearer '+session.access_token},body:JSON.stringify(body)});
+ const data=await r.json();if(!r.ok||data.error)throw Error(data.error||'Connection error');return data;
+}
+const msg=document.getElementById('shippingConnectionMessage');
+async function loadProviders(){
+ try{const d=await shippingAction({action:'status'});document.getElementById('shippingProvidersStatus').textContent=(d.providers||[]).map(p=>p.display_name+': '+(d.connected.includes(p.provider)?'Keys saved':'Not connected')+' · '+(p.is_enabled?'Active':'Inactive')).join(' | ');}
+ catch(e){document.getElementById('shippingProvidersStatus').textContent=e.message;}
+}
+document.querySelector('[data-section="shipmozo"]')?.addEventListener('click',loadProviders);
+document.getElementById('shippingConnectForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;msg.textContent='Saving keys securely…';try{const d=await shippingAction({action:'save_shipmozo',public_key:form.elements.public_key.value,private_key:form.elements.private_key.value});form.reset();msg.textContent=d.message;await loadProviders();}catch(err){msg.textContent=err.message;}});
+document.getElementById('shippingTest')?.addEventListener('click',async()=>{msg.textContent='Checking Shipmozo API…';try{const d=await shippingAction({action:'test_shipmozo'});msg.textContent=d.message;const sel=document.getElementById('shippingWarehouse');sel.innerHTML='<option value="">Select pickup warehouse</option>'+(d.warehouses||[]).filter(w=>w.status==='ACTIVE').map(w=>'<option value="'+esc(w.id)+'">'+esc(w.name)+'</option>').join('');await loadProviders();}catch(err){msg.textContent=err.message;}});
+document.getElementById('shippingSaveWarehouse')?.addEventListener('click',async()=>{const id=document.getElementById('shippingWarehouse').value;if(!id){msg.textContent='Choose a warehouse first';return;}try{await shippingAction({action:'set_warehouse',warehouse_id:id});msg.textContent='Pickup warehouse saved';}catch(err){msg.textContent=err.message;}});
