@@ -22,17 +22,17 @@
   async function load(force=false){
     const local=fallback().map(normalize);
     if(!force && !products.length && local.length){products=local.slice(); window.PRODUCTS=products;}
+    const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),8000);
     try{
-      const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),8000);
       const r=await fetch(`${URL}/rest/v1/deshigram_products?select=*&is_visible=eq.true&status=in.(live,coming_soon,out_of_stock)&order=featured.desc,sort_order.asc,created_at.asc`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},signal:controller.signal,cache:"no-store"});
-      clearTimeout(timer); if(!r.ok) throw new Error('catalog');
+      if(!r.ok) throw new Error('catalog');
       const remote=(await r.json()).map(normalize);
       if(remote.length) products=remote;
       local.filter(x=>String(x.id).startsWith('panch-poshan-')).forEach(x=>{if(!products.some(p=>p.id===x.id))products.push(x)});
     }catch(err){
       if(!products.length) products=local.slice();
       if(!products.length) throw err;
-    }
+    }finally{clearTimeout(timer)}
     window.PRODUCTS=products;
     products.filter(p=>(p.status==='live'||p.status==='available')&&p.stock_quantity>0).forEach(p=>window.DESHIGRAM_CART?.registerProduct({id:p.id,name:p.name,price:p.price,mrp:p.oldPrice,weight:p.weight,packed_weight_grams:p.packed_weight_grams,image:p.images[0]||'images/favicon.png',max_order_quantity:p.max_order_quantity,cod_enabled:p.cod_enabled,online_payment_enabled:p.online_payment_enabled}));
     document.dispatchEvent(new CustomEvent('deshigram:catalog',{detail:products}));
@@ -62,7 +62,7 @@
   }
   async function render(){
     const local=fallback().map(normalize);
-    if(products.length) paint(products); else document.querySelectorAll('[data-dg-catalog]').forEach(el=>{el.innerHTML='<div class="dg-catalog-skeleton" aria-label="Loading products">'+Array.from({length:6},()=>'<div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div>').join('')+'</div>'});
+    if(products.length) paint(products); else if(local.length) paint(local); else document.querySelectorAll('[data-dg-catalog]').forEach(el=>{el.innerHTML='<div class="dg-catalog-skeleton" aria-label="Loading products">'+Array.from({length:6},()=>'<div class="dg-skeleton-card"><div class="dg-skeleton-img"></div><div class="dg-skeleton-line"></div><div class="dg-skeleton-line short"></div></div>').join('')+'</div>'});
     try{const list=await load(true);paint(list)}catch(e){document.querySelectorAll('[data-dg-catalog]').forEach(el=>state(el,'error','Unable to load products. Retry'))}
   }
   window.DESHIGRAM_CATALOG={load,render,get products(){return products},imageUrl,money};
