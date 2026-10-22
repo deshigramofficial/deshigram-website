@@ -1,10 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-const source=document.querySelector('script[src*="admin-portal.js"]');
-const scripts=[...document.scripts].map(x=>x.textContent||'').join('\n');
-const match=scripts.match(/https:\/\/[a-z0-9-]+\.supabase\.co/g);
-const url=match?.[0]||'https://kqkpbqpfnupjpthtpvdn.supabase.co';
-const keyMatch=scripts.match(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/);
-const key=keyMatch?.[0];
+const url='https://kqkpbqpfnupjpthtpvdn.supabase.co';
+const key='sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0';
 const status=document.getElementById('dgNowSettingsStatus');
 if(!key){if(status)status.textContent='Supabase key not found. Reload admin page.';}else{
 const db=createClient(url,key);
