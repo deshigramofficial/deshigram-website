@@ -1,0 +1,16 @@
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const db=createClient('https://kqkpbqpfnupjpthtpvdn.supabase.co','sb_publishable_AVVPm0Pr0KH-dfZozBKdBw_iGWIxqL0');
+const el=id=>document.getElementById(id);
+let mode='login',currentUser=null;
+const status=message=>{el('customerAuthStatus').textContent=message||''};
+function open(){el('authDialog').hidden=false;el('authOverlay').classList.add('open');el('customerEmail').focus()}
+function close(){el('authDialog').hidden=true;el('authOverlay').classList.remove('open')}
+function setMode(next){mode=next;const signup=mode==='signup';el('customerNameLabel').hidden=!signup;el('customerName').required=signup;el('customerAuthSubmit').textContent=signup?'Create Account':'Login';el('customerPassword').autocomplete=signup?'new-password':'current-password';el('customerResetPassword').hidden=signup;status('')}
+function render(user){currentUser=user;el('authGuest').hidden=!!user;el('authMember').hidden=!user;el('accountBtn').textContent=user?'👤 Account':'👤 Login';el('customerSignedInEmail').textContent=user?.email||''}
+el('accountBtn').addEventListener('click',open);el('authClose').addEventListener('click',close);el('authOverlay').addEventListener('click',close);document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+el('authSignInTab').addEventListener('click',()=>setMode('login'));el('authSignUpTab').addEventListener('click',()=>setMode('signup'));
+el('customerAuthForm').addEventListener('submit',async e=>{e.preventDefault();status('Please wait…');const email=el('customerEmail').value.trim(),password=el('customerPassword').value;try{if(mode==='signup'){const name=el('customerName').value.trim();if(!name){status('Please enter your name.');return}const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:'https://now.deshigram.in/'}});if(error)throw error;render(data.user&&data.session?data.user:null);status(data.session?'Account created and signed in.':'Please check your email to confirm your account before logging in.')}else{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;render(data.user);status('You are signed in.')}}catch(error){status(error.message||'Authentication failed. Please try again.')}});
+el('customerResetPassword').addEventListener('click',async()=>{const email=el('customerEmail').value.trim();if(!email){status('Enter your email address first.');return}status('Sending reset link…');const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://now.deshigram.in/'});status(error?error.message:'If this address is registered, a password reset email will be sent.')});
+el('customerLogout').addEventListener('click',async()=>{const {error}=await db.auth.signOut();if(error){status(error.message);return}render(null);status('Signed out successfully.')});
+db.auth.getUser().then(({data,error})=>{if(!error)render(data.user||null)}).catch(()=>status('Account service is temporarily unavailable.'));
+db.auth.onAuthStateChange((_event,session)=>render(session?.user||null));
