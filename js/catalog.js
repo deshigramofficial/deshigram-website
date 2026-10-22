@@ -46,7 +46,7 @@
     const imgs=[...(p.images||[])].filter((src,i,a)=>src&&a.indexOf(src)===i).slice(0,3);
     const pictures=imgs.length?imgs:['images/favicon.png'];
     const slider=`<div class="dg-product-slider" data-product-slider data-current="0"><div class="dg-product-slider-frame">
-      ${pictures.map((src,i)=>`<img class="dg-product-slide${i===0?' is-active':''}" src="${src}" alt="${p.name} image ${i+1}" loading="${home?'lazy':(i===0?'eager':'lazy')}" decoding="async">`).join('')}
+      ${pictures.map((src,i)=>`<img class="dg-product-slide${i===0?' is-active':''}" src="${src}" alt="${p.name} image ${i+1}" loading="${home?'lazy':(i===0?'eager':'lazy')}" fetchpriority="${i===0?'auto':'low'}" decoding="async">`).join('')}
       ${pictures.length>1?`<button type="button" class="dg-slider-arrow dg-slider-prev" data-slider-prev aria-label="Previous image">‹</button><button type="button" class="dg-slider-arrow dg-slider-next" data-slider-next aria-label="Next image">›</button>`:''}
       </div>${pictures.length>1?`<div class="dg-slider-dots">${pictures.map((_,i)=>`<button type="button" class="dg-slider-dot${i===0?' is-active':''}" data-slider-dot="${i}"></button>`).join('')}</div>`:''}</div>`;
     const price=noPrice?`<div class="dg-price-pending">Price updating</div>`:`<div class="dg-price"><s>${p.oldPrice>p.price?`MRP ${money(p.oldPrice)}`:''}</s><strong>${money(p.price)}</strong></div>`;
