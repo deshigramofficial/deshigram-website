@@ -37,10 +37,10 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 <div class="mobileLoc" onclick="openLocation()">📍 <span id="locMob">Select delivery location</span><small>Delivery target: <span id="target">30–60</span> min</small></div>
 <div class="mobileSearch"><span style="padding-top:13px">🔎</span><input id="searchMob" placeholder="Search for grocery, milk, fruits..." oninput="syncSearch(this.value)"></div>
 
-<section class="hero"><div><span class="badge">DESHIGRAM NOW • QUICK DELIVERY</span><h1>Fresh groceries & daily essentials, ab DeshiGram NOW 🛵</h1><p id="offerText">Live offers load ho rahe hain...</p></div><div style="font-size:64px">🛍️</div></section>
+<section class="hero"><div><span class="badge">DESHIGRAM NOW • QUICK DELIVERY</span><h1>Fresh groceries & daily essentials, ab DeshiGram NOW 🛵</h1><p id="offerText">Daily essentials · COD coming soon</p></div><div style="font-size:64px">🛍️</div></section>
 
 <section class="section"><div class="sectionHead"><h2>Shop by Category</h2></div><div id="cats" class="cats"></div></section>
-<section class="section"><div class="sectionHead"><h2>Products near you</h2><span class="small" id="productCount"></span></div><div id="products" class="products"><div class="empty">Live products load ho rahe hain...</div></div></section>
+<section class="section"><div class="sectionHead"><h2>Products near you</h2><span class="small" id="productCount"></span></div><div id="products" class="products"><div class="empty">Products loading...</div></div></section>
 <section class="section dg-national-section" aria-labelledby="nationalTitle"><div class="sectionHead"><div><span class="dg-national-kicker">DESHIGRAM COLLECTION</span><h2 id="nationalTitle">All India Delivery Products</h2><p class="dg-national-sub">DeshiGram favourites delivered across India. Checkout happens on the main DeshiGram store.</p></div><a class="dg-national-link" href="products.html">View all products →</a></div><div id="nationalProducts" class="products" aria-live="polite"><div class="empty">Loading DeshiGram products…</div></div></section>
 </main>
 
@@ -81,5 +81,5 @@ async function saveAddress(){let n=$('custName').value.trim(),p=$('custPhone').v
 function showCheckout(){alert("COD checkout admin verification ke baad enable hoga.");}
 async function placeOrder(){let {data:{session}}=await sb.auth.getSession();if(!session)return $('authMsg').textContent='Pehle mobile OTP se login karein.';if(!addressId)return $('addressMsg').textContent='Pehle address save karein.';let payload=items().map(x=>({product_id:x.p.id,quantity:x.qty}));$('placeBtn').disabled=true;let {data,error}=await sb.rpc('place_cod_order',{p_address_id:addressId,p_items:payload,p_coupon_code:null,p_carry_bag:true,p_rider_tip:0,p_child_welfare:false});$('placeBtn').disabled=false;if(error)return $('placeMsg').textContent='Order place nahi hua: '+error.message;cart={};saveCart();$('placeMsg').textContent='✓ COD order successfully placed. Order ID: '+data}
 async function renderAccount(){let {data:{session}}=await sb.auth.getSession();$('accountBody').innerHTML=session?`<div class="walletBox"><b>Logged in</b><p>${session.user.phone||''}</p></div><button class="primary" onclick="logout()">Logout</button>`:`<div class="empty">Abhi login nahi hai.<br>Checkout ke time mobile OTP se login hoga.</div>`}async function logout(){await sb.auth.signOut();addressId=null;setLogged(false);renderAccount()}
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');init();
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(console.warn);} init().catch(e=>{console.error('NOW startup',e);$('products').innerHTML='<div class="empty">Products load nahi hue. Refresh karein.</div>';});
 </script></body></html>
