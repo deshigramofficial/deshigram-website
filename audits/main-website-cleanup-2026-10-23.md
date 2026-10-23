@@ -32,3 +32,15 @@
 3. Identify verified unused files only, with evidence and rollback list.
 4. Prepare narrow cleanup PR, test mobile banner frame, refresh without legacy flash, admin banners, checkout, payments, orders, reviews and login.
 5. Only then merge and deploy via confirmed hosting path, monitor and retain rollback branch.
+
+## Confirmed production hosting (user's GitHub Pages settings screenshot)
+- GitHub Pages shows `Your site is live at https://deshigram.in/`.
+- Build and deployment: `Deploy from a branch`; branch `main`, directory `/(root)`; `github-pages` environment.
+- Therefore merging into `main` can automatically publish to production. Never merge untested cleanup or unreviewed existing PRs.
+
+## Code-path review
+- `js/site-shell.js` removes old announcement/navigation elements, then replaces the existing `header` using `outerHTML` on DOMContentLoaded; also replaces footer and injects main announcements script. This is **active code**; do not delete it.
+- `js/website-customization.js` checks `d2c_quick_controls`, fetches `website_customization`, removes fallback slides when saved showcase rows exist, inserts new slides and dispatches `dg:banners-updated`. This is **active admin integration**; do not delete it.
+- `js/premium-final.js` owns carousel arrows/dots/auto-rotation and reinitializes when admin banners update. This is **active UI code**; do not delete it.
+- `admin.html` loads active `css/admin-portal.css`, `css/website-customization-admin.css`, and `css/product-commerce-v3.css`. Preserve these and inspect script dependencies before any pruning.
+- Cleanup candidate is duplicated/overriding CSS declarations in `index.html`, **not** entire referenced scripts. Refactor only after computed-style/browser checks and regression tests.
