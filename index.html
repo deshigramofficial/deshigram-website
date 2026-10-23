@@ -1,5 +1,19 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DeshiGram | Desh Ki Parampara, Har Ghar Tak</title>
 <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/product.css"><link rel="stylesheet" href="css/premium-final.css?v=20261005p2">
+<style id="dg-initial-render-guard">
+/* Avoid painting fallback header and banners before their active JS sources mount. */
+html:not(.dg-shell-ready) body > .dg-top,
+html:not(.dg-shell-ready) body > header.dg-head { visibility:hidden!important; }
+html:not(.dg-banners-ready) .dg-hero-grid > .dg-carousel .dg-slide { visibility:hidden!important; }
+</style>
+<script>
+/* Fail open if scripts are blocked, so navigation and fallback artwork remain usable. */
+window.addEventListener('DOMContentLoaded',()=>{
+ setTimeout(()=>{
+  document.documentElement.classList.add('dg-shell-ready','dg-banners-ready');
+ },3500);
+});
+</script>
 <style id="dg-permanent-critical">
 :root{--dg:#064c31;--dg2:#003b27;--gold:#f5b800;--cream:#fff6d7;--ink:#122033;--muted:#697386}
 *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
