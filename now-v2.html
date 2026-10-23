@@ -57,12 +57,12 @@ el('detailClose').addEventListener('click',closeDetail);el('detailOverlay').addE
 el('browseBtn').addEventListener('click',function(){el('catalog').scrollIntoView({behavior:'smooth'})});
 el('locationBtn').addEventListener('click',function(){el('addressDialog').hidden=false;el('addressOverlay').classList.add('open')});
 function showCategories(){var cats=[...new Set(products.map(function(p){return p.category}))];el('categories').innerHTML='<button class="cat active" data-category="">✨ All products</button>'+cats.map(function(cat){return '<button class="cat" data-category="'+escapeHtml(cat)+'">'+icon(cat)+' '+escapeHtml(cat)+'</button>'}).join('');render()}
-showCategories();if(location.hash.startsWith('#product=')){var wanted=decodeURIComponent(location.hash.slice(9));setTimeout(function(){openDetail(wanted)},150)}el('catalogStatus').textContent='Browse our grocery collection';
+showCategories();el('catalogStatus').textContent='Browse our grocery collection';
 fetch(API,{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Accept':'application/json'},cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('Catalog HTTP '+r.status);return r.json()}).then(function(data){
 if(!Array.isArray(data))throw new Error('Invalid catalog response');
 products=data;renderCart();var cats=[...new Set(data.map(function(p){return p.category}))];
 el('categories').innerHTML='<button class="cat active" data-category="">✨ All products</button>'+cats.map(function(c){return '<button class="cat" data-category="'+escapeHtml(c)+'">'+icon(c)+' '+escapeHtml(c)+'</button>'}).join('');
-el('catalogStatus').textContent='Browse our grocery collection';render();
+el('catalogStatus').textContent='Browse our grocery collection';render();if(location.hash.startsWith('#product=')){try{openDetail(decodeURIComponent(location.hash.slice(9)))}catch(e){console.warn('Product link invalid',e)}}
 }).catch(function(err){console.error('Catalog load failed',err);el('catalogStatus').textContent='Showing available catalog; latest updates will sync when connection returns';});
 })();
 </script><script type="module" src="js/dg-now-customer-auth.js?v=1"></script><script src="js/dg-now-address.js?v=1" defer></script><script src="js/dg-now-checkout.js?v=1" defer></script></body></html>
