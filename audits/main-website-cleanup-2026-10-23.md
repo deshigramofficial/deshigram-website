@@ -44,3 +44,11 @@
 - `js/premium-final.js` owns carousel arrows/dots/auto-rotation and reinitializes when admin banners update. This is **active UI code**; do not delete it.
 - `admin.html` loads active `css/admin-portal.css`, `css/website-customization-admin.css`, and `css/product-commerce-v3.css`. Preserve these and inspect script dependencies before any pruning.
 - Cleanup candidate is duplicated/overriding CSS declarations in `index.html`, **not** entire referenced scripts. Refactor only after computed-style/browser checks and regression tests.
+
+## First isolated code change — audit branch only
+- Added `dg-mobile-banner-frame-correction` style block in `index.html`, after the existing uniform-size rule.
+- For screens <=760px, override hero carousel frame to `2048 / 738` to match the stated banner export format. No desktop change, data mutation, or file deletion.
+- Existing `1536 / 819` rule is intentionally still present for desktop; broader CSS deduplication remains pending verification.
+- **Unverified:** admin-configured mobile images may use a different ratio; must inspect active image dimensions and browser computed styles before shipping.
+- **Not yet fixed:** initial stale header/banner flash; active async integrations must be preserved and tested before change.
+- **Not deployed:** this commit exists only on the audit PR branch.
