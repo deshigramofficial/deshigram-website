@@ -9,6 +9,9 @@ html:not(.dg-banners-ready) .dg-hero-grid > .dg-carousel .dg-slide { visibility:
 <script>
 /* Fail open if scripts are blocked, so navigation and fallback artwork remain usable. */
 window.addEventListener('DOMContentLoaded',()=>{
+ const reveal=()=>document.documentElement.classList.add('dg-banners-ready');
+ document.querySelector('[data-carousel]')?.addEventListener('dg:banners-updated',reveal,{once:true});
+ /* The static slides remain a fallback when the admin API is unreachable. */
  setTimeout(()=>{
   document.documentElement.classList.add('dg-shell-ready','dg-banners-ready');
  },3500);
