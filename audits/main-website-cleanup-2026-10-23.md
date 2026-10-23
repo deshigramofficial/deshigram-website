@@ -52,3 +52,10 @@
 - **Unverified:** admin-configured mobile images may use a different ratio; must inspect active image dimensions and browser computed styles before shipping.
 - **Not yet fixed:** initial stale header/banner flash; active async integrations must be preserved and tested before change.
 - **Not deployed:** this commit exists only on the audit PR branch.
+
+## Active-image mobile banner sizing (audit branch)
+- `js/premium-final.js` now measures the current slide image `naturalWidth/naturalHeight` and sets an inline important `aspect-ratio` on mobile (<=760px).
+- Recomputes on slide paint, image load, and viewport resize. Removes the inline override on desktop.
+- This supersedes the fixed 2048:738 mobile fallback for admin banners with different intrinsic dimensions.
+- Browser testing still required: mobile `<picture>` source selection, lazy-loaded slides, arrow/dot navigation, automatic rotation, slow network and page refresh.
+- No production deployment, database edit, asset deletion or NOW changes.
