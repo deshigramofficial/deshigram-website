@@ -47,14 +47,19 @@ document.getElementById('shippingSaveWarehouse')?.addEventListener('click',async
 
 const testButton=document.createElement('button');
 testButton.type='button';
-testButton.textContent='Sync queued orders to Shipmozo';
+testButton.textContent='Refresh Shipmozo Tracking & Orders';
 settings.append(testButton);
 testButton.addEventListener('click',async()=>{
  const {data:{session}}=await db.auth.getSession();
  if(!session){msg.textContent='Login required';return;}
- const res=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/functions/v1/shipping-sync-worker',{method:'POST',headers:{Authorization:'Bearer '+session.access_token}});
+ testButton.disabled=true;msg.textContent='Checking Shipmozo tracking…';
+ try { const res=await fetch('https://kqkpbqpfnupjpthtpvdn.supabase.co/functions/v1/shipping-sync-worker',{method:'POST',headers:{Authorization:'Bearer '+session.access_token}});
  const result=await res.json();
- msg.textContent=JSON.stringify(result);
+ if(!res.ok||result.error){msg.textContent='Tracking sync failed: '+(result.error||res.status);return;}
+ const failures=result.tracking_errors||[];
+ msg.textContent='Checked '+(result.tracking_checked||0)+' shipments · Updated '+(result.tracking_updated||0)+(failures.length?' · '+failures.length+' tracking issues: '+failures.map(x=>x.order+': '+x.message).join('; '):' · No tracking API errors');
+ await refresh();
+ }catch(e){msg.textContent='Tracking refresh failed: '+e.message;}finally{testButton.disabled=false;}
 });
 
 const shippingStyles=document.createElement('style');
@@ -76,3 +81,7 @@ shippingStyles.textContent=`
 @media(max-width:420px){.sm-stats{grid-template-columns:1fr}}
 `;
 document.head.append(shippingStyles);
+
+// Refresh the read-only shipping overview when admin returns to this tab.
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&panel?.classList.contains('active'))refresh();});
+setInterval(()=>{if(!document.hidden&&panel?.classList.contains('active'))refresh();},90000);
