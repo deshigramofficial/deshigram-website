@@ -122,6 +122,22 @@
   function closeOwnedProduct(){document.getElementById('ownedProductModal')?.classList.add('hidden')}
   async function removeOwnedProduct(index){const p=ownedProducts[index];if(!p||!confirm(`Delete ${p.name}? This removes it from the website.`))return;try{await deleteOwnedProduct(p.id);await loadOwnedProducts()}catch(e){alert(e.message)}}
 
+  async function hydrateShipmozoOrder(o){
+    const message=document.getElementById('orderUpdateMessage');
+    try{
+      const data=await request('/rest/v1/rpc/main_shipmozo_shipping_overview',{method:'POST',body:'{}'});
+      const shipment=(data?.shipments||[]).find(s=>String(s.order_id)===String(o.id));
+      if(!shipment)return;
+      // Do not overwrite edits made by the admin while the lookup was in flight.
+      if(document.getElementById('modalOrderId').value!==String(o.id))return;
+      const courier=document.getElementById('modalCourier'),awb=document.getElementById('modalAwb'),url=document.getElementById('modalTracking');
+      if(!courier.value.trim()&&shipment.courier_name)courier.value=shipment.courier_name;
+      if(!awb.value.trim()&&shipment.awb_number)awb.value=shipment.awb_number;
+      if(!url.value.trim()&&/^https:\/\//i.test(shipment.tracking_url||''))url.value=shipment.tracking_url;
+      const info=[shipment.last_tracking_status||shipment.state,shipment.awb_number?'AWB: '+shipment.awb_number:null].filter(Boolean).join(' · ');
+      message.textContent=info?'Shipmozo sync: '+info:'';
+    }catch(e){message.textContent='Shipmozo details could not load: '+e.message;}
+  }
   function openOrder(index){
     const o=currentOrders[index]; if(!o)return;
     document.getElementById('modalOrderId').value=o.id;
@@ -138,6 +154,7 @@
       <div><span>Delivery address</span><strong>${esc(o.shipping_address||'—')}</strong><small>${esc([o.city,o.state,o.pincode].filter(Boolean).join(', '))}</small></div>`;
     document.getElementById('orderUpdateMessage').textContent='';
     document.getElementById('orderModal').classList.remove('hidden');document.body.classList.add('modal-open');
+    hydrateShipmozoOrder(o);
   }
   function closeOrder(){document.getElementById('orderModal').classList.add('hidden');document.body.classList.remove('modal-open');}
 
