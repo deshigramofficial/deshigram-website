@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const DELIVERY_FEE = 55;
   const PLATFORM_FEE = 10;
   const PACKAGING_FEE = 5;
-  const PAYMENT_HANDLING_FEE = 5;
+  const PAYMENT_HANDLING_FEE = 0;
   const money = v => cart.money ? cart.money(v) : `₹${Number(v).toFixed(2)}`;
 
   const totals = () => {
@@ -97,10 +97,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     mrpEl.textContent=money(t.mrp);
     discountEl.textContent=`− ${money(t.discount)}`;
     totalEl.textContent=money(t.total);
-    if(deliveryEl)deliveryEl.textContent=money(t.logistics);
+    if(deliveryEl)deliveryEl.textContent=money(t.logistics + t.packaging);
     if(platformEl)platformEl.textContent=money(t.platform);
-    if(packagingEl)packagingEl.textContent=money(t.packaging);
-    if(processingEl)processingEl.textContent=money(t.payment);
+    if(packagingEl)packagingEl.textContent=money(0);
+    if(processingEl)processingEl.textContent=money(0);
   }
 
   try{
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       Payment_Method:method,Transaction_ID:transactionId||(method==='UPI'?'Pending verification':'COD'),Account_Link:'https://deshigram.in/account.html'
     });
 
-    const feeLines=t.extra?`Delivery: ${money(t.logistics)}\nPlatform fee: ${money(t.platform)}\nPayment processing: ${money(t.payment)}`:'Delivery & platform charges: Included in listing price';
+    const feeLines=t.extra?`Delivery & Packaging: ${money(t.logistics+t.packaging)}\nPlatform Handling: ${money(t.platform)}`:'Delivery & platform charges: Included in listing price';
     const paymentLine=method==='COD' ? `Payment method: Cash on Delivery\nAmount to collect: ${money(t.total)}` : method==='UPI' ? `Payment method: UPI (verification pending)\nUPI ID: ${upiId}` : `Payment method: Razorpay\nPayment ID: ${transactionId}`;
     const msg=`Hello DeshiGram, I want to confirm my order.\n\nOrder ID: ${orderNumber}\n${orderLines().join('\n')}\n\nMRP total: ${money(t.mrp)}\nDiscount: -${money(t.discount)}\n${feeLines}\n${paymentLine}\n\nCustomer Details:\nName: ${c.name}\nPhone: ${c.phone}\nAddress: ${c.address}, ${c.city}, ${c.state} - ${c.pincode}`;
 
