@@ -238,6 +238,34 @@ function openOrder(id){
   </div>`).join(""):"<p>No fulfillment items linked to this order.</p>";
   status($("#orderDetailStatus"),"");
   $("#orderDetailDialog").showModal();
+  // The Orders dialog uses fulfillment rows, while Shipmozo sync writes to
+  // main_shipmozo_shipments. Merge read-only tracking details into this dialog.
+  (async()=>{
+    try{
+      const {data,error}=await db.rpc("main_shipmozo_shipping_overview");
+      if(error)throw error;
+      if(currentOrderId!==id||!$("#orderDetailDialog").open)return;
+      const shipment=(data?.shipments||[]).find(s=>String(s.order_id)===String(id));
+      if(!shipment)return;
+      const courier=shipment.courier_name||"";
+      const awb=shipment.awb_number||"";
+      const trackingUrl=/^https:\/\//i.test(shipment.tracking_url||"")?shipment.tracking_url:"";
+      for(const row of $("#orderFulfillmentItems").querySelectorAll("[data-fulfill-row]")){
+        const inputCourier=row.querySelector("[data-f-courier]");
+        const inputTracking=row.querySelector("[data-f-tracking]");
+        const inputUrl=row.querySelector("[data-f-url]");
+        if(inputCourier&&courier)inputCourier.value=courier;
+        if(inputTracking&&awb)inputTracking.value=awb;
+        if(inputUrl&&trackingUrl)inputUrl.value=trackingUrl;
+      }
+      const details=document.createElement("div");
+      details.className="shipmozo-order-tracking";
+      details.style.cssText="margin:12px 0;padding:12px;border:1px solid #cbded1;border-radius:10px;background:#f6faf7;line-height:1.7";
+      const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+      details.innerHTML="<b>Shipmozo Live Tracking</b><div>Courier: "+safe(courier||"Pending")+"</div><div>AWB: "+safe(awb||"Pending")+"</div><div>Status: "+safe(shipment.last_tracking_status||shipment.state||"Pending")+"</div>"+(trackingUrl?'<a href="'+safe(trackingUrl)+'" target="_blank" rel="noopener noreferrer">Track shipment</a>':"");
+      $("#orderFulfillmentItems").prepend(details);
+    }catch(e){if(currentOrderId===id)status($("#orderDetailStatus"),"Shipmozo tracking unavailable: "+e.message);}
+  })();
 }
 async function updateOrder(id,orderStatus,paymentStatus=null){
   const {error}=await db.rpc("admin_update_order_status",{p_order_id:id,p_order_status:orderStatus,p_payment_status:paymentStatus});
