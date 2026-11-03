@@ -2,7 +2,24 @@
  const c=document.querySelector('[data-carousel]');if(!c)return;
  const dots=c.querySelector('.dg-dots');let index=0,timer;
  const slides=()=>[...c.querySelectorAll('.dg-slide')].filter(el=>!el.hidden&&el.style.display!=='none');
- function paint(){const list=slides();if(!list.length)return;index=((index%list.length)+list.length)%list.length;
+ // Match the visible banner's intrinsic aspect ratio on mobile, including
+ // administrator-supplied <picture> variants; never stretch/crop the artwork.
+ function syncMobileFrame(){
+  if(!window.matchMedia('(max-width: 760px)').matches){
+   c.style.removeProperty('aspect-ratio');return;
+  }
+  const current=slides()[index];const img=current?.querySelector('img');
+  if(!img)return;
+  const apply=()=>{
+   if(current!==slides()[index])return;
+   const w=img.naturalWidth,h=img.naturalHeight;
+   if(w>0&&h>0)c.style.setProperty('aspect-ratio',w+' / '+h,'important');
+  };
+  if(img.complete&&img.naturalWidth)apply();
+  else img.addEventListener('load',apply,{once:true});
+ }
+ window.addEventListener('resize',syncMobileFrame,{passive:true});
+ function paint(){const list=slides();if(!list.length)return;index=((index%list.length)+list.length)%list.length;syncMobileFrame();
   list.forEach((el,n)=>{const active=n===index;el.classList.toggle('active',active);el.style.setProperty('opacity',active?'1':'0','important');el.style.setProperty('visibility',active?'visible':'hidden','important');el.style.setProperty('pointer-events',active?'auto':'none','important');el.style.setProperty('z-index',active?'2':'1','important');});
   if(dots){dots.replaceChildren(...list.map((_,n)=>{const b=document.createElement('button');b.type='button';b.className='dg-dot'+(n===index?' active':'');b.setAttribute('aria-label','Banner '+(n+1));b.addEventListener('click',()=>move(n-index));return b;}));}
  }
